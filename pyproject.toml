@@ -1,0 +1,54 @@
+[project]
+name = "role-based-rag"
+version = "0.1.0"
+requires-python = ">=3.11"
+
+dependencies = [
+
+    # ⚡ Backend
+    "fastapi",
+    "uvicorn[standard]",
+    "sqlalchemy",
+    "asyncpg",
+    "websockets",
+    "python-multipart",
+    "jinja2",
+
+    # 🔐 Authentication & Security
+    "python-jose[cryptography]",
+    "passlib[bcrypt]",
+    "slowapi",
+
+    # 🗄️ Database & Vector DB
+    "qdrant-client",
+    "redis",
+    "alembic",
+
+    # 🔗 LangChain & AI
+    "langchain-core",
+    "langchain-community",
+    "langchain-openai",
+    "langchain-google-genai",
+    "langchain-qdrant",
+
+    # 📄 Document Processing
+    "docling",
+    "pandas",
+
+    # ⚙️ Config & Utilities
+    "pydantic",
+    "pydantic-settings",
+    "python-dotenv",
+    "requests",
+    "httpx",
+    "tenacity",
+    "tqdm",
+
+    # 🧪 Testing & Evaluation
+    "pytest",
+    "pytest-asyncio",
+    "pytest-mock",
+    "coverage",
+    "ragas",
+    "datasets"
+]

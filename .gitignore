@@ -1,0 +1,19 @@
+.env
+.env.*  
+.envrc
+.env.local
+.env.example
+.venv
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.db
+*.sqlite3
+*.log
+
+# Ignore virtual environment directories
+venv/
+# Ignore IDE specific files
+.vscode/
+.idea/  
