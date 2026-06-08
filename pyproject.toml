@@ -5,50 +5,127 @@ requires-python = ">=3.11"
 
 dependencies = [
 
-    # ⚡ Backend
+    # ===========================
+    # FastAPI Backend
+    # ===========================
     "fastapi",
     "uvicorn[standard]",
-    "sqlalchemy",
-    "asyncpg",
     "websockets",
     "python-multipart",
     "jinja2",
 
-    # 🔐 Authentication & Security
+    # ===========================
+    # Database (PostgreSQL)
+    # ===========================
+    "sqlalchemy",
+    "asyncpg",
+    "psycopg2-binary",
+    "alembic",
+
+    # ===========================
+    # Authentication & Security
+    # ===========================
     "python-jose[cryptography]",
     "passlib[bcrypt]",
     "slowapi",
 
-    # 🗄️ Database & Vector DB
-    "qdrant-client",
+    # ===========================
+    # Cache & Session Management
+    # ===========================
     "redis",
-    "alembic",
 
-    # 🔗 LangChain & AI
+    # ===========================
+    # Vector Database
+    # ===========================
+    "qdrant-client",
+
+    # ===========================
+    # LangChain Ecosystem
+    # ===========================
+    "langchain",
     "langchain-core",
     "langchain-community",
     "langchain-openai",
     "langchain-google-genai",
     "langchain-qdrant",
 
-    # 📄 Document Processing
+    # ===========================
+    # LLM & Embeddings
+    # ===========================
+    "openai",
+    "google-generativeai",
+    "sentence-transformers",
+    "transformers",
+    "torch",
+
+    # ===========================
+    # Document Processing
+    # ===========================
     "docling",
+    "pypdf",
+    "python-docx",
+    "openpyxl",
+    "unstructured",
     "pandas",
 
-    # ⚙️ Config & Utilities
+    # ===========================
+    # RAG Evaluation
+    # ===========================
+    "ragas",
+    "datasets",
+    "deepeval",
+
+    # ===========================
+    # Monitoring & Observability
+    # ===========================
+    "langsmith",
+    "prometheus-client",
+
+    # ===========================
+    # PII Detection / Guardrails
+    # ===========================
+    "presidio-analyzer",
+    "presidio-anonymizer",
+
+    # ===========================
+    # Config & Utilities
+    # ===========================
     "pydantic",
     "pydantic-settings",
     "python-dotenv",
+
+    # ===========================
+    # HTTP Clients
+    # ===========================
     "requests",
     "httpx",
+
+    # ===========================
+    # Retry Mechanism
+    # ===========================
     "tenacity",
+
+    # ===========================
+    # Logging
+    # ===========================
+    "loguru",
+
+    # ===========================
+    # Progress Bars
+    # ===========================
     "tqdm",
 
-    # 🧪 Testing & Evaluation
+    # ===========================
+    # AWS Services
+    # ===========================
+    "boto3",
+
+    # ===========================
+    # Testing
+    # ===========================
     "pytest",
     "pytest-asyncio",
     "pytest-mock",
-    "coverage",
-    "ragas",
-    "datasets"
+    "faker",
+    "coverage"
 ]
