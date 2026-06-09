@@ -1,20 +1,9 @@
-import asyncio
-from sqlalchemy import text
+from src.vectordb.qdrant_service import QdrantService
 
-from config.database import engine
+qdrant = QdrantService()
 
+info = qdrant.client.get_collection(
+    qdrant.collection_name
+)
 
-async def test_connection():
-    try:
-        async with engine.begin() as conn:
-            result = await conn.execute(text("SELECT 1"))
-            print("✅ Database Connected")
-            print("Result:", result.scalar())
-
-    except Exception as e:
-        print("❌ Database Connection Failed")
-        print(e)
-
-
-if __name__ == "__main__":
-    asyncio.run(test_connection())
+print(info)

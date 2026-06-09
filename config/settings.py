@@ -11,6 +11,7 @@ class Settings(BaseSettings):
     # === Qdrant ===
     qdrant_url: str
     qdrant_api_key: str = ""
+    collection_name: str = "role_based_rag"
 
     # === Postgres ===
     database_url: str
