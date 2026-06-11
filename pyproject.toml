@@ -4,7 +4,6 @@ version = "0.1.0"
 requires-python = ">=3.11"
 
 dependencies = [
-
     # ===========================
     # FastAPI Backend
     # ===========================
@@ -13,7 +12,6 @@ dependencies = [
     "websockets",
     "python-multipart",
     "jinja2",
-
     # ===========================
     # Database (PostgreSQL)
     # ===========================
@@ -21,24 +19,20 @@ dependencies = [
     "asyncpg",
     "psycopg2-binary",
     "alembic",
-
     # ===========================
     # Authentication & Security
     # ===========================
     "python-jose[cryptography]",
     "passlib[bcrypt]",
     "slowapi",
-
     # ===========================
     # Cache & Session Management
     # ===========================
     "redis",
-
     # ===========================
     # Vector Database
     # ===========================
     "qdrant-client",
-
     # ===========================
     # LangChain Ecosystem
     # ===========================
@@ -48,7 +42,6 @@ dependencies = [
     "langchain-openai",
     "langchain-google-genai",
     "langchain-qdrant",
-
     # ===========================
     # LLM & Embeddings
     # ===========================
@@ -57,7 +50,6 @@ dependencies = [
     "sentence-transformers",
     "transformers",
     "torch",
-
     # ===========================
     # Document Processing
     # ===========================
@@ -67,59 +59,49 @@ dependencies = [
     "openpyxl",
     "unstructured",
     "pandas",
-
     # ===========================
     # RAG Evaluation
     # ===========================
     "ragas",
     "datasets",
     "deepeval",
-
     # ===========================
     # Monitoring & Observability
     # ===========================
     "langsmith",
     "prometheus-client",
-
     # ===========================
     # PII Detection / Guardrails
     # ===========================
     "presidio-analyzer",
     "presidio-anonymizer",
-
     # ===========================
     # Config & Utilities
     # ===========================
     "pydantic",
     "pydantic-settings",
     "python-dotenv",
-
     # ===========================
     # HTTP Clients
     # ===========================
     "requests",
     "httpx",
-
     # ===========================
     # Retry Mechanism
     # ===========================
     "tenacity",
-
     # ===========================
     # Logging
     # ===========================
     "loguru",
-
     # ===========================
     # Progress Bars
     # ===========================
     "tqdm",
-
     # ===========================
     # AWS Services
     # ===========================
     "boto3",
-
     # ===========================
     # Testing
     # ===========================
@@ -127,5 +109,6 @@ dependencies = [
     "pytest-asyncio",
     "pytest-mock",
     "faker",
-    "coverage"
+    "coverage",
+    "langchain-huggingface>=1.2.2",
 ]
