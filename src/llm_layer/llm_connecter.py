@@ -1,151 +1,92 @@
-import requests
+"""
+src/llm/llm_connector.py
+==========================
+LangChain ChatOpenAI pointed at OpenRouter.
+
+OpenRouter is OpenAI API-compatible, so ChatOpenAI works directly
+by overriding the base_url and api_key.
+
+Supports any model available on OpenRouter:
+    meta-llama/llama-3.3-70b-instruct   (default)
+    openai/gpt-4o
+    anthropic/claude-3.5-sonnet
+    google/gemini-2.0-flash
+    mistralai/mistral-large
+    ...
+
+Usage:
+    llm    = LLMConnector().get_llm()
+    result = llm.invoke("Hello")
+
+    # Health check
+    ok = LLMConnector().health_check()
+"""
+
+from __future__ import annotations
+
+from langchain_openai import ChatOpenAI
 
 from config.settings import get_settings
 from utils.logger_exceptions import get_logger
-from src.prompts_layer import get_system_prompt
 
-logger = get_logger(__name__)
-
+logger   = get_logger(__name__)
 settings = get_settings()
 
 
-class OpenRouterService:
+class LLMConnector:
+    """
+    Factory for a LangChain ChatOpenAI instance that targets OpenRouter.
 
-    def __init__(self):
+    Args:
+        model       : model string (defaults to settings.llm_model)
+        temperature : generation temperature (0 = deterministic)
+        max_tokens  : max output tokens
+    """
 
-        self.api_key = (
-            settings.openrouter_api_key
-        )
-
-        self.model = (
-            settings.llm_model
-        )
-
-        self.base_url = (
-            settings.openrouter_base_url
-        )
-
+    def __init__(
+        self,
+        model:       str   = "",
+        temperature: float = 0.0,
+        max_tokens:  int   = 1000,
+    ) -> None:
+        self._model       = model or settings.llm_model
+        self._temperature = temperature
+        self._max_tokens  = max_tokens
         logger.info(
-            "OpenRouter Service Initialized"        
+            f"LLMConnector | model={self._model} "
+            f"| temp={temperature} | max_tokens={max_tokens}"
         )
 
-    def generate_answer(
-        self,
-        question: str,
-        context: str,
-        department: str,
-    ) -> str:
+    def get_llm(self) -> ChatOpenAI:
+        """
+        Build and return a ChatOpenAI instance targeting OpenRouter.
+        The object is lightweight — create one per request or cache it.
+        """
+        return ChatOpenAI(
+            model            = self._model,
+            openai_api_key   = settings.openrouter_api_key,
+            openai_api_base  = settings.openrouter_base_url,
+            temperature      = self._temperature,
+            max_tokens       = self._max_tokens,
+            # OpenRouter recommended headers
+            default_headers  = {
+                "HTTP-Referer": "https://finsolve.internal",
+                "X-Title":      "FinSolve RAG",
+            },
+        )
 
+    def health_check(self) -> bool:
+        """Ping the LLM with a minimal request. Returns True if reachable."""
         try:
-
-            system_prompt = (
-                get_system_prompt(
-                    department
-                )
+            llm = ChatOpenAI(
+                model           = self._model,
+                openai_api_key  = settings.openrouter_api_key,
+                openai_api_base = settings.openrouter_base_url,
+                max_tokens      = 5,
             )
-
-            user_prompt = f"""
-Context:
-{context}
-
-Question:
-{question}
-
-Answer:
-"""
-
-            payload = {
-                "model": self.model,
-                "messages": [
-                    {
-                        "role": "system",
-                        "content": system_prompt,
-                    },
-                    {
-                        "role": "user",
-                        "content": user_prompt,
-                    },
-                ],
-                "temperature": 0,
-                "max_tokens": 1000,
-            }
-
-            headers = {
-                "Authorization":
-                    f"Bearer {self.api_key}",
-                "Content-Type":
-                    "application/json",
-            }
-
-            response = requests.post(
-                self.base_url,
-                headers=headers,
-                json=payload,
-                timeout=60,
-            )
-
-            response.raise_for_status()
-
-            data = response.json()
-
-            answer = (
-                data["choices"][0]
-                ["message"]["content"]
-            )
-
-            logger.info(
-                "Answer generated successfully"
-            )
-
-            return answer
-
+            llm.invoke("ping")
+            logger.info("LLM health check ✓")
+            return True
         except Exception:
-
-            logger.exception(
-                "OpenRouter request failed"
-            )
-
-            raise
-
-    def health_check(
-        self,
-    ) -> bool:
-
-        try:
-
-            payload = {
-                "model": self.model,
-                "messages": [
-                    {
-                        "role": "user",
-                        "content": "Hello",
-                    }
-                ],
-                "max_tokens": 5,
-            }
-
-            headers = {
-                "Authorization":
-                    f"Bearer {self.api_key}",
-                "Content-Type":
-                    "application/json",
-            }
-
-            response = requests.post(
-                self.base_url,
-                headers=headers,
-                json=payload,
-                timeout=30,
-            )
-
-            return (
-                response.status_code == 200
-            )
-
-        except Exception:
-
-            logger.exception(
-                "Health check failed"
-            )
-
+            logger.exception("LLM health check failed")
             return False

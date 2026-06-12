@@ -1,28 +1,3 @@
-"""
-src/vectordb/qdrant_store.py
-==============================
-LangChain-native Qdrant vector store wrapper.
-
-Responsibilities:
-  - Create / connect to a Qdrant collection
-  - Ensure a payload index exists on the 'department' field
-  - Ingest LangChain Documents with metadata
-  - Similarity search filtered by department
-
-Every point stored in Qdrant has this payload:
-    {
-        "metadata": {
-            "department"  : str,
-            
-            "filename"    : str,
-            "chunk_index" : int,
-            "chunk_type"  : "text" | "table",
-            "page"        : int | None,
-        },
-        "page_content": str,
-    }
-"""
-
 from __future__ import annotations
 
 from langchain_core.documents import Document
@@ -37,7 +12,10 @@ from qdrant_client.models import (
     VectorParams,
 )
 
-from src.embedding_layer.embedding_service import EmbeddingService
+from src.embedding_layer.embedding_service import (
+    EmbeddingService,
+    get_embedding_service,
+)
 from config.settings import get_settings
 from utils.logger_exceptions import get_logger
 
@@ -46,37 +24,45 @@ settings = get_settings()
 
 
 class QdrantStore:
-    """
-    LangChain QdrantVectorStore with department-aware filtered search.
-    """
 
     def __init__(
         self,
-        embedding_service: EmbeddingService,
-        url:             str = None,
-        api_key:         str = None,
-        collection_name: str = None,
+        embedding_service: EmbeddingService = None,  # ← optional, uses singleton
+        url:             str = None,                  # ← None = read from settings
+        api_key:         str = None,                  # ← None = read from settings
+        collection_name: str = None,                  # ← None = read from settings
     ) -> None:
 
-        self._embedding_service = embedding_service
-        self._collection_name   = (
+        # ── Use singleton if not provided ──────────────────────────────
+        self._embedding_service = (
+            embedding_service or get_embedding_service()
+        )
+
+        # ── Read from settings if not explicitly passed ────────────────
+        self._collection_name = (
             collection_name or settings.collection_name
         )
-        self._url     = url     or settings.qdrant_url
-        self._api_key = api_key or settings.qdrant_api_key or None
+        self._url = (
+            url or settings.qdrant_url
+        )
+        self._api_key = (
+            api_key or settings.qdrant_api_key or None
+        )
 
-        # Raw Qdrant client — for admin ops
+        # ── Raw Qdrant client — for admin ops ──────────────────────────
         self._client = QdrantClient(
             url     = self._url,
             api_key = self._api_key,
+            timeout = 120,
         )
 
-        # LangChain vectorstore — for add/search
+        # ── LangChain vectorstore — for add/search ─────────────────────
         self._store = self._init_store()
 
         logger.info(
             f"QdrantStore ready | "
-            f"collection='{self._collection_name}'"
+            f"collection='{self._collection_name}' | "
+            f"url='{self._url}'"
         )
 
     # ------------------------------------------------------------------
@@ -84,7 +70,6 @@ class QdrantStore:
     # ------------------------------------------------------------------
 
     def _init_store(self) -> QdrantVectorStore:
-        """Create collection if needed, ensure index, return store."""
         self._ensure_collection()
         self._ensure_department_index()
 
@@ -103,7 +88,7 @@ class QdrantStore:
 
         if self._collection_name in existing:
             logger.info(
-                f"Collection '{self._collection_name}' exists ✓"
+                f"Collection '{self._collection_name}' already exists"
             )
             return
 
@@ -119,22 +104,16 @@ class QdrantStore:
         )
 
     def _ensure_department_index(self) -> None:
-        """
-        Qdrant requires a payload index on filtered fields.
-        Check both 'department' and 'metadata.department'
-        since LangChain nests metadata.
-        """
+
         info    = self._client.get_collection(self._collection_name)
         indexes = info.payload_schema or {}
 
-        # LangChain Qdrant stores fields under metadata.*
         index_key = "metadata.department"
 
         if index_key in indexes or "department" in indexes:
-            logger.info("department index exists ✓")
+            logger.info("department index already exists ✓")
             return
 
-        # Create index on metadata.department
         self._client.create_payload_index(
             collection_name = self._collection_name,
             field_name      = index_key,
@@ -152,30 +131,19 @@ class QdrantStore:
         self,
         documents: list[Document],
     ) -> list[str]:
-        """
-        Embed and upsert LangChain Documents into Qdrant.
-        Returns list of inserted point IDs.
-        """
+
         if not documents:
-            logger.warning(
-                "add_documents called with empty list — skipping"
-            )
+            logger.warning("add_documents — empty list, skipping")
             return []
 
-        logger.info(
-            f"Inserting {len(documents)} documents..."
-        )
-
+        logger.info(f"Inserting {len(documents)} documents...")
         ids = self._store.add_documents(documents)
-
-        logger.info(
-            f"Inserted {len(ids)} documents ✓"
-        )
+        logger.info(f"Inserted {len(ids)} documents ✓")
 
         return ids
 
     # ------------------------------------------------------------------
-    # Retrieval
+    # Search
     # ------------------------------------------------------------------
 
     def search(
@@ -184,12 +152,7 @@ class QdrantStore:
         department: str,
         k:          int = 5,
     ) -> list[Document]:
-        """
-        Similarity search filtered to one department.
 
-        Returns Documents sorted by relevance (highest score first).
-        Score is attached to doc.metadata['score'].
-        """
         dept_filter = Filter(
             must=[
                 FieldCondition(
@@ -210,7 +173,6 @@ class QdrantStore:
             doc.metadata["score"] = round(float(score), 4)
             docs.append(doc)
 
-        # ✅ Higher score = more similar — sort descending
         docs.sort(
             key=lambda d: d.metadata.get("score", 0.0),
             reverse=True,
@@ -218,6 +180,7 @@ class QdrantStore:
 
         logger.info(
             f"search | dept='{department}' | "
+            f"query='{query[:50]}' | "
             f"hits={len(docs)}"
         )
 
@@ -225,15 +188,12 @@ class QdrantStore:
 
     def search_multi_department(
         self,
-        query:      str,
+        query:       str,
         departments: list[str],
-        k_per_dept: int = 5,
-        top_k:      int = 5,
+        k_per_dept:  int = 5,
+        top_k:       int = 5,
     ) -> list[Document]:
-        """
-        Search across multiple departments — used for C-Level users.
-        Merges and re-ranks by score, returns top_k.
-        """
+
         all_docs: list[Document] = []
 
         for dept in departments:
@@ -250,7 +210,6 @@ class QdrantStore:
                     f"Search failed for dept '{dept}': {e}"
                 )
 
-        # ✅ Sort descending — highest similarity first
         all_docs.sort(
             key=lambda d: d.metadata.get("score", 0.0),
             reverse=True,

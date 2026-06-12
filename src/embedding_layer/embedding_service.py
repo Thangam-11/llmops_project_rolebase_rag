@@ -14,6 +14,7 @@ from functools import cached_property
 
 from langchain_huggingface import HuggingFaceEmbeddings
 
+from config.settings import get_settings
 from utils.logger_exceptions import get_logger
 
 logger = get_logger(__name__)
@@ -150,3 +151,18 @@ class EmbeddingService:
     @staticmethod
     def dimension() -> int:
         return EMBEDDING_DIM
+    
+# Add this at the very bottom of embedding_service.py
+
+from functools import lru_cache
+
+@lru_cache(maxsize=1)
+def get_embedding_service() -> EmbeddingService:
+    """
+    Global singleton — model loads once, reused everywhere.
+    Prevents reloading 768-dim model on every search call.
+    """
+    settings = get_settings()
+    return EmbeddingService(
+        model_name=settings.embedding_model,
+    )

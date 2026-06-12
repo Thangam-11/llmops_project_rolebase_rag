@@ -1,168 +1,233 @@
 """
-Ingest all department documents into Qdrant.
+src/rag_pipeline/ingestion_pipeline.py
+=======================================
+Correct ingestion pipeline using YOUR existing services:
+
+    IngestionService    (Docling loader    — returns raw dicts)
+         |
+    ChunkingService     (HybridChunker     — returns list[dict])
+         |
+    chunks_to_langchain (attach metadata   — returns list[Document])
+         |
+    QdrantStore         (embed + upsert    — stores with full payload)
 
 Run:
-    python -m src.ingestion_pipeline.ingest_to_qdrant
+    python -m src.rag_pipeline.ingestion_pipeline
 """
 
+from __future__ import annotations
+
 from pathlib import Path
+
 from langchain_core.documents import Document
 
-from src.data_ingestion.data_loader import IngestionService
-from src.data_ingestion.chunker_service import ChunkingService
-from src.embedding_layer.embedding_service import EmbeddingService
-from src.vectordb.qdrant_service import QdrantStore
-from config.settings import get_settings
-from utils.logger_exceptions import get_logger
+from src.data_ingestion.data_loader      import IngestionService
+from src.data_ingestion.chunker_service  import ChunkingService
+from src.embedding_layer.embedding_service     import EmbeddingService
+from src.vectordb.qdrant_store           import QdrantStore
+from utils.logger_exceptions             import get_logger
+from config.settings                     import get_settings
 
 logger   = get_logger(__name__)
 settings = get_settings()
 
 
 # ---------------------------------------------------------------------------
-# Convert Docling raw docs → LangChain Documents
+# Helper: convert ChunkingService dicts → LangChain Documents
 # ---------------------------------------------------------------------------
 
-def to_langchain_docs(
-    raw_docs: list[dict],
-    chunker:  ChunkingService,
+def chunks_to_langchain(
+    chunks:     list[dict],
+    department: str,
+    filename:   str,
 ) -> list[Document]:
+    """
+    Convert raw chunk dicts from ChunkingService into LangChain Documents.
+    This attaches department + filename into metadata so Qdrant
+    stores them as searchable payload fields.
 
-    lc_docs: list[Document] = []
+    Input chunk dict shape:
+        {
+            "chunk_id"  : int,
+            "text"      : str,
+            "headings"  : list[str],
+            "page"      : int | None,
+            "chunk_type": "text" | "table",
+        }
+    """
+    docs = []
+    for chunk in chunks:
+        docs.append(
+            Document(
+                page_content = chunk["text"],
+                metadata     = {
+                    "department": department,
+                    "filename":   filename,
+                    "chunk_id":   chunk["chunk_id"],
+                    "chunk_type": chunk["chunk_type"],
+                    "headings":   chunk["headings"],
+                    "page":       chunk["page"],
+                },
+            )
+        )
+    return docs
 
-    for raw in raw_docs:
 
-        department = raw["department"]
-        filename   = raw["filename"]
-        file_type  = raw["file_type"]
+# ---------------------------------------------------------------------------
+# Pipeline
+# ---------------------------------------------------------------------------
 
-        chunks = chunker.chunk_document(
-            document=raw["document"],
-            file_type=file_type,
+class IngestionPipeline:
+    """
+    End-to-end ingestion pipeline using your existing services.
+
+        loader  : IngestionService  — Docling, returns raw dicts
+        chunker : ChunkingService   — HybridChunker, returns list[dict]
+        store   : QdrantStore       — LangChain Qdrant wrapper
+    """
+
+    def __init__(self) -> None:
+        self.loader  = IngestionService()
+        self.chunker = ChunkingService()
+        self.embedder = EmbeddingService(
+            model_name = settings.embedding_model,
+        )
+        self.store = QdrantStore(
+            embedding_service = self.embedder,
+            url               = settings.qdrant_url,
+            api_key           = settings.qdrant_api_key,
+            collection_name   = settings.collection_name,
+        )
+        logger.info("IngestionPipeline initialised ✓")
+
+    # ------------------------------------------------------------------
+    # Public API
+    # ------------------------------------------------------------------
+
+    def run(self, data_dir: str | Path = "data") -> dict:
+        """
+        Ingest an entire data directory.
+
+        Steps:
+            1. ingest_directory()      raw Docling dicts
+            2. chunk_document()        HybridChunker per file
+            3. chunks_to_langchain()   attach department + filename metadata
+            4. store.add_documents()   embed + upsert into Qdrant
+
+        Returns:
+            {"files": int, "chunks": int}
+        """
+        root = Path(data_dir)
+        logger.info(f"=== Ingestion pipeline START | dir={root} ===")
+
+        # Step 1: load all files via Docling
+        raw_docs = self.loader.ingest_directory(root)
+
+        if not raw_docs:
+            logger.warning("No files loaded — pipeline stopped")
+            return {"files": 0, "chunks": 0}
+
+        total_chunks = 0
+        all_lc_docs: list[Document] = []
+
+        # Step 2+3: chunk each file and convert to LangChain Documents
+        for raw in raw_docs:
+            department = raw["department"]
+            filename   = raw["filename"]
+            file_type  = raw["file_type"]
+
+            logger.info(f"Chunking: {filename} | dept={department}")
+
+            chunks = self.chunker.chunk_document(
+                document  = raw["document"],
+                file_type = file_type,
+            )
+
+            if not chunks:
+                logger.warning(f"No chunks for {filename} — skipping")
+                continue
+
+            # Attach department + filename into each chunk's metadata
+            lc_docs = chunks_to_langchain(
+                chunks     = chunks,
+                department = department,
+                filename   = filename,
+            )
+
+            all_lc_docs.extend(lc_docs)
+            total_chunks += len(lc_docs)
+
+            logger.info(
+                f"  {filename} → {len(lc_docs)} chunks"
+            )
+
+        if not all_lc_docs:
+            logger.warning("No chunks produced — pipeline stopped")
+            return {"files": len(raw_docs), "chunks": 0}
+
+        # Step 4: embed + upsert into Qdrant
+        self.store.add_documents(all_lc_docs)
+
+        stats = {"files": len(raw_docs), "chunks": total_chunks}
+        logger.info(f"=== Ingestion pipeline DONE | {stats} ===")
+        self._print_summary(stats)
+        return stats
+
+    def run_file(
+        self,
+        file_path:  str | Path,
+        department: str,
+    ) -> dict:
+        """
+        Ingest a single file.
+
+        Returns:
+            {"files": 1, "chunks": int}
+        """
+        path = Path(file_path)
+        logger.info(f"=== Single-file ingestion | {path.name} ===")
+
+        raw    = self.loader.ingest_file(path, department)
+        chunks = self.chunker.chunk_document(
+            document  = raw["document"],
+            file_type = raw["file_type"],
         )
 
         if not chunks:
-            logger.warning(
-                f"No chunks from {filename} — skipping"
-            )
-            continue
+            logger.warning(f"No chunks produced for {path.name}")
+            return {"files": 1, "chunks": 0}
 
-        for chunk in chunks:
-            lc_docs.append(
-                Document(
-                    page_content=chunk["text"],
-                    metadata={
-                        "department":  department,
-                        "filename":    filename,
-                        "chunk_index": chunk["chunk_id"],
-                        "chunk_type":  chunk.get("chunk_type", "text"),
-                        "page":        chunk.get("page"),
-                        "headings":    chunk.get("headings", []),
-                    },
-                )
-            )
+        lc_docs = chunks_to_langchain(
+            chunks     = chunks,
+            department = department,
+            filename   = path.name,
+        )
 
-    logger.info(
-        f"Converted {len(raw_docs)} files "
-        f"→ {len(lc_docs)} chunks"
-    )
+        self.store.add_documents(lc_docs,batch_size=8)
 
-    return lc_docs
+        stats = {"files": 1, "chunks": len(lc_docs)}
+        logger.info(f"=== Single-file ingestion DONE | {stats} ===")
+        return stats
 
+    # ------------------------------------------------------------------
+    # Internal
+    # ------------------------------------------------------------------
 
-# ---------------------------------------------------------------------------
-# Main ingestion function
-# ---------------------------------------------------------------------------
-
-def run_ingestion(data_dir: str = "data") -> dict:
-
-    root = Path(data_dir)
-
-    print("=" * 60)
-    print(f"Starting ingestion from: {root.resolve()}")
-    print("=" * 60)
-
-    # ── Init services ──────────────────────────────────────────────────
-    loader   = IngestionService()
-    chunker  = ChunkingService()
-    embedder = EmbeddingService(
-        model_name=settings.embedding_model,
-    )
-    store = QdrantStore(
-        embedding_service=embedder,
-        url=settings.qdrant_url,
-        api_key=settings.qdrant_api_key,
-        collection_name=settings.collection_name,
-    )
-
-    # ── Step 1 — Load all files ────────────────────────────────────────
-    raw_docs = loader.ingest_directory(root)
-
-    if not raw_docs:
-        print("❌ No files found — check your data/ folder")
-        return {"files": 0, "chunks": 0}
-
-    print(f"\nFiles loaded: {len(raw_docs)}\n")
-
-    # ── Step 2 — Chunk + convert ───────────────────────────────────────
-    lc_docs = to_langchain_docs(raw_docs, chunker)
-
-    if not lc_docs:
-        print("❌ No chunks produced")
-        return {"files": len(raw_docs), "chunks": 0}
-
-    # ── Step 3 — Embed + upsert into Qdrant ───────────────────────────
-    print(f"Inserting {len(lc_docs)} chunks into Qdrant...")
-    store.add_documents(lc_docs)
-
-    # ── Summary ────────────────────────────────────────────────────────
-    dept_counts: dict[str, int] = {}
-    file_counts: dict[str, list] = {}
-
-    for doc in lc_docs:
-        dept = doc.metadata.get("department", "unknown")
-        file = doc.metadata.get("filename", "unknown")
-
-        dept_counts[dept] = dept_counts.get(dept, 0) + 1
-
-        if dept not in file_counts:
-            file_counts[dept] = []
-        if file not in file_counts[dept]:
-            file_counts[dept].append(file)
-
-    print()
-    print("=" * 60)
-    print("INGESTION SUMMARY")
-    print("=" * 60)
-    print(f"{'Department':<15} {'Chunks':>8}  Files")
-    print("-" * 60)
-
-    for dept in sorted(dept_counts.keys()):
-        files  = ", ".join(file_counts[dept])
-        count  = dept_counts[dept]
-        print(f"{dept:<15} {count:>8}  {files}")
-
-    print("-" * 60)
-    print(f"{'TOTAL':<15} {len(lc_docs):>8}  {len(raw_docs)} files")
-    print("=" * 60)
-
-    # Collection info
-    info = store.collection_info()
-    print(f"\nQdrant collection : {info['name']}")
-    print(f"Total vectors     : {info['vector_count']}")
-    print(f"Status            : {info['status']}")
-    print("\n✅ Ingestion complete")
-
-    return {
-        "files":       len(raw_docs),
-        "chunks":      len(lc_docs),
-        "departments": dept_counts,
-    }
+    @staticmethod
+    def _print_summary(stats: dict) -> None:
+        print()
+        print("=" * 50)
+        print(f"  Files processed : {stats['files']}")
+        print(f"  Chunks inserted : {stats['chunks']}")
+        print("=" * 50)
+        print("  Data ingested into Qdrant ✓")
+        print()
 
 
 # ---------------------------------------------------------------------------
-# Entry point
+# CLI entry point
 # ---------------------------------------------------------------------------
 
 if __name__ == "__main__":
-    run_ingestion("data")
+    pipeline = IngestionPipeline()
+    pipeline.run("data")
