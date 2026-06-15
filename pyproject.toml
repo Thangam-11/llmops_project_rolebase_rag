@@ -59,10 +59,6 @@ dependencies = [
     "openpyxl",
     "unstructured",
     "pandas",
-    # ===========================
-    # RAG Evaluation
-    # ===========================
-    "ragas",
     "datasets",
     "deepeval",
     # ===========================
@@ -111,4 +107,5 @@ dependencies = [
     "faker",
     "coverage",
     "langchain-huggingface>=1.2.2",
+    "langchain-google-vertexai>=3.2.4",
 ]

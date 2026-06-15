@@ -14,6 +14,7 @@ class RegisterRequest(BaseModel):
     full_name:  str | None = None
     department: Department
     role:       UserRole   = UserRole.viewer
+    model_config = {"from_attributes": True}  
 
     @field_validator("username")
     @classmethod

@@ -1,56 +1,51 @@
 """
-FastAPI application entry point.
+main.py
 """
 from contextlib import asynccontextmanager
-
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from prometheus_client import make_asgi_app
 
-from models.database import engine, Base
-from models import model   # register all models
-from api_services.routers.auth import router as auth_router
-from api_services.routers.chat import router as chat_router
-from utils.logger_exceptions import get_logger
+from src.monitoring              import setup_langsmith, start_metrics_server
+from api_services.routers.auth         import router as auth_router
+from api_services.routers.chat         import router as chat_router
+from config.settings             import get_settings
 
-logger = get_logger(__name__)
+settings = get_settings()
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    logger.info("Starting FinSolve RAG API...")
-
-    # Create all PostgreSQL tables
-    async with engine.begin() as conn:
-        await conn.run_sync(Base.metadata.create_all)
-    logger.info("Database tables ready ✓")
-
+    # ── Startup ───────────────────────────────────────────────────────
+    setup_langsmith()                                   # LangSmith tracing
+    start_metrics_server(port=settings.prometheus_port) # Prometheus server
     yield
-
-    logger.info("Shutting down...")
+    # ── Shutdown ──────────────────────────────────────────────────────
 
 
 app = FastAPI(
-    title="FinSolve RAG Chatbot API",
-    description="Role-Based RAG with JWT + PostgreSQL",
-    version="1.0.0",
-    lifespan=lifespan,
+    title       = "Role-Based RAG API",
+    version     = "1.0.0",
+    lifespan    = lifespan,
 )
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_origins     = ["*"],
+    allow_credentials = True,
+    allow_methods     = ["*"],
+    allow_headers     = ["*"],
 )
 
+# ── Mount Prometheus metrics as ASGI endpoint (alternative to separate server)
+metrics_app = make_asgi_app()
+app.mount("/metrics", metrics_app)
+
+# ── Routers ───────────────────────────────────────────────────────────────────
 app.include_router(auth_router)
 app.include_router(chat_router)
 
 
 @app.get("/health")
 async def health():
-    return {
-        "status":  "ok",
-        "app":     "FinSolve RAG Chatbot",
-        "version": "1.0.0",
-    }
+    return {"status": "ok", "environment": settings.environment}
