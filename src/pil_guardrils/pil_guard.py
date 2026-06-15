@@ -1,161 +1,180 @@
+"""
+src/pil_guardrils/pil_guard.py
+================================
+PII detection and scrubbing using Microsoft Presidio.
+"""
+
 from __future__ import annotations
+from dataclasses import dataclass, field
 
-from dataclasses import dataclass
-
-from presidio_analyzer import AnalyzerEngine, PatternRecognizer, Pattern
-from presidio_analyzer.nlp_engine import NlpEngineProvider
+from presidio_analyzer import AnalyzerEngine
 from presidio_anonymizer import AnonymizerEngine
 
 from utils.logger_exceptions import get_logger
 
 logger = get_logger(__name__)
 
-# ---------------------------------------------------------------------------
-# Config
-# ---------------------------------------------------------------------------
 
-INPUT_ENTITIES = [
-    "CREDIT_CARD",
-    "US_SSN",
-    "IBAN_CODE",
-    "EMAIL_ADDRESS",
-    "PHONE_NUMBER",
-    "IP_ADDRESS",
-]
-
-OUTPUT_ENTITIES = [
-    "CREDIT_CARD",
-    "US_SSN",
-    "IBAN_CODE",
-    "EMAIL_ADDRESS",
-    "PHONE_NUMBER",
-    "IP_ADDRESS",
-    "PERSON",
-    "LOCATION",
-]
-
-SCORE_THRESHOLD = 0.4
-
-
-# ---------------------------------------------------------------------------
-# Custom SSN recognizer (Presidio built-in is unreliable)
-# ---------------------------------------------------------------------------
-
-def _build_ssn_recognizer() -> PatternRecognizer:
-    patterns = [
-        Pattern(
-            name  = "SSN_dashes",
-            regex = r"\b\d{3}-\d{2}-\d{4}\b",
-            score = 0.85,
-        ),
-        Pattern(
-            name  = "SSN_spaces",
-            regex = r"\b\d{3} \d{2} \d{4}\b",
-            score = 0.85,
-        ),
-        Pattern(
-            name  = "SSN_plain",
-            regex = r"\b\d{9}\b",
-            score = 0.5,   # lower confidence — 9 digits alone is ambiguous
-        ),
-    ]
-    return PatternRecognizer(
-        supported_entity = "US_SSN",
-        patterns         = patterns,
-    )
-
-
-# ---------------------------------------------------------------------------
-# Result
-# ---------------------------------------------------------------------------
+# ── Result dataclass ───────────────────────────────────────────────────────
 
 @dataclass
 class PIIGuardResult:
-    allowed:   bool
-    reason:    str  = ""
-    pii_found: list = None
+    """
+    Structured result from PIIGuardrail.scrub_input().
+    Importable by chain_pipeline.py.
+    """
+    clean_text:   str
+    pii_found:    list[str] = field(default_factory=list)
+    was_scrubbed: bool      = False
 
-    def __post_init__(self):
-        if self.pii_found is None:
-            self.pii_found = []
+    def __bool__(self) -> bool:
+        return self.was_scrubbed
 
 
-# ---------------------------------------------------------------------------
-# Guardrail
-# ---------------------------------------------------------------------------
+# ── Entity lists ───────────────────────────────────────────────────────────
+
+INPUT_ENTITIES = [
+    "PERSON",
+    "EMAIL_ADDRESS",
+    "PHONE_NUMBER",
+    "CREDIT_CARD",
+    "IBAN_CODE",
+    "IP_ADDRESS",
+    "LOCATION",
+    "NRP",
+]
+
+OUTPUT_ENTITIES = [
+    "PERSON",
+    "EMAIL_ADDRESS",
+    "PHONE_NUMBER",
+    "CREDIT_CARD",
+    "IBAN_CODE",
+]
+
+
+# ── Guard class ────────────────────────────────────────────────────────────
 
 class PIIGuardrail:
 
     def __init__(self) -> None:
-        provider = NlpEngineProvider(nlp_configuration={
-            "nlp_engine_name": "spacy",
-            "models": [{"lang_code": "en", "model_name": "en_core_web_lg"}],
-        })
-        nlp_engine = provider.create_engine()
-
-        self._analyzer = AnalyzerEngine(nlp_engine=nlp_engine)
-
-        # Register custom SSN recognizer
-        self._analyzer.registry.add_recognizer(_build_ssn_recognizer())
-
+        self._analyzer   = AnalyzerEngine()
         self._anonymizer = AnonymizerEngine()
         logger.info("PIIGuardrail (Presidio) ready ✓")
 
-    def analyze(self, text: str, entities: list[str] | None = None, language: str = "en") -> list:
+    # ------------------------------------------------------------------
+    # Internal helper
+    # ------------------------------------------------------------------
+
+    def _to_str(self, text) -> str:
+        """
+        Force convert to plain str.
+        Fixes LangChain TextAccessor → str issue.
+        """
+        if isinstance(text, str):
+            return text
+        return str(text)
+
+    def analyze(
+        self,
+        text,
+        entities: list[str] | None = None,
+    ) -> list:
+        """Detect PII entities. Always converts to str first."""
+        clean_text = self._to_str(text)
+
+        if not clean_text.strip():
+            return []
+
         return self._analyzer.analyze(
-            text            = text,
-            entities        = entities,
-            language        = language,
-            score_threshold = SCORE_THRESHOLD,
+            text=clean_text,
+            language="en",
+            entities=entities,
         )
 
-    def anonymize(self, text: str, entities: list[str] | None = None) -> str:
-        results = self.analyze(text, entities=entities)
+    # ------------------------------------------------------------------
+    # Input scrubbing — returns PIIGuardResult
+    # ------------------------------------------------------------------
+
+    def scrub_input(self, query) -> PIIGuardResult:
+        """
+        Scrub PII from user input.
+        Returns PIIGuardResult with clean_text and pii_found list.
+        """
+        clean_text = self._to_str(query)
+        results    = self.analyze(
+            clean_text,
+            entities=INPUT_ENTITIES,
+        )
+
         if not results:
-            return text
-        return self._anonymizer.anonymize(text=text, analyzer_results=results).text
+            return PIIGuardResult(
+                clean_text=clean_text,
+                pii_found=[],
+                was_scrubbed=False,
+            )
 
-    def check_input(self, question: str) -> PIIGuardResult:
-        results = self.analyze(question, entities=INPUT_ENTITIES)
-        if not results:
-            return PIIGuardResult(allowed=True)
+        anonymized = self._anonymizer.anonymize(
+            text=clean_text,
+            analyzer_results=results,
+        )
 
-        found_types = list({r.entity_type for r in results})
-        friendly    = ", ".join(t.replace("_", " ").title() for t in found_types)
-
-        logger.warning(f"PII in user question: {found_types} | q={question[:60]}")
+        pii_types = [r.entity_type for r in results]
+        logger.info(f"Input PII scrubbed: {pii_types}")
 
         return PIIGuardResult(
-            allowed   = False,
-            reason    = (
-                f"Your question appears to contain sensitive information "
-                f"({friendly}). Please rephrase without personal data."
-            ),
-            pii_found = found_types,
+            clean_text=anonymized.text,
+            pii_found=pii_types,
+            was_scrubbed=True,
         )
 
-    def scrub_output(self, answer: str) -> str:
-        results = self.analyze(answer, entities=OUTPUT_ENTITIES)
+    # ------------------------------------------------------------------
+    # Output scrubbing — returns plain str
+    # ------------------------------------------------------------------
+
+    def scrub_output(self, answer) -> str:
+        """
+        Scrub PII from LLM answer.
+        Converts TextAccessor → str before Presidio call.
+        """
+        clean_answer = self._to_str(answer)
+
+        if not clean_answer.strip():
+            return clean_answer
+
+        results = self.analyze(
+            clean_answer,
+            entities=OUTPUT_ENTITIES,
+        )
+
         if not results:
-            return answer
+            return clean_answer
 
-        found_types = list({r.entity_type for r in results})
-        logger.warning(f"PII scrubbed from LLM output: {found_types}")
+        anonymized = self._anonymizer.anonymize(
+            text=clean_answer,
+            analyzer_results=results,
+        )
 
-        return self._anonymizer.anonymize(text=answer, analyzer_results=results).text
+        pii_types = [r.entity_type for r in results]
+        logger.info(f"Output PII scrubbed: {pii_types}")
 
+        return anonymized.text
 
-# ---------------------------------------------------------------------------
-# Test
-# ---------------------------------------------------------------------------
+    # ------------------------------------------------------------------
+    # Detection only
+    # ------------------------------------------------------------------
 
-if __name__ == "__main__":
-    guard = PIIGuardrail()
+    def detect_pii(self, text) -> list[dict]:
+        """Detect PII without anonymizing."""
+        clean_text = self._to_str(text)
+        results    = self.analyze(clean_text)
 
-    r = guard.check_input("My SSN is 123-45-6789 and card is 4111-1111-1111-1111")
-    print(r.allowed, r.reason)
-
-    print(guard.scrub_output("Email John at john@example.com, SSN 123-45-6789"))
-
-    r2 = guard.check_input("What is the Q4 revenue?")
-    print(r2.allowed)
+        return [
+            {
+                "type":  r.entity_type,
+                "score": round(r.score, 3),
+                "start": r.start,
+                "end":   r.end,
+            }
+            for r in results
+        ]

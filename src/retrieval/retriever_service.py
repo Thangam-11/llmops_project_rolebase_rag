@@ -2,17 +2,7 @@
 src/retrieval/retriever.py
 ===========================
 Department-aware retrieval layer built on QdrantStore.
-
-Role-based logic:
-    - Regular users → search only their own department
-    - C-Level users → search ALL departments, merge + re-rank
-
-Returns LangChain Documents with 'score' in metadata.
-
-Usage:
-    retriever = RetrieverService(qdrant_store)
-    docs      = retriever.retrieve("What is our Q4 profit?", department="finance")
-    docs      = retriever.retrieve("Summarise all KPIs",     department="c_level")
+...
 """
 
 from __future__ import annotations
@@ -20,11 +10,10 @@ from __future__ import annotations
 from langchain_core.documents import Document
 
 from src.vectordb.qdrant_store import QdrantStore
-from utils.logger_exceptions         import get_logger
+from utils.logger_exceptions import get_logger
 
 logger = get_logger(__name__)
 
-# All departments a C-Level user can query
 C_LEVEL_DEPARTMENTS: list[str] = [
     "finance",
     "hr",
@@ -33,11 +22,19 @@ C_LEVEL_DEPARTMENTS: list[str] = [
     "general",
 ]
 
+DEPT_COLLECTIONS: dict[str, list[str]] = {
+    "engineering": ["engineering", "general"],
+    "hr":          ["hr",          "general"],
+    "finance":     ["finance",     "general"],
+    "marketing":   ["marketing",   "general"],
+    "general":     ["general"],
+    "c_level":     C_LEVEL_DEPARTMENTS,
+}
+
 
 class RetrieverService:
     """
     Thin routing layer over QdrantStore.
-
     Args:
         store      : QdrantStore instance
         default_k  : number of chunks to return per query
@@ -45,10 +42,10 @@ class RetrieverService:
 
     def __init__(
         self,
-        store:     QdrantStore,
+        store: QdrantStore,
         default_k: int = 5,
     ) -> None:
-        self._store     = store
+        self._store = store
         self._default_k = default_k
         logger.info("RetrieverService ready ✓")
 
@@ -58,62 +55,75 @@ class RetrieverService:
 
     def retrieve(
         self,
-        question:   str,
+        question: str,
         department: str,
-        k:          int | None = None,
+        k: int | None = None,
     ) -> list[Document]:
-        """
-        Retrieve the most relevant chunks for a question.
-
-        Args:
-            question   : user query
-            department : user's department (from JWT payload)
-            k          : override number of results
-
-        Returns:
-            list[Document] sorted by relevance
-        """
         k = k or self._default_k
 
         if department == "c_level":
             return self._retrieve_c_level(question, k)
 
-        return self._retrieve_single(question, department, k)
+        collections = DEPT_COLLECTIONS.get(department, [department])
+
+        if len(collections) == 1:
+            return self._retrieve_single(
+                question=question,
+                department=collections[0],
+                k=k,
+            )
+
+        return self._retrieve_multiple(
+            question=question,
+            departments=collections,
+            k=k,
+        )
 
     # ------------------------------------------------------------------
-    # Internal
+    # Internal Retrieval Methods
     # ------------------------------------------------------------------
 
     def _retrieve_single(
         self,
-        question:   str,
+        question: str,
         department: str,
-        k:          int,
+        k: int,
     ) -> list[Document]:
         docs = self._store.search(
-            query      = question,
-            department = department,
-            k          = k,
+            query=question,
+            department=department,
+            k=k,
         )
-        logger.info(
-            f"Single retrieval | dept='{department}' | hits={len(docs)}"
+        logger.info(f"Single retrieval | dept='{department}' | hits={len(docs)}")
+        return docs
+
+    def _retrieve_multiple(
+        self,
+        question: str,
+        departments: list[str],
+        k: int,
+    ) -> list[Document]:
+        docs = self._store.search_multi_department(
+            query=question,
+            departments=departments,
+            k_per_dept=k,
+            top_k=k,
         )
+        logger.info(f"Multi-department retrieval | depts={departments} | hits={len(docs)}")
         return docs
 
     def _retrieve_c_level(
         self,
         question: str,
-        k:        int,
+        k: int,
     ) -> list[Document]:
         docs = self._store.search_multi_department(
-            query       = question,
-            departments = C_LEVEL_DEPARTMENTS,
-            k_per_dept  = k,
-            top_k       = k,
+            query=question,
+            departments=C_LEVEL_DEPARTMENTS,
+            k_per_dept=k,
+            top_k=k,
         )
-        logger.info(
-            f"C-Level retrieval | depts={C_LEVEL_DEPARTMENTS} | hits={len(docs)}"
-        )
+        logger.info(f"C-Level retrieval | depts={C_LEVEL_DEPARTMENTS} | hits={len(docs)}")
         return docs
 
     # ------------------------------------------------------------------
@@ -121,20 +131,17 @@ class RetrieverService:
     # ------------------------------------------------------------------
 
     @staticmethod
-    def format_context(docs: list[Document]) -> str:
-        """
-        Convert retrieved Documents into a formatted context string
-        suitable for injection into a prompt.
-
-        Format:
-            [1] filename.pdf | dept=finance | score=0.9241
-            <chunk text>
-            ---
-        """
+    def format_context(
+        docs: list[Document],
+        max_chars_per_chunk: int = 800,
+        max_total_chars: int = 6000,
+    ) -> str:
         if not docs:
             return "No relevant context found."
 
         parts: list[str] = []
+        total_chars: int = 0
+
         for i, doc in enumerate(docs, 1):
             m        = doc.metadata
             filename = m.get("filename",   "unknown")
@@ -143,18 +150,28 @@ class RetrieverService:
             page     = m.get("page",       None)
             headings = m.get("headings",   [])
 
-            heading_str = (
-                f" | section: {' > '.join(headings)}" if headings else ""
-            )
-            page_str = f" | page {page}" if page else ""
+            heading_str = f" | section: {' > '.join(headings)}" if headings else ""
+            page_str    = f" | page {page}" if page else ""
 
             header = (
                 f"[{i}] {filename}"
                 f" | dept={dept}"
                 f"{heading_str}"
                 f"{page_str}"
-                f" | score={score}"
+                f" | score={score:.4f}"
             )
-            parts.append(f"{header}\n{doc.page_content}")
+
+            content = doc.page_content
+            if len(content) > max_chars_per_chunk:
+                content = content[:max_chars_per_chunk] + "…"
+
+            chunk = f"{header}\n{content}"
+
+            if total_chars + len(chunk) > max_total_chars:
+                logger.info(f"Context truncated at chunk {i} ({total_chars} chars)")
+                break
+
+            parts.append(chunk)
+            total_chars += len(chunk)
 
         return "\n\n---\n\n".join(parts)
