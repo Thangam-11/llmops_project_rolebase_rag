@@ -5,8 +5,8 @@ from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from auth.jwt_service import decode_token
-from config.database import get_db
+from auth.jwt_service import JWTService
+from models.database import get_db
 from models.model import User, UserRole
 
 
@@ -20,7 +20,7 @@ async def get_current_user(
 
     token = credentials.credentials
 
-    payload = decode_token(token)
+    payload = JWTService.decode_token(token)
 
     if not payload:
         raise HTTPException(

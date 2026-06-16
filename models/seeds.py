@@ -1,9 +1,9 @@
 import asyncio
 from sqlalchemy import select
-from config.database import AsyncSessionLocal, engine, Base
+from models.database import AsyncSessionLocal, engine, Base
 from models.model import User, Department, UserRole
-from app.auth.security import hash_password
-import app.db.models  # register all models
+from auth.security import hash_password
+import models.model # register all models
 
 
 # ── Exact users from problem statement ────────────────────────────────────

@@ -1,66 +1,61 @@
 from datetime import datetime, timedelta, timezone
-from jose import JWTError, jwt
-
+from jose import ExpiredSignatureError, JWTError, jwt
 from config.settings import get_settings
 
 settings = get_settings()
 
 
-def create_access_token(data: dict) -> str:
-    """
-    Create short-lived access token.
-    """
+class TokenExpiredError(Exception):
+    """Raised when the token has expired."""
 
-    payload = data.copy()
-
-    expire = datetime.now(timezone.utc) + timedelta(
-        minutes=settings.access_token_expire_minutes
-    )
-
-    payload.update({"exp": expire})
-
-    encoded_jwt = jwt.encode(
-        payload,
-        settings.secret_key,
-        algorithm=settings.algorithm,
-    )
-
-    return encoded_jwt
+class TokenInvalidError(Exception):
+    """Raised when the token is invalid or malformed."""
 
 
-def create_refresh_token(data: dict) -> str:
-    """
-    Create long-lived refresh token.
-    """
+class JWTService:
 
-    payload = data.copy()
+    @staticmethod
+    def _build_payload(data: dict, expire: datetime) -> dict:
+        return {
+            **data,
+            "iat": datetime.now(timezone.utc),
+            "exp": expire,
+        }
 
-    expire = datetime.now(timezone.utc) + timedelta(days=7)
-
-    payload.update({"exp": expire})
-
-    encoded_jwt = jwt.encode(
-        payload,
-        settings.secret_key,
-        algorithm=settings.algorithm,
-    )
-
-    return encoded_jwt
-
-
-def decode_token(token: str) -> dict:
-    """
-    Decode and validate JWT.
-    """
-
-    try:
-        payload = jwt.decode(
-            token,
+    @staticmethod
+    def create_access_token(data: dict) -> str:
+        """Create short-lived access token."""
+        expire = datetime.now(timezone.utc) + timedelta(
+            minutes=settings.access_token_expire_minutes
+        )
+        return jwt.encode(
+            JWTService._build_payload(data, expire),
             settings.secret_key,
-            algorithms=[settings.algorithm],
+            algorithm=settings.algorithm,
         )
 
-        return payload
+    @staticmethod
+    def create_refresh_token(data: dict) -> str:
+        """Create long-lived refresh token."""
+        expire = datetime.now(timezone.utc) + timedelta(
+            days=settings.refresh_token_expire_days
+        )
+        return jwt.encode(
+            JWTService._build_payload(data, expire),
+            settings.secret_key,
+            algorithm=settings.algorithm,
+        )
 
-    except JWTError:
-        return {}
+    @staticmethod
+    def decode_token(token: str) -> dict:
+        """Decode and validate JWT. Raises TokenExpiredError or TokenInvalidError on failure."""
+        try:
+            return jwt.decode(
+                token,
+                settings.secret_key,
+                algorithms=[settings.algorithm],
+            )
+        except ExpiredSignatureError:
+            raise TokenExpiredError("Token has expired")
+        except JWTError as e:
+            raise TokenInvalidError(f"Invalid token: {e}") from e
