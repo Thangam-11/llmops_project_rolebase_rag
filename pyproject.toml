@@ -108,4 +108,5 @@ dependencies = [
     "coverage",
     "langchain-huggingface>=1.2.2",
     "langchain-google-vertexai>=3.2.4",
+    "streamlit>=1.58.0",
 ]

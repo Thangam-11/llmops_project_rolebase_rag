@@ -159,7 +159,7 @@ async def history(
 ):
     HTTP_REQUESTS.labels(method="GET", endpoint="/chat/history", status=200).inc()
 
-    result = await db.execute(
+    result = await db.execute (
         select(QueryLog)
         .where(QueryLog.user_id == user.id)
         .order_by(QueryLog.created_at.desc())

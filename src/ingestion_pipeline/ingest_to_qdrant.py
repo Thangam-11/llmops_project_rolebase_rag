@@ -203,7 +203,7 @@ class IngestionPipeline:
             filename   = path.name,
         )
 
-        self.store.add_documents(lc_docs,batch_size=8)
+        self.store.add_documents(lc_docs)
 
         stats = {"files": 1, "chunks": len(lc_docs)}
         logger.info(f"=== Single-file ingestion DONE | {stats} ===")
