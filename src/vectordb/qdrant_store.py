@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from concurrent.futures import ThreadPoolExecutor, as_completed
+
 from langchain_core.documents import Document
 from langchain_qdrant import QdrantVectorStore
 from qdrant_client import QdrantClient
@@ -31,6 +33,7 @@ class QdrantStore:
         url:             str = None,                  # ← None = read from settings
         api_key:         str = None,                  # ← None = read from settings
         collection_name: str = None,                  # ← None = read from settings
+        max_workers:     int = 8,                      # ← thread pool size for parallel search
     ) -> None:
 
         # ── Use singleton if not provided ──────────────────────────────
@@ -55,6 +58,9 @@ class QdrantStore:
             api_key = self._api_key,
             timeout = 120,
         )
+
+        # ── Thread pool — used to parallelize multi-department search ──
+        self._executor = ThreadPoolExecutor(max_workers=max_workers)
 
         # ── LangChain vectorstore — for add/search ─────────────────────
         self._store = self._init_store()
@@ -193,28 +199,27 @@ class QdrantStore:
         k_per_dept:  int = 5,
         top_k:       int = 5,
     ) -> list[Document]:
+        """Searches all given departments concurrently (thread pool) instead
+        of sequentially, since each Qdrant call is a blocking network call."""
 
         all_docs: list[Document] = []
 
-        for dept in departments:
-            try:
-                docs = self.search(
-                    query=query,
-                    department=dept,
-                    k=k_per_dept,
-                )
-                all_docs.extend(docs)
+        futures = {
+            self._executor.submit(self.search, query, dept, k_per_dept): dept
+            for dept in departments
+        }
 
+        for future in as_completed(futures):
+            dept = futures[future]
+            try:
+                all_docs.extend(future.result())
             except Exception as e:
-                logger.warning(
-                    f"Search failed for dept '{dept}': {e}"
-                )
+                logger.warning(f"Search failed for dept '{dept}': {e}")
 
         all_docs.sort(
             key=lambda d: d.metadata.get("score", 0.0),
             reverse=True,
         )
-
         top = all_docs[:top_k]
 
         logger.info(
@@ -241,3 +246,7 @@ class QdrantStore:
         logger.info(
             f"Collection '{self._collection_name}' deleted ✓"
         )
+
+    def shutdown(self) -> None:
+        """Call on app shutdown to cleanly release thread pool workers."""
+        self._executor.shutdown(wait=False)

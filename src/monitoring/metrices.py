@@ -26,12 +26,26 @@ PII_BLOCKS = Counter(
     "Requests blocked by PII guardrail",
     ["pii_type"],
 )
+PII_DETECTIONS = Counter(
+    "rag_pii_detections_total",
+    "PII entities detected and anonymized by Presidio",
+    ["direction", "pii_type"],
+)
+
 
 RAGAS_SCORE = Gauge(
     "rag_ragas_score",
     "Latest RAGAS overall score",
     ["department"],
 )
+
+
+RAGAS_METRIC_SCORE = Gauge(
+    "rag_ragas_metric_score",
+    "Latest RAGAS metric score by department and metric",
+    ["department", "metric"],
+)
+
 
 RETRIEVAL_DOCS = Histogram(
     "rag_retrieval_docs_count",

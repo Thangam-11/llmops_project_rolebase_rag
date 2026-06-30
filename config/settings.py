@@ -35,11 +35,12 @@ class Settings(BaseSettings):
     # ===========================
     # Monitoring & Observability
     # ===========================
-    langsmith_api_key:    str  = ""
-    langsmith_project:    str  = "role-based-rag"
-    langsmith_enabled:    bool = False
-    prometheus_port:      int  = 9090
-
+    langsmith_api_key:     str  = ""
+    langsmith_project:     str  = "role-based-rag"
+    langsmith_enabled:     bool = False
+    prometheus_port:       int  = 9090
+    ragas_enabled:         bool = False
+    pii_guardrail_enabled: bool = True
     model_config = SettingsConfigDict(
         env_file       = ".env",
         case_sensitive = False,

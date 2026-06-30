@@ -1,37 +1,26 @@
-"""
-src/pil_guardrils/pil_guard.py
-================================
-PII detection and scrubbing using Microsoft Presidio.
-"""
-
 from __future__ import annotations
+
 from dataclasses import dataclass, field
 
 from presidio_analyzer import AnalyzerEngine
 from presidio_anonymizer import AnonymizerEngine
+from presidio_anonymizer.entities import OperatorConfig
 
 from utils.logger_exceptions import get_logger
 
 logger = get_logger(__name__)
 
 
-# ── Result dataclass ───────────────────────────────────────────────────────
-
 @dataclass
 class PIIGuardResult:
-    """
-    Structured result from PIIGuardrail.scrub_input().
-    Importable by chain_pipeline.py.
-    """
-    clean_text:   str
-    pii_found:    list[str] = field(default_factory=list)
-    was_scrubbed: bool      = False
+    clean_text: str
+    pii_found: list[str] = field(default_factory=list)
+    was_scrubbed: bool = False
+    count: int = 0
 
     def __bool__(self) -> bool:
         return self.was_scrubbed
 
-
-# ── Entity lists ───────────────────────────────────────────────────────────
 
 INPUT_ENTITIES = [
     "PERSON",
@@ -53,34 +42,29 @@ OUTPUT_ENTITIES = [
 ]
 
 
-# ── Guard class ────────────────────────────────────────────────────────────
-
 class PIIGuardrail:
-
     def __init__(self) -> None:
-        self._analyzer   = AnalyzerEngine()
+        self._analyzer = AnalyzerEngine()
         self._anonymizer = AnonymizerEngine()
-        logger.info("PIIGuardrail (Presidio) ready ✓")
-
-    # ------------------------------------------------------------------
-    # Internal helper
-    # ------------------------------------------------------------------
+        self._operators = {
+            "DEFAULT": OperatorConfig("replace", {"new_value": "[REDACTED]"}),
+            "PERSON": OperatorConfig("replace", {"new_value": "[PERSON]"}),
+            "EMAIL_ADDRESS": OperatorConfig("replace", {"new_value": "[EMAIL]"}),
+            "PHONE_NUMBER": OperatorConfig("replace", {"new_value": "[PHONE]"}),
+            "CREDIT_CARD": OperatorConfig("replace", {"new_value": "[CREDIT_CARD]"}),
+            "IBAN_CODE": OperatorConfig("replace", {"new_value": "[IBAN]"}),
+            "IP_ADDRESS": OperatorConfig("replace", {"new_value": "[IP_ADDRESS]"}),
+            "LOCATION": OperatorConfig("replace", {"new_value": "[LOCATION]"}),
+            "NRP": OperatorConfig("replace", {"new_value": "[NRP]"}),
+        }
+        logger.info("PIIGuardrail with Presidio anonymizer ready")
 
     def _to_str(self, text) -> str:
-        """
-        Force convert to plain str.
-        Fixes LangChain TextAccessor → str issue.
-        """
         if isinstance(text, str):
             return text
         return str(text)
 
-    def analyze(
-        self,
-        text,
-        entities: list[str] | None = None,
-    ) -> list:
-        """Detect PII entities. Always converts to str first."""
+    def analyze(self, text, entities: list[str] | None = None) -> list:
         clean_text = self._to_str(text)
 
         if not clean_text.strip():
@@ -92,60 +76,36 @@ class PIIGuardrail:
             entities=entities,
         )
 
-    # ------------------------------------------------------------------
-    # Input scrubbing — returns PIIGuardResult
-    # ------------------------------------------------------------------
-
     def scrub_input(self, query) -> PIIGuardResult:
-        """
-        Scrub PII from user input.
-        Returns PIIGuardResult with clean_text and pii_found list.
-        """
         clean_text = self._to_str(query)
-        results    = self.analyze(
-            clean_text,
-            entities=INPUT_ENTITIES,
-        )
+        results = self.analyze(clean_text, entities=INPUT_ENTITIES)
 
         if not results:
-            return PIIGuardResult(
-                clean_text=clean_text,
-                pii_found=[],
-                was_scrubbed=False,
-            )
+            return PIIGuardResult(clean_text=clean_text)
 
         anonymized = self._anonymizer.anonymize(
             text=clean_text,
             analyzer_results=results,
+            operators=self._operators,
         )
 
-        pii_types = [r.entity_type for r in results]
-        logger.info(f"Input PII scrubbed: {pii_types}")
+        pii_types = sorted({r.entity_type for r in results})
+        logger.info(f"Input PII anonymized: {pii_types}")
 
         return PIIGuardResult(
             clean_text=anonymized.text,
             pii_found=pii_types,
             was_scrubbed=True,
+            count=len(results),
         )
 
-    # ------------------------------------------------------------------
-    # Output scrubbing — returns plain str
-    # ------------------------------------------------------------------
-
     def scrub_output(self, answer) -> str:
-        """
-        Scrub PII from LLM answer.
-        Converts TextAccessor → str before Presidio call.
-        """
         clean_answer = self._to_str(answer)
 
         if not clean_answer.strip():
             return clean_answer
 
-        results = self.analyze(
-            clean_answer,
-            entities=OUTPUT_ENTITIES,
-        )
+        results = self.analyze(clean_answer, entities=OUTPUT_ENTITIES)
 
         if not results:
             return clean_answer
@@ -153,28 +113,24 @@ class PIIGuardrail:
         anonymized = self._anonymizer.anonymize(
             text=clean_answer,
             analyzer_results=results,
+            operators=self._operators,
         )
 
-        pii_types = [r.entity_type for r in results]
-        logger.info(f"Output PII scrubbed: {pii_types}")
+        pii_types = sorted({r.entity_type for r in results})
+        logger.info(f"Output PII anonymized: {pii_types}")
 
         return anonymized.text
 
-    # ------------------------------------------------------------------
-    # Detection only
-    # ------------------------------------------------------------------
-
     def detect_pii(self, text) -> list[dict]:
-        """Detect PII without anonymizing."""
         clean_text = self._to_str(text)
-        results    = self.analyze(clean_text)
+        results = self.analyze(clean_text)
 
         return [
             {
-                "type":  r.entity_type,
+                "type": r.entity_type,
                 "score": round(r.score, 3),
                 "start": r.start,
-                "end":   r.end,
+                "end": r.end,
             }
             for r in results
         ]
