@@ -1,0 +1,15 @@
+.venv/
+__pycache__/
+*.py[cod]
+*.pyo
+.git/
+data/
+uv.lock
+testing/
+test_backend/
+evaluation/
+.deepeval/
+.pytest_cache/
+*.log
+.env
+.env.*

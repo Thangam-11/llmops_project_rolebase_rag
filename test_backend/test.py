@@ -1,4 +1,4 @@
-from src.vectordb.qdrant_service import QdrantService
+from src.vectordb.qdrant_store import QdrantService
 
 qdrant = QdrantService()
 

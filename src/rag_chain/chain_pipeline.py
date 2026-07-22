@@ -44,7 +44,7 @@ from src.vectordb.qdrant_store import QdrantStore
 from src.retrieval.retriever_service import RetrieverService
 from src.llm_layer.llm_connecter import LLMConnector
 from src.pil_guardrils.pil_guard import PIIGuardrail, PIIGuardResult
-from src.ragas_evaluation.rags_evaluator import RagasEvaluator
+#from src.ragas_evaluation.rags_evaluator import RagasEvaluator
 
 from config.settings import get_settings
 from utils.logger_exceptions import get_logger
@@ -83,7 +83,7 @@ class RAGChain:
         self._parser = StrOutputParser()
 
         self._pii = PIIGuardrail() if self._pii_enabled else None
-        self._evaluator = RagasEvaluator() if self._enable_eval else None
+        #self._evaluator = RagasEvaluator() if self._enable_eval else None
 
         logger.info(
             f"RAGChain ready | "

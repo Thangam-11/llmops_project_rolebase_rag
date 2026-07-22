@@ -53,6 +53,7 @@ for doc in documents:
             chunks[0]["text"][:500]
         )
 
+
         print("\nChunk Metadata:\n")
 
         print(

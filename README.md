@@ -98,25 +98,3 @@ The frontend defaults to `http://localhost:8001`. Override it with:
 ```powershell
 $env:ROLE_RAG_API_BASE="http://localhost:8001"
 .\.venv\Scripts\streamlit.exe run app.py
-```
-
-## Verify
-
-```powershell
-.\.venv\Scripts\python.exe -m compileall api_services auth config models src app.py
-```
-
-For an end-to-end check:
-
-1. Start PostgreSQL and Qdrant.
-2. Run `models.seeds`.
-3. Run ingestion.
-4. Start the backend on port `8001`.
-5. Start Streamlit.
-6. Log in as a seeded user and ask a department-specific question.
-
-## Notes
-
-- New frontend registrations create `viewer` users, matching the backend role enum.
-- Department routing is enforced by `RetrieverService` and Qdrant payload filters.
-- `.env` is intentionally ignored by git; use `.env.example` as the shared template.

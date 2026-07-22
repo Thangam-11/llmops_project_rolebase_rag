@@ -1,0 +1,222 @@
+{
+  "title": "RAG Service Overview",
+  "uid": "rag-overview",
+  "timezone": "browser",
+  "schemaVersion": 39,
+  "version": 2,
+  "refresh": "15s",
+  "time": { "from": "now-6h", "to": "now" },
+  "panels": [
+    { "id": 100, "type": "row", "title": "HTTP & Auth", "gridPos": { "h": 1, "w": 24, "x": 0, "y": 0 }, "collapsed": false },
+    {
+      "id": 1,
+      "title": "HTTP Request Rate (by endpoint / status)",
+      "type": "timeseries",
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 1 },
+      "datasource": "Prometheus",
+      "targets": [
+        { "expr": "sum(rate(http_requests_total[5m])) by (endpoint, status)", "legendFormat": "{{endpoint}} [{{status}}]" }
+      ]
+    },
+    {
+      "id": 2,
+      "title": "HTTP Latency p50 / p95 (by endpoint)",
+      "type": "timeseries",
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 1 },
+      "datasource": "Prometheus",
+      "fieldConfig": { "defaults": { "unit": "s" }, "overrides": [] },
+      "targets": [
+        { "expr": "histogram_quantile(0.50, sum(rate(http_request_duration_seconds_bucket[5m])) by (le, endpoint))", "legendFormat": "{{endpoint}} p50" },
+        { "expr": "histogram_quantile(0.95, sum(rate(http_request_duration_seconds_bucket[5m])) by (le, endpoint))", "legendFormat": "{{endpoint}} p95" }
+      ]
+    },
+    {
+      "id": 3,
+      "title": "Auth Activity (logins / registrations)",
+      "type": "timeseries",
+      "gridPos": { "h": 8, "w": 24, "x": 0, "y": 9 },
+      "datasource": "Prometheus",
+      "targets": [
+        { "expr": "sum(rate(auth_logins_total[5m])) by (status)", "legendFormat": "logins [{{status}}]" },
+        { "expr": "sum(rate(auth_registrations_total[5m]))", "legendFormat": "registrations" }
+      ]
+    },
+
+    { "id": 101, "type": "row", "title": "RAG Pipeline", "gridPos": { "h": 1, "w": 24, "x": 0, "y": 17 }, "collapsed": false },
+    {
+      "id": 4,
+      "title": "RAG Query Rate (by department / status)",
+      "type": "timeseries",
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 18 },
+      "datasource": "Prometheus",
+      "targets": [
+        { "expr": "sum(rate(rag_requests_total[5m])) by (department, status)", "legendFormat": "{{department}} [{{status}}]" }
+      ]
+    },
+    {
+      "id": 5,
+      "title": "RAG End-to-End Latency p50 / p95 (by department)",
+      "type": "timeseries",
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 18 },
+      "datasource": "Prometheus",
+      "fieldConfig": { "defaults": { "unit": "s" }, "overrides": [] },
+      "targets": [
+        { "expr": "histogram_quantile(0.50, sum(rate(rag_latency_seconds_bucket[5m])) by (le, department))", "legendFormat": "{{department}} p50" },
+        { "expr": "histogram_quantile(0.95, sum(rate(rag_latency_seconds_bucket[5m])) by (le, department))", "legendFormat": "{{department}} p95" }
+      ]
+    },
+    {
+      "id": 6,
+      "title": "Qdrant Retrieval Latency p95",
+      "type": "timeseries",
+      "gridPos": { "h": 8, "w": 8, "x": 0, "y": 26 },
+      "datasource": "Prometheus",
+      "fieldConfig": { "defaults": { "unit": "s" }, "overrides": [] },
+      "targets": [
+        { "expr": "histogram_quantile(0.95, sum(rate(rag_retrieval_latency_seconds_bucket[5m])) by (le))", "legendFormat": "p95" }
+      ]
+    },
+    {
+      "id": 7,
+      "title": "Pipeline Latency p95 (excl. evaluation)",
+      "type": "timeseries",
+      "gridPos": { "h": 8, "w": 8, "x": 8, "y": 26 },
+      "datasource": "Prometheus",
+      "fieldConfig": { "defaults": { "unit": "s" }, "overrides": [] },
+      "targets": [
+        { "expr": "histogram_quantile(0.95, sum(rate(rag_pipeline_latency_seconds_bucket[5m])) by (le))", "legendFormat": "p95" }
+      ]
+    },
+    {
+      "id": 8,
+      "title": "Retrieved Docs per Query (avg, by department)",
+      "type": "timeseries",
+      "gridPos": { "h": 8, "w": 8, "x": 16, "y": 26 },
+      "datasource": "Prometheus",
+      "targets": [
+        { "expr": "sum(rate(rag_retrieval_docs_count_sum[5m])) by (department) / sum(rate(rag_retrieval_docs_count_count[5m])) by (department)", "legendFormat": "{{department}}" }
+      ]
+    },
+
+    { "id": 102, "type": "row", "title": "Security & Guardrails", "gridPos": { "h": 1, "w": 24, "x": 0, "y": 34 }, "collapsed": false },
+    {
+      "id": 9,
+      "title": "PII Detections (by direction / type)",
+      "type": "timeseries",
+      "gridPos": { "h": 8, "w": 8, "x": 0, "y": 35 },
+      "datasource": "Prometheus",
+      "targets": [
+        { "expr": "sum(rate(rag_pii_detections_total[5m])) by (direction, pii_type)", "legendFormat": "{{direction}} - {{pii_type}}" }
+      ]
+    },
+    {
+      "id": 10,
+      "title": "PII Blocks (by type)",
+      "type": "timeseries",
+      "gridPos": { "h": 8, "w": 8, "x": 8, "y": 35 },
+      "datasource": "Prometheus",
+      "targets": [
+        { "expr": "sum(rate(rag_pii_blocks_total[5m])) by (pii_type)", "legendFormat": "{{pii_type}}" }
+      ]
+    },
+    {
+      "id": 11,
+      "title": "Prompt Injection Attempts Detected",
+      "type": "timeseries",
+      "gridPos": { "h": 8, "w": 8, "x": 16, "y": 35 },
+      "datasource": "Prometheus",
+      "targets": [
+        { "expr": "rate(prompt_injection_detected_total[5m])", "legendFormat": "detections/sec" }
+      ]
+    },
+
+    { "id": 103, "type": "row", "title": "RAGAS Quality", "gridPos": { "h": 1, "w": 24, "x": 0, "y": 43 }, "collapsed": false },
+    {
+      "id": 12,
+      "title": "RAGAS Overall Score (by department)",
+      "type": "timeseries",
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 44 },
+      "datasource": "Prometheus",
+      "fieldConfig": { "defaults": { "min": 0, "max": 1 }, "overrides": [] },
+      "targets": [
+        { "expr": "rag_ragas_score", "legendFormat": "{{department}}" }
+      ]
+    },
+    {
+      "id": 13,
+      "title": "RAGAS Metric Breakdown (faithfulness, relevancy, precision, recall)",
+      "type": "timeseries",
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 44 },
+      "datasource": "Prometheus",
+      "fieldConfig": { "defaults": { "min": 0, "max": 1 }, "overrides": [] },
+      "targets": [
+        { "expr": "rag_ragas_metric_score", "legendFormat": "{{department}} - {{metric}}" }
+      ]
+    },
+
+    { "id": 104, "type": "row", "title": "LLM Usage & Cost", "gridPos": { "h": 1, "w": 24, "x": 0, "y": 52 }, "collapsed": false },
+    {
+      "id": 14,
+      "title": "LLM Token Usage (prompt / completion / total)",
+      "type": "timeseries",
+      "gridPos": { "h": 8, "w": 8, "x": 0, "y": 53 },
+      "datasource": "Prometheus",
+      "targets": [
+        { "expr": "rate(llm_prompt_tokens_total[5m])", "legendFormat": "prompt tokens/sec" },
+        { "expr": "rate(llm_completion_tokens_total[5m])", "legendFormat": "completion tokens/sec" },
+        { "expr": "rate(llm_total_tokens_total[5m])", "legendFormat": "total tokens/sec" }
+      ]
+    },
+    {
+      "id": 15,
+      "title": "Estimated LLM Cost (USD/hr)",
+      "type": "timeseries",
+      "gridPos": { "h": 8, "w": 8, "x": 8, "y": 53 },
+      "datasource": "Prometheus",
+      "fieldConfig": { "defaults": { "unit": "currencyUSD" }, "overrides": [] },
+      "targets": [
+        { "expr": "rate(llm_cost_usd_total[5m]) * 3600", "legendFormat": "$/hr" }
+      ]
+    },
+    {
+      "id": 16,
+      "title": "LLM Response Time p95",
+      "type": "timeseries",
+      "gridPos": { "h": 8, "w": 8, "x": 16, "y": 53 },
+      "datasource": "Prometheus",
+      "fieldConfig": { "defaults": { "unit": "s" }, "overrides": [] },
+      "targets": [
+        { "expr": "histogram_quantile(0.95, sum(rate(llm_response_time_seconds_bucket[5m])) by (le))", "legendFormat": "p95" }
+      ]
+    },
+
+    { "id": 105, "type": "row", "title": "System Resources", "gridPos": { "h": 1, "w": 24, "x": 0, "y": 61 }, "collapsed": false },
+    {
+      "id": 17,
+      "title": "CPU Usage %",
+      "type": "stat",
+      "gridPos": { "h": 6, "w": 8, "x": 0, "y": 62 },
+      "datasource": "Prometheus",
+      "fieldConfig": { "defaults": { "unit": "percent", "max": 100 }, "overrides": [] },
+      "targets": [ { "expr": "system_cpu_usage_percent" } ]
+    },
+    {
+      "id": 18,
+      "title": "Memory Usage %",
+      "type": "stat",
+      "gridPos": { "h": 6, "w": 8, "x": 8, "y": 62 },
+      "datasource": "Prometheus",
+      "fieldConfig": { "defaults": { "unit": "percent", "max": 100 }, "overrides": [] },
+      "targets": [ { "expr": "system_memory_usage_percent" } ]
+    },
+    {
+      "id": 19,
+      "title": "Disk Usage %",
+      "type": "stat",
+      "gridPos": { "h": 6, "w": 8, "x": 16, "y": 62 },
+      "datasource": "Prometheus",
+      "fieldConfig": { "defaults": { "unit": "percent", "max": 100 }, "overrides": [] },
+      "targets": [ { "expr": "system_disk_usage_percent" } ]
+    }
+  ]
+}

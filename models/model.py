@@ -136,6 +136,9 @@ class QueryLog(Base):
     block_reason: Mapped[str | None] = mapped_column(String(255), nullable=True)
     faithfulness: Mapped[float | None]      = mapped_column(Float, nullable=True)
     answer_relevancy: Mapped[float | None]  = mapped_column(Float, nullable=True)
+    context_precision: Mapped[float | None] = mapped_column(Float, nullable=True)
+    context_recall: Mapped[float | None]    = mapped_column(Float, nullable=True)
+    overall_score: Mapped[float | None]     = mapped_column(Float, nullable=True)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
 
     user: Mapped["User"] = relationship(back_populates="queries")

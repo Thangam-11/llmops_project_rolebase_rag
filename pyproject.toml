@@ -1,112 +1,108 @@
 [project]
 name = "role-based-rag"
 version = "0.1.0"
-requires-python = ">=3.11"
+requires-python = ">=3.11,<3.13"
 
 dependencies = [
-    # ===========================
-    # FastAPI Backend
-    # ===========================
+    # FastAPI
     "fastapi",
     "uvicorn[standard]",
     "websockets",
     "python-multipart",
     "jinja2",
-    # ===========================
-    # Database (PostgreSQL)
-    # ===========================
+
+    # Database
     "sqlalchemy",
     "asyncpg",
     "psycopg2-binary",
     "alembic",
-    # ===========================
-    # Authentication & Security
-    # ===========================
+
+    # Authentication
     "python-jose[cryptography]",
     "passlib[bcrypt]",
     "slowapi",
-    # ===========================
-    # Cache & Session Management
-    # ===========================
+
+    # Cache
     "redis",
-    # ===========================
-    # Vector Database
-    # ===========================
+
+    # Vector DB
     "qdrant-client",
-    # ===========================
-    # LangChain Ecosystem
-    # ===========================
+
+    # LangChain
     "langchain",
     "langchain-core",
     "langchain-community",
     "langchain-openai",
     "langchain-google-genai",
+    "langchain-google-vertexai",
     "langchain-qdrant",
-    # ===========================
-    # LLM & Embeddings
-    # ===========================
+    "langchain-huggingface",
+
+    # LLM
     "openai",
     "google-generativeai",
     "sentence-transformers",
     "transformers",
     "torch",
-    # ===========================
+    "numpy",
+
     # Document Processing
-    # ===========================
     "docling",
     "pypdf",
     "python-docx",
     "openpyxl",
     "unstructured",
+
+    # Data
     "pandas",
     "datasets",
+
+    # Evaluation
+    "ragas",
     "deepeval",
-    # ===========================
-    # Monitoring & Observability
-    # ===========================
+
+    # Monitoring
     "langsmith",
     "prometheus-client",
-    # ===========================
-    # PII Detection / Guardrails
-    # ===========================
+
+    # Guardrails
     "presidio-analyzer",
     "presidio-anonymizer",
-    # ===========================
-    # Config & Utilities
-    # ===========================
+
+    # Config
     "pydantic",
     "pydantic-settings",
+    "email-validator",
     "python-dotenv",
-    # ===========================
-    # HTTP Clients
-    # ===========================
+
+    # HTTP
     "requests",
     "httpx",
-    # ===========================
-    # Retry Mechanism
-    # ===========================
+
+    # Utilities
     "tenacity",
-    # ===========================
-    # Logging
-    # ===========================
     "loguru",
-    # ===========================
-    # Progress Bars
-    # ===========================
     "tqdm",
-    # ===========================
-    # AWS Services
-    # ===========================
+
+    # AWS
     "boto3",
-    # ===========================
+
     # Testing
-    # ===========================
     "pytest",
     "pytest-asyncio",
     "pytest-mock",
     "faker",
     "coverage",
-    "langchain-huggingface>=1.2.2",
-    "langchain-google-vertexai>=3.2.4",
-    "streamlit>=1.58.0",
+
+    # UI
+    "streamlit"
 ]
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]
+markers = [
+    "unit: fast, no external calls",
+    "integration: real local services, mocked LLM",
+    "e2e: full pipeline, real LLM, costs money",
+]
+asyncio_mode = "auto"

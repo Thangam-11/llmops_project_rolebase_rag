@@ -4,9 +4,11 @@ Chat router with Prometheus metrics and LangSmith tracing.
 import time
 import uuid
 
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, status
+from fastapi.concurrency import run_in_threadpool
 from fastapi.responses import StreamingResponse
 from sqlalchemy import select
+
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from models.database import get_db
@@ -48,21 +50,21 @@ def get_rag_chain() -> RAGChain:
 @router.post("/query", response_model=QueryResponse)
 async def query(
     req: QueryRequest,
+    background_tasks: BackgroundTasks,
     user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
 ):
     chain = get_rag_chain()
     department = user.department.value
     start = time.perf_counter()
-
     try:
-        result = chain.invoke(
+        result = await run_in_threadpool(
+            chain.invoke,
             question=req.question,
             department=department,
             k=req.top_k,
         )
         latency_ms = int((time.perf_counter() - start) * 1000)
-
         status_label = "blocked" if result.get("was_blocked") else "success"
         RAG_REQUESTS.labels(department=department, status=status_label).inc()
         RAG_LATENCY.labels(department=department).observe(latency_ms / 1000)
@@ -91,7 +93,6 @@ async def query(
             RAGAS_SCORE.labels(department=department).set(
                 result["quality"]["overall"]
             )
-
             for metric in (
                 "faithfulness",
                 "answer_relevancy",
@@ -119,21 +120,40 @@ async def query(
             for s in result.get("sources", [])
         ]
 
-        db.add(
-            QueryLog(
-                user_id=user.id,
-                department=user.department,
-                question=req.question,
-                answer=result.get("answer"),
-                sources=result.get("sources", []),
-                latency_ms=latency_ms,
-                was_blocked=result.get("was_blocked", False),
-            )
+        query_log = QueryLog(
+            user_id=user.id,
+            department=user.department,
+            question=req.question,
+            answer=result.get("answer"),
+            sources=result.get("sources", []),
+            latency_ms=latency_ms,
+            was_blocked=result.get("was_blocked", False),
         )
+        db.add(query_log)
         await db.commit()
+        await db.refresh(query_log)  # get the generated id back
+
+        # Schedule background RAGAS evaluation (only if not already scored
+        # and not blocked, to avoid wasting eval calls on PII-blocked answers)
+        if not result.get("was_blocked") and not result.get("quality"):
+            try:
+                from src.ragas_evaluation.background import evaluate_and_store
+                background_tasks.add_task(
+                    evaluate_and_store,
+                    query_id=query_log.id,
+                    question=req.question,
+                    answer=result.get("answer"),
+                    sources=result.get("sources", []),
+                    department=department,
+                )
+            except Exception:
+                logger.exception(
+                    "Skipping background RAGAS evaluation: evaluate_and_store "
+                    "unavailable (check ragas / langchain_community versions)"
+                )
 
         return QueryResponse(
-            query_id=str(uuid.uuid4()),
+            query_id=str(query_log.id),
             answer=result["answer"],
             sources=mapped_sources,
             department=department,
@@ -145,6 +165,7 @@ async def query(
         )
 
     except Exception as e:
+        await db.rollback()
         RAG_REQUESTS.labels(department=department, status="error").inc()
         HTTP_REQUESTS.labels(method="POST", endpoint="/chat/query", status=500).inc()
         logger.exception(f"Query failed: {e}")

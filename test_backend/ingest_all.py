@@ -3,7 +3,7 @@ from pathlib import Path
 from src.data_ingestion.data_loader import IngestionService
 from src.data_ingestion.chunker_service import ChunkingService
 from src.embedding_layer.embedding_service import EmbeddingService
-from src.vectordb.qdrant_service import QdrantService
+from src.vectordb.qdrant_store import QdrantService
 
 
 def main():

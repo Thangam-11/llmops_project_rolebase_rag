@@ -1,6 +1,6 @@
 # test_qdrant.py
 
-from src.vectordb.qdrant_service import (
+from src.vectordb.qdrant_store import (
     QdrantService
 )
 
