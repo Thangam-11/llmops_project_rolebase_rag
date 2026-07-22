@@ -1,9 +1,7 @@
 """
 Document ingestion schemas.
 """
-from datetime import datetime
 from pydantic import BaseModel
-from models.model import Department
 
 
 class DocumentResponse(BaseModel):

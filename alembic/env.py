@@ -8,7 +8,6 @@ from models.database import Base
 import models.model  # noqa: F401 — populates Base.metadata with User, Document, etc.
 # Import your app's settings and models
 from config.settings import get_settings  # adjust import path
-from models.database import Base           # wherever your declarative Base lives
 # Make sure all your models are imported somewhere so Base.metadata is populated,
 # e.g. import api_services.models  # noqa
 

@@ -4,7 +4,6 @@ from unittest.mock import MagicMock, AsyncMock
 import pytest
 
 from models.database import get_db
-from config.settings import get_settings
 
 # ---------------------------------------------------------------------------
 # Fixtures

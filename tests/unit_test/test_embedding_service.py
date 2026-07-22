@@ -8,7 +8,6 @@ from src.embedding_layer.embedding_service import (
     get_embedding_service,
     QUERY_PREFIX,
     EMBEDDING_DIM,
-    MODEL_NAME,
 )
 
 

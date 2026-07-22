@@ -6,7 +6,6 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from prometheus_client import make_asgi_app
 # Right - split into correct modules
-from models import database
 from models.seeds import seed
 from src.monitoring.langsmith_tracer import setup_langsmith
 from src.monitoring.metrices import start_metrics_server

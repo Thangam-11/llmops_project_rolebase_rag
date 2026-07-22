@@ -58,7 +58,7 @@ for f in init_files:
     if content:
         print(f"⚠️  NOT EMPTY : {f}")
         print(f"   Content: {content[:100]}")
-        print(f"   → Clear this file completely")
+        print("   → Clear this file completely")
     else:
         print(f"✅ Empty    : {f}")
 

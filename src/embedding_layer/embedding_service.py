@@ -154,7 +154,7 @@ class EmbeddingService:
     
 # Add this at the very bottom of embedding_service.py
 
-from functools import lru_cache
+from functools import lru_cache  # noqa: E402
 
 @lru_cache(maxsize=1)
 def get_embedding_service() -> EmbeddingService:

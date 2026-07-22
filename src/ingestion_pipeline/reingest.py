@@ -15,15 +15,15 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent
 sys.path.insert(0, str(ROOT))
 
-from qdrant_client import QdrantClient
-from qdrant_client.models import (
+from qdrant_client import QdrantClient  # noqa: E402
+from qdrant_client.models import (# noqa: E402
     Distance,
     PayloadSchemaType,
     VectorParams,
 )
 
-from config.settings import get_settings
-from src.ingestion_pipeline.ingest_to_qdrant import IngestionPipeline
+from config.settings import get_settings # noqa: E402
+from src.ingestion_pipeline.ingest_to_qdrant import IngestionPipeline # noqa: E402
 
 settings = get_settings()
 
@@ -38,15 +38,15 @@ hr_old = Path("data/hr_data")
 hr_new = Path("data/hr")
 
 if hr_new.exists():
-    print(f"  ✅ data/hr already exists — skipping")
+    print("  ✅ data/hr already exists — skipping")
 
 elif hr_old.exists():
     shutil.copytree(str(hr_old), str(hr_new))
-    print(f"  ✅ Copied data/hr_data → data/hr")
+    print("  ✅ Copied data/hr_data → data/hr")
 
 else:
-    print(f"  ⚠️  Neither data/hr nor data/hr_data found")
-    print(f"  Check your data folder structure")
+    print("  ⚠️  Neither data/hr nor data/hr_data found")
+    print("  Check your data folder structure")
 
 
 # ── Step 2: Delete old collection ─────────────────────────────────────────
@@ -98,7 +98,7 @@ client.create_payload_index(
     field_name="metadata.department",
     field_schema=PayloadSchemaType.KEYWORD,
 )
-print(f"  ✅ Created metadata.department index")
+print("  ✅ Created metadata.department index")
 
 
 # ── Step 4: Re-ingest all documents ───────────────────────────────────────

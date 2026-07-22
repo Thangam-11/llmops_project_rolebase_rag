@@ -1,5 +1,4 @@
 # tests/unit/test_data_loader.py
-from pathlib import Path
 from unittest.mock import MagicMock
 
 import pytest
@@ -8,7 +7,6 @@ from src.data_ingestion.data_loader import (
     IngestionService,
     FOLDER_TO_DEPT,
     VALID_DEPARTMENTS,
-    SUPPORTED_EXTENSIONS,
 )
 
 

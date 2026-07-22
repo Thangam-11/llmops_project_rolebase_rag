@@ -252,7 +252,7 @@ def api_me(token):
         if r.status_code == 200:
             return True, r.json()
         return False, {}
-    except Exception as e:
+    except Exception:
         return False, {}
 
 def api_query(question, top_k=5):
@@ -264,7 +264,7 @@ def api_query(question, top_k=5):
         if r.status_code == 200:
             return True, r.json()
         return False, {"answer": "Something went wrong. Please try again.", "sources": [], "quality": None, "was_blocked": False, "latency_ms": 0}
-    except Exception as e:
+    except Exception:
         return False, {"answer": "Could not reach the server. Please check your connection.", "sources": [], "quality": None, "was_blocked": False, "latency_ms": 0}
 
 def api_history():

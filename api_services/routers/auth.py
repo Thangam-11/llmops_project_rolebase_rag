@@ -1,7 +1,7 @@
 """
 Auth router — with Prometheus metrics
 """
-from fastapi import APIRouter, Depends, Request, status, HTTPException
+from fastapi import APIRouter, Depends, Request, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from models.database        import get_db

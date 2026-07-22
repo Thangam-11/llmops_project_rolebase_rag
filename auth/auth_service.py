@@ -146,7 +146,7 @@ class AuthService:
         result     = await db.execute(
             select(RefreshToken).where(
                 RefreshToken.token_hash == token_hash,
-                RefreshToken.is_revoked == False,
+                not RefreshToken.is_revoked,
             )
         )
         stored = result.scalar_one_or_none()

@@ -1,7 +1,5 @@
 # here we can create custom exceptions for our project use traceback to print the error message in the console
 import traceback
-import sys
-import os
 
 class RolebasedAccessException(Exception):
    

@@ -2,7 +2,6 @@
 Chat router with Prometheus metrics and LangSmith tracing.
 """
 import time
-import uuid
 
 from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, status
 from fastapi.concurrency import run_in_threadpool

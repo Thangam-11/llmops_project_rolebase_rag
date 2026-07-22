@@ -3,7 +3,6 @@ from sqlalchemy import select
 from models.database import AsyncSessionLocal, engine, Base
 from models.model import User, Department, UserRole
 from auth.security import hash_password
-import models.model # register all models
 
 
 # ── Exact users from problem statement ────────────────────────────────────
