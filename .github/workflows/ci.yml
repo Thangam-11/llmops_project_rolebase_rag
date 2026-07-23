@@ -79,6 +79,9 @@ jobs:
           pytest tests/unit_test -v
 
       - name: Bandit Security Scan
+        run: pip install "bandit[sarif]"
+        
+      - name: Bandit Security Scan
         run: |
           bandit -r . -f sarif -o bandit-results.sarif -x ./tests,./venv,./.venv
         continue-on-error: true
