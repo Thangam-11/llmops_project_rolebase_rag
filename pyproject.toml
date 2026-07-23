@@ -93,6 +93,8 @@ dependencies = [
     "pytest-mock",
     "faker",
     "coverage",
+    " types-psutil",
+    "types-python-jose",
 
     # UI
     "streamlit"
@@ -106,3 +108,7 @@ markers = [
     "e2e: full pipeline, real LLM, costs money",
 ]
 asyncio_mode = "auto"
+
+[tool.mypy]
+plugins = ["pydantic.mypy", "sqlalchemy.ext.mypy.plugin"]
+ignore_missing_imports = true

@@ -6,7 +6,7 @@ from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.sql import func
 from models.database import Base
-
+from sqlalchemy import Boolean
 
 class Department(str, enum.Enum):
     engineering = "engineering"

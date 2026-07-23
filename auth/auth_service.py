@@ -144,11 +144,11 @@ class AuthService:
 
         token_hash = _hash_token(raw_token)
         result     = await db.execute(
-            select(RefreshToken).where(
-                RefreshToken.token_hash == token_hash,
-                not RefreshToken.is_revoked,
-            )
-        )
+        select(RefreshToken).where(
+        RefreshToken.token_hash == token_hash,
+        RefreshToken.is_revoked.is_(False),
+    )
+)
         stored = result.scalar_one_or_none()
 
         if not stored or stored.expires_at.replace(tzinfo=timezone.utc) < datetime.now(timezone.utc):

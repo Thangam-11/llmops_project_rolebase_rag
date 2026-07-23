@@ -29,10 +29,10 @@ class QdrantStore:
 
     def __init__(
         self,
-        embedding_service: EmbeddingService = None,  # ← optional, uses singleton
-        url:             str = None,                  # ← None = read from settings
-        api_key:         str = None,                  # ← None = read from settings
-        collection_name: str = None,                  # ← None = read from settings
+        embedding_service: EmbeddingService | None = None,  # ← optional, uses singleton
+        url:             str | None = None,                  # ← None = read from settings
+        api_key:         str | None = None,                  # ← None = read from settings
+        collection_name: str | None = None,                  # ← None = read from settings
         max_workers:     int = 8,                      # ← thread pool size for parallel search
     ) -> None:
 

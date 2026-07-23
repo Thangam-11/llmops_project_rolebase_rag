@@ -1,0 +1,132 @@
+[
+  {
+    "id": 1,
+    "domain": "general",
+    "question": "What is FinSolve Technologies' mission?",
+    "reference": "FinSolve Technologies' mission is to deliver secure, scalable, and innovative financial technology solutions that simplify digital payments and financial services for businesses and consumers.",
+    "relevant_contexts": [
+      "Mission: Deliver secure, scalable, and innovative fintech solutions that simplify financial services and digital payments."
+    ],
+    "expected_tools": ["retrieve_documents"],
+    "actual_response": "",
+    "actual_contexts": [],
+    "actual_tools_called": []
+  },
+  {
+    "id": 2,
+    "domain": "general",
+    "question": "When was FinSolve Technologies founded?",
+    "reference": "FinSolve Technologies was founded in 2015.",
+    "relevant_contexts": [
+      "Company Overview: FinSolve Technologies was established in 2015."
+    ],
+    "expected_tools": ["retrieve_documents"],
+    "actual_response": "",
+    "actual_contexts": [],
+    "actual_tools_called": []
+  },
+  {
+    "id": 3,
+    "domain": "general",
+    "question": "Where is FinSolve Technologies headquartered?",
+    "reference": "FinSolve Technologies is headquartered in San Francisco, California, USA.",
+    "relevant_contexts": [
+      "Corporate Information: Headquarters are located in San Francisco, California."
+    ],
+    "expected_tools": ["retrieve_documents"],
+    "actual_response": "",
+    "actual_contexts": [],
+    "actual_tools_called": []
+  },
+  {
+    "id": 4,
+    "domain": "general",
+    "question": "What financial services does FinSolve Technologies provide?",
+    "reference": "The company provides digital payment solutions, merchant payment processing, lending services, digital wallets, cross-border payments, fraud detection, and financial analytics.",
+    "relevant_contexts": [
+      "Products and Services: Digital payments, merchant solutions, lending, digital wallets, fraud detection, analytics, and cross-border payments."
+    ],
+    "expected_tools": ["retrieve_documents"],
+    "actual_response": "",
+    "actual_contexts": [],
+    "actual_tools_called": []
+  },
+  {
+    "id": 5,
+    "domain": "general",
+    "question": "How many individual customers does FinSolve Technologies serve globally?",
+    "reference": "FinSolve Technologies serves more than 20 million individual customers worldwide.",
+    "relevant_contexts": [
+      "Company Overview: Serving over 20 million individual users globally."
+    ],
+    "expected_tools": ["retrieve_documents"],
+    "actual_response": "",
+    "actual_contexts": [],
+    "actual_tools_called": []
+  },
+  {
+    "id": 6,
+    "domain": "general",
+    "question": "How many business customers use FinSolve Technologies' platform?",
+    "reference": "More than 250,000 businesses use FinSolve Technologies' financial platform.",
+    "relevant_contexts": [
+      "Customer Base: Over 250,000 businesses rely on FinSolve Technologies."
+    ],
+    "expected_tools": ["retrieve_documents"],
+    "actual_response": "",
+    "actual_contexts": [],
+    "actual_tools_called": []
+  },
+  {
+    "id": 7,
+    "domain": "general",
+    "question": "What software architecture does FinSolve Technologies use?",
+    "reference": "FinSolve Technologies uses a microservices-based architecture to provide scalability, resilience, and independent service deployment.",
+    "relevant_contexts": [
+      "Architecture Overview: The platform is built using a microservices architecture."
+    ],
+    "expected_tools": ["retrieve_documents"],
+    "actual_response": "",
+    "actual_contexts": [],
+    "actual_tools_called": []
+  },
+  {
+    "id": 8,
+    "domain": "general",
+    "question": "What monitoring tools are used in production?",
+    "reference": "The production environment uses Prometheus for metrics collection, Grafana for visualization, CloudWatch for AWS monitoring, and the ELK stack for centralized logging.",
+    "relevant_contexts": [
+      "Monitoring Stack: Prometheus, Grafana, CloudWatch, and ELK are used for monitoring and observability."
+    ],
+    "expected_tools": ["retrieve_documents"],
+    "actual_response": "",
+    "actual_contexts": [],
+    "actual_tools_called": []
+  },
+  {
+    "id": 9,
+    "domain": "general",
+    "question": "Which compliance standards does FinSolve Technologies follow?",
+    "reference": "FinSolve Technologies complies with PCI DSS, SOC 2 Type II, GDPR, and ISO 27001 security standards.",
+    "relevant_contexts": [
+      "Compliance: PCI DSS, SOC 2 Type II, GDPR, and ISO 27001."
+    ],
+    "expected_tools": ["retrieve_documents"],
+    "actual_response": "",
+    "actual_contexts": [],
+    "actual_tools_called": []
+  },
+  {
+    "id": 10,
+    "domain": "general",
+    "question": "What is the company's uptime target?",
+    "reference": "FinSolve Technologies maintains a production uptime target of 99.99% availability.",
+    "relevant_contexts": [
+      "Service Reliability: Production systems are designed to achieve 99.99% uptime."
+    ],
+    "expected_tools": ["retrieve_documents"],
+    "actual_response": "",
+    "actual_contexts": [],
+    "actual_tools_called": []
+  }
+]

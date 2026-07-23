@@ -40,6 +40,7 @@ from langchain_core.output_parsers import StrOutputParser
 
 from src.prompts_layer.prompts import get_rag_prompt
 from src.embedding_layer.embedding_service import get_embedding_service
+from src.ragas_evaluation.rags_evaluator import RagasEvaluator
 from src.vectordb.qdrant_store import QdrantStore
 from src.retrieval.retriever_service import RetrieverService
 from src.llm_layer.llm_connecter import LLMConnector
@@ -64,6 +65,10 @@ class RAGChain:
             if enable_evaluation is None
             else enable_evaluation
         )
+        self._evaluator: RagasEvaluator | None = None
+        if self._enable_eval:
+            
+            self._evaluator = RagasEvaluator()
 
         self._embedder = get_embedding_service()
 
