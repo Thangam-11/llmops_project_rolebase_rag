@@ -1,222 +1,220 @@
 """
-src/ragas_evaluation/ragas_evaluator.py
-"""
+offline_ragas_eval.py
+======================
+Offline RAGAS evaluation over department sample JSON files, using the
+project's own RagasEvaluator (src/ragas_evaluation/ragas_evaluator.py)
+so results match production scoring exactly (same LLM, embeddings,
+and weighted overall_score formula).
 
+Run this from the project root (role_based_rag/) so the `src`, `config`,
+and `utils` imports resolve correctly.
+
+Expected input format per file (list of records), matching your dataset schema:
+[
+  {
+    "id": 2,
+    "domain": "general",
+    "question": "When was FinSolve Technologies founded?",
+    "reference": "FinSolve Technologies was founded in 2015.",
+    "relevant_contexts": ["Company Overview: FinSolve Technologies was established in 2015."],
+    "expected_tools": ["retrieve_documents"],
+    "actual_response": "...",       # <- must be filled in by running your RAG pipeline first
+    "actual_contexts": ["..."],     # <- must be filled in by running your RAG pipeline first
+    "actual_tools_called": []
+  },
+  ...
+]
+
+Field mapping used for RAGAS:
+    question      <- question
+    answer        <- actual_response
+    contexts      <- actual_contexts
+    ground_truth  <- reference
+
+Records with empty actual_response or actual_contexts are skipped (nothing to
+score yet) -- run your RAG pipeline over the questions first to populate those
+two fields (ask me for the companion "populate" script if you don't have one).
+
+Usage:
+    python offline_ragas_eval.py --data-dir ./eval_data --out-dir ./eval_results
+
+Expects files named like: hr.json, finance.json, marketing.json, engineering.json
+in --data-dir. Any *.json file in that folder is treated as one department
+(file name without extension = department name).
+"""
 from __future__ import annotations
 
-from dataclasses import dataclass
+import argparse
+import json
+import sys
+from pathlib import Path
+from typing import Any
 
-from datasets import Dataset
-from langchain_openai import ChatOpenAI
-from ragas import evaluate
-from ragas.metrics import (
-    answer_relevancy,
-    context_precision,
-    context_recall,
-    faithfulness,
-)
+import pandas as pd
 
-from config.settings import get_settings
-from src.embedding_layer.embedding_service import get_embedding_service
-from utils.logger_exceptions import get_logger
+from src.ragas_evaluation.ragas_evaluator import RagasEvaluator, RagasResult
 
-logger = get_logger(__name__)
-settings = get_settings()
+REQUIRED_SOURCE_FIELDS = ("question", "reference", "actual_response", "actual_contexts")
 
 
-@dataclass
-class RagasResult:
-    question: str
-    answer: str
-    faithfulness: float = 0.0
-    answer_relevancy: float = 0.0
-    context_precision: float = 0.0
-    context_recall: float = 0.0
-    overall_score: float = 0.0
+def load_department_file(path: Path) -> list[dict[str, Any]]:
+    with open(path, "r", encoding="utf-8") as f:
+        data = json.load(f)
 
-    def report(self) -> str:
-        status = "PASS" if self.overall_score >= 0.5 else "FAIL"
-
-        lines = [
-            "=" * 55,
-            "RAGAS EVALUATION",
-            "=" * 55,
-            f"Question          : {self.question[:65]}",
-            f"Answer            : {self.answer[:65]}",
-            "",
-            f"Faithfulness      : {self.faithfulness:.3f}",
-            f"Answer Relevancy  : {self.answer_relevancy:.3f}",
-            f"Context Precision : {self.context_precision:.3f}",
-            f"Context Recall    : {self.context_recall:.3f}",
-            "",
-            f"Overall Score     : {self.overall_score:.3f} {status}",
-            "=" * 55,
-        ]
-        return "\n".join(lines)
-
-
-class RagasEvaluator:
-    """
-    RAGAS evaluator using OpenRouter-compatible ChatOpenAI and
-    the same embedding model as the retrieval pipeline.
-    """
-
-    def __init__(self) -> None:
-        self._llm = ChatOpenAI(
-            model=settings.llm_model,
-            openai_api_key=settings.openrouter_api_key,
-            openai_api_base=settings.openrouter_base_url,
-            temperature=0,
+    if not isinstance(data, list):
+        raise ValueError(
+            f"{path.name}: expected a JSON list of records, got {type(data).__name__}"
         )
 
-        self._embeddings = get_embedding_service().as_langchain()
+    cleaned = []
+    skipped_empty = 0
+    for i, record in enumerate(data):
+        rec_id = record.get("id", i)
+        missing = [field for field in REQUIRED_SOURCE_FIELDS if field not in record]
+        if missing:
+            print(f"  [WARN] {path.name} id={rec_id}: missing fields {missing}, skipping")
+            continue
 
-        self._metrics = [
-            faithfulness,
-            answer_relevancy,
-            context_precision,
-            context_recall,
-        ]
+        answer = record["actual_response"]
+        contexts = record["actual_contexts"]
 
-        logger.info("RagasEvaluator ready")
+        if not answer or not contexts:
+            skipped_empty += 1
+            continue
 
-    def evaluate_single(
-        self,
-        question: str,
-        answer: str,
-        contexts: list[str],
-        ground_truth: str = "",
-    ) -> RagasResult:
-        if not contexts:
-            logger.warning("RAGAS skipped because contexts are empty")
-            return RagasResult(question=question, answer=answer)
+        if not isinstance(contexts, list):
+            print(f"  [WARN] {path.name} id={rec_id}: 'actual_contexts' is not a list, skipping")
+            continue
 
-        data = {
-            "question": [question],
-            "answer": [answer],
-            "contexts": [contexts],
-            "ground_truth": [ground_truth or answer],
-        }
-
-        dataset = Dataset.from_dict(data)
-
-        logger.info("Running RAGAS evaluation")
-
-        scores = evaluate(
-            dataset=dataset,
-            metrics=self._metrics,
-            llm=self._llm,
-            embeddings=self._embeddings,
+        cleaned.append(
+            {
+                "id": rec_id,
+                "question": record["question"],
+                "answer": answer,
+                "contexts": contexts,
+                "ground_truth": record["reference"],
+            }
         )
 
-        row = scores.to_pandas().iloc[0]
-
-        faithfulness_score = self._score(row, "faithfulness")
-        relevancy_score = self._score(row, "answer_relevancy")
-        precision_score = self._score(row, "context_precision")
-        recall_score = self._score(row, "context_recall")
-
-        overall_score = (
-            faithfulness_score * 0.35
-            + relevancy_score * 0.30
-            + precision_score * 0.20
-            + recall_score * 0.15
+    if skipped_empty:
+        print(
+            f"  [INFO] {path.name}: skipped {skipped_empty} record(s) with empty "
+            f"actual_response/actual_contexts -- run your RAG pipeline first to fill these in"
         )
 
-        result = RagasResult(
-            question=question,
-            answer=answer,
-            faithfulness=round(faithfulness_score, 3),
-            answer_relevancy=round(relevancy_score, 3),
-            context_precision=round(precision_score, 3),
-            context_recall=round(recall_score, 3),
-            overall_score=round(overall_score, 3),
+    return cleaned
+
+
+def results_to_dataframe(
+    department: str,
+    records: list[dict[str, Any]],
+    results: list[RagasResult | None],
+) -> pd.DataFrame:
+    """Build a DataFrame from records/results pairs, skipping any record whose
+    evaluation failed (result is None) so a failure never shifts the pairing
+    for records that come after it."""
+    rows = []
+    skipped_failed = 0
+    for record, result in zip(records, results):
+        if result is None:
+            skipped_failed += 1
+            continue
+        rows.append(
+            {
+                "department": department,
+                "id": record["id"],
+                "question": result.question,
+                "answer": result.answer,
+                "faithfulness": result.faithfulness,
+                "answer_relevancy": result.answer_relevancy,
+                "context_precision": result.context_precision,
+                "context_recall": result.context_recall,
+                "overall_score": result.overall_score,
+                "pass": result.overall_score >= 0.5,
+            }
         )
+    if skipped_failed:
+        print(f"  [INFO] {department}: {skipped_failed} record(s) failed evaluation, excluded from results")
+    return pd.DataFrame(rows)
 
-        logger.info(
-            f"RAGAS done | overall={result.overall_score:.3f} | "
-            f"faithfulness={result.faithfulness:.3f} | "
-            f"relevancy={result.answer_relevancy:.3f}"
-        )
 
-        return result
+def main() -> None:
+    parser = argparse.ArgumentParser(description="Offline RAGAS evaluation per department")
+    parser.add_argument("--data-dir", type=Path, required=True, help="Folder with *.json files, one per department")
+    parser.add_argument("--out-dir", type=Path, default=Path("./eval_results"), help="Where to write results")
+    args = parser.parse_args()
 
-    def evaluate_batch(
-        self,
-        test_cases: list[dict],
-    ) -> list[RagasResult]:
-        results: list[RagasResult] = []
+    if not args.data_dir.is_dir():
+        print(f"Data dir not found: {args.data_dir}")
+        sys.exit(1)
 
-        for index, test_case in enumerate(test_cases, 1):
-            logger.info(f"RAGAS batch case {index}/{len(test_cases)}")
+    args.out_dir.mkdir(parents=True, exist_ok=True)
 
-            try:
-                result = self.evaluate_single(
-                    question=test_case["question"],
-                    answer=test_case["answer"],
-                    contexts=test_case["contexts"],
-                    ground_truth=test_case.get("ground_truth", ""),
-                )
-                results.append(result)
+    json_files = sorted(args.data_dir.glob("*.json"))
+    if not json_files:
+        print(f"No .json files found in {args.data_dir}")
+        sys.exit(1)
 
-            except Exception as exc:
-                logger.exception(f"RAGAS failed for case {index}: {exc}")
+    evaluator = RagasEvaluator()
 
-        return results
+    all_frames: list[pd.DataFrame] = []
+    summary_rows: list[dict[str, Any]] = []
 
-    def summary(self, results: list[RagasResult]) -> dict:
-        if not results:
-            return {}
-
-        total = len(results)
-
-        return {
-            "total_cases": total,
-            "avg_faithfulness": round(
-                sum(item.faithfulness for item in results) / total,
-                3,
-            ),
-            "avg_relevancy": round(
-                sum(item.answer_relevancy for item in results) / total,
-                3,
-            ),
-            "avg_precision": round(
-                sum(item.context_precision for item in results) / total,
-                3,
-            ),
-            "avg_recall": round(
-                sum(item.context_recall for item in results) / total,
-                3,
-            ),
-            "avg_overall": round(
-                sum(item.overall_score for item in results) / total,
-                3,
-            ),
-            "pass_rate": round(
-                sum(1 for item in results if item.overall_score >= 0.5) / total,
-                3,
-            ),
-        }
-
-    @staticmethod
-    def _score(row, key: str) -> float:
-        value = row.get(key, 0.0)
-
-        if value is None:
-            return 0.0
-
+    for path in json_files:
+        department = path.stem
+        print(f"\n=== {department} ===")
         try:
-            return float(value)
-        except (TypeError, ValueError):
-            return 0.0
+            records = load_department_file(path)
+        except ValueError as e:
+            print(f"  [ERROR] {e}")
+            continue
+
+        if not records:
+            print(f"  [SKIP] {department}: no valid records")
+            continue
+
+        print(f"  Running RAGAS on {len(records)} records for '{department}'...")
+        results = evaluator.evaluate_batch(records)
+
+        if not results or not any(r is not None for r in results):
+            print(f"  [SKIP] {department}: all evaluations failed")
+            continue
+
+        df = results_to_dataframe(department, records, results)
+        if df.empty:
+            print(f"  [SKIP] {department}: no scoreable records after filtering")
+            continue
+
+        all_frames.append(df)
+
+        per_dept_path = args.out_dir / f"{department}_detailed.csv"
+        df.to_csv(per_dept_path, index=False)
+        print(f"  Saved detailed results -> {per_dept_path}")
+
+        successful_results = [r for r in results if r is not None]
+        dept_summary = evaluator.summary(successful_results)
+        dept_summary["department"] = department
+        summary_rows.append(dept_summary)
+
+    if not all_frames:
+        print("\nNo departments produced results. Nothing to summarize.")
+        sys.exit(1)
+
+    combined = pd.concat(all_frames, ignore_index=True)
+    combined_path = args.out_dir / "all_departments_detailed.csv"
+    combined.to_csv(combined_path, index=False)
+
+    summary_df = pd.DataFrame(summary_rows)
+    cols = ["department"] + [c for c in summary_df.columns if c != "department"]
+    summary_df = summary_df[cols]
+    summary_path = args.out_dir / "summary_by_department.csv"
+    summary_df.to_csv(summary_path, index=False)
+
+    print("\n=== Summary (per department) ===")
+    print(summary_df.to_string(index=False))
+    print(f"\nDetailed (all): {combined_path}")
+    print(f"Summary:        {summary_path}")
 
 
 if __name__ == "__main__":
-    evaluator = RagasEvaluator()
-    result = evaluator.evaluate_single(
-        question="What is Q4 revenue?",
-        answer="Q4 revenue was $2.6B",
-        contexts=["Q4 2024 revenue was $2.6 billion."],
-        ground_truth="Q4 revenue was $2.6 billion",
-    )
-    print(result.report())
+    main()
