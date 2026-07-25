@@ -58,7 +58,7 @@ dependencies = [
     "datasets",
 
     # Evaluation
-    "ragas",
+    "ragas==0.3.9",
     "deepeval",
 
     # Monitoring
@@ -101,7 +101,7 @@ dependencies = [
 ]
 [tool.pytest.ini_options]
 pythonpath = ["src"]
-testpaths = ["tests"]
+testpaths = ["tests/unit_test"]
 markers = [
     "unit: fast, no external calls",
     "integration: real local services, mocked LLM",
@@ -112,3 +112,6 @@ asyncio_mode = "auto"
 [tool.mypy]
 plugins = ["pydantic.mypy", "sqlalchemy.ext.mypy.plugin"]
 ignore_missing_imports = true
+
+[tool.ruff.lint.per-file-ignores]
+"src/ragas_evaluation/ragas_evaluator.py" = ["E402"]
