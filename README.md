@@ -98,3 +98,7 @@ The frontend defaults to `http://localhost:8001`. Override it with:
 ```powershell
 $env:ROLE_RAG_API_BASE="http://localhost:8001"
 .\.venv\Scripts\streamlit.exe run app.py
+
+# updated the ci yml file 
+
+ci yml implemntation do
