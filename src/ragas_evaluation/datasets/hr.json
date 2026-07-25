@@ -1,0 +1,222 @@
+[
+  {
+    "id": 1,
+    "domain": "hr",
+    "question": "What is the onboarding process for a new employee?",
+    "reference": "The onboarding process includes Pre-Joining, Day 1, First Week, and First Month activities. Employees complete document submission before joining, attend HR induction and IT setup on Day 1, receive policy and role-specific training during the first week, and have probation objectives and regular check-ins during the first month.",
+    "relevant_contexts": [
+      "Pre-Joining: Offer letter issuance, document submission.",
+      "Day 1: Welcome session, HR induction, IT setup, introduction to team and mentor.",
+      "First Week: Policy orientation, compliance training, role-specific training, buddy program.",
+      "First Month: Probation objectives and regular check-ins."
+    ],
+    "expected_tools": [
+      "retrieve_documents"
+    ],
+    "actual_response": "The onboarding process for a new employee includes several steps: \n\n1. **Pre-Joining**: Offer letter issuance, document submission (ID, address, education, previous employment) (Source: [2] employee_handbook.md).\n2. **Day 1**: Welcome session, HR induction, IT setup, introduction to team and mentor (Source: [2] employee_handbook.md).\n3. **First Week**: Policy orientation, compliance training, role-specific training, buddy program (Source: [2] employee_handbook.md).\n4. **First Month**: Probation objectives set, regular check-ins with manager and HR (Source: [2] employee_handbook.md).\n\nAdditionally, the employee handbook provides an overview of the onboarding process in section 2: [Employee Onboarding & Benefits] (Source: [1] employee_handbook.md).",
+    "actual_contexts": [
+      "1. [Welcome & Introduction](#welcome--introduction)\n2. [Employee Onboarding & Benefits](#employee-onboarding--benefits)\n3. [Leave Policies](#leave-policies)\n4. [Work Hours & Attendance](#work-hours--attendance)\n5. [Code of Conduct & Workplace Behavior](#code-of-conduct--workplace-behavior)\n6. [Healt...",
+      "- **Pre-Joining** : Offer letter issuance, document submission (ID, address, education, previous employment).\n- **Day 1** : Welcome session, HR induction, IT setup, introduction to team and mentor.\n- **First Week** : Policy orientation, compliance training, role-specific training, buddy program.\n- *...",
+      "- Attendance must be marked daily via biometric, swipe card, or HRMS app.\n- Late arrivals/early departures must be notified to the manager.\n- Three or more late arrivals in a month may attract disciplinary action.",
+      "- Submit written/email resignation to manager and HR.\n- Notice period as per appointment letter (typically 30-90 days).\n- Handover of duties and documentation required.",
+      "1. Submit expense claims via HRMS with original bills within 30 days of incurring the expense.\n2. Claims reviewed and approved by reporting manager.\n3. Reimbursement processed with the next payroll cycle."
+    ],
+    "actual_tools_called": []
+  },
+  {
+    "id": 2,
+    "domain": "hr",
+    "question": "What statutory benefits are provided to employees?",
+    "reference": "Employees receive EPF, ESI, Gratuity, Maternity Benefits, and Bonus as statutory benefits according to applicable Indian labor laws.",
+    "relevant_contexts": [
+      "Employees' Provident Fund (EPF)",
+      "Employee State Insurance (ESI)",
+      "Gratuity",
+      "Maternity Benefit",
+      "Bonus"
+    ],
+    "expected_tools": [
+      "retrieve_documents"
+    ],
+    "actual_response": "The statutory benefits provided to employees include:\n- Provident Fund (PF) (Source: [2] employee_handbook.md)\n- Employee State Insurance (ESI) (Source: [2] employee_handbook.md)\n- Professional Tax (Source: [2] employee_handbook.md)\n- Income Tax (TDS) (Source: [2] employee_handbook.md)\n- Labour Welfare Fund (Source: [2] employee_handbook.md)\n- Gratuity (Source: [4] employee_handbook.md)\n- Maternity Benefit (Source: [4] employee_handbook.md)\n- Bonus (Source: [4] employee_handbook.md)\n\nAdditionally, the company provides leave benefits as per statutory requirements, including:\n- Privilege/Annual Leave (Source: [3] employee_handbook.md)\n- Sick Leave (Source: [3] employee_handbook.md)\n- Casual Leave (Source: [3] employee_handbook.md)\n- Maternity Leave (Source: [3] employee_handbook.md)\n- Public Holidays (Source: [3] employee_handbook.md)",
+    "actual_contexts": [
+      "- Provided as per statutory requirements and company policy.",
+      "- **Statutory deductions** : PF, ESI, Professional Tax, Income Tax (TDS), Labour Welfare Fund.\n- **Voluntary deductions** : Loan repayments, advances, etc.",
+      "Privilege/Annual, Entitlement/Details = 15-21 days/year (as per state Shops & Establishments Act); accrued monthly. Sick Leave, Entitlement/Details = 12 days/year (non-cumulative; medical certificate for >2 days). Casual Leave, Entitlement/Details = 7 days/year (state-specific). Maternity Leave, Ent...",
+      "Employees’ Provident Fund (EPF), Details = 12% employer & employee contribution; as per EPF Act, 1952. Employee State Insurance (ESI), Details = For employees earning ≤ ₹21,000/month; covers medical, disability, maternity. Gratuity, Details = Payable after 5 years of continuous service; as per Payme...",
+      "- **Group Health Insurance** : Family floater policy covering employee, spouse, and up to 2 children.\n- **Accident & Life Insurance** : Additional coverage for accidental death or disability.\n- **Wellness Programs** : Annual health check-ups, yoga/meditation sessions, mental health counseling.\n- **E..."
+    ],
+    "actual_tools_called": []
+  },
+  {
+    "id": 3,
+    "domain": "hr",
+    "question": "How much maternity leave does the company provide?",
+    "reference": "The company provides 26 weeks of paid maternity leave for the first two children and 12 weeks for subsequent children.",
+    "relevant_contexts": [
+      "Maternity Leave: 26 weeks (first two children); 12 weeks for subsequent children."
+    ],
+    "expected_tools": [
+      "retrieve_documents"
+    ],
+    "actual_response": "The company provides 26 weeks of maternity leave for the first two children, and 12 weeks for subsequent children (Source: [1] employee_handbook.md). Additionally, the maternity leave is also mentioned as 26 weeks paid leave for the first two children, as per the Maternity Benefit Act (Source: [4] employee_handbook.md).",
+    "actual_contexts": [
+      "Privilege/Annual, Entitlement/Details = 15-21 days/year (as per state Shops & Establishments Act); accrued monthly. Sick Leave, Entitlement/Details = 12 days/year (non-cumulative; medical certificate for >2 days). Casual Leave, Entitlement/Details = 7 days/year (state-specific). Maternity Leave, Ent...",
+      "**Q: How do I apply for maternity leave?**\nA: Submit application on HRMS with medical certificate at least 8 weeks before due date.\n**Q: What if I forget to mark attendance?**\nA: Inform HR within 24 hours; repeated lapses may lead to deduction or disciplinary action.\n**Q: How is overtime calculated?...",
+      "- **Standard Hours** : 9 hours/day (including 1 hour break), 6 days/week or 8 hours/day, 5 days/week (as per company policy).\n- **Flexible Timings** : Allowed for eligible roles, subject to manager approval.\n- **Shift Work** : Applicable for certain roles; shift allowance as per policy.",
+      "Employees’ Provident Fund (EPF), Details = 12% employer & employee contribution; as per EPF Act, 1952. Employee State Insurance (ESI), Details = For employees earning ≤ ₹21,000/month; covers medical, disability, maternity. Gratuity, Details = Payable after 5 years of continuous service; as per Payme...",
+      "- Apply via HRMS/leave portal at least 3 days in advance (except emergencies).\n- Sick leave for more than 2 days requires a medical certificate.\n- Emergency leave to be communicated to manager/HR as soon as possible.\n- Approval from reporting manager and HR required for all leave requests.\n- Leave b..."
+    ],
+    "actual_tools_called": []
+  },
+  {
+    "id": 4,
+    "domain": "hr",
+    "question": "How many casual leave days are employees entitled to each year?",
+    "reference": "Employees are entitled to 7 days of casual leave per year, subject to state-specific policies.",
+    "relevant_contexts": [
+      "Casual Leave: 7 days/year (state-specific)."
+    ],
+    "expected_tools": [
+      "retrieve_documents"
+    ],
+    "actual_response": "Employees are entitled to 7 days of casual leave per year (Source: [1] employee_handbook.md).",
+    "actual_contexts": [
+      "Privilege/Annual, Entitlement/Details = 15-21 days/year (as per state Shops & Establishments Act); accrued monthly. Sick Leave, Entitlement/Details = 12 days/year (non-cumulative; medical certificate for >2 days). Casual Leave, Entitlement/Details = 7 days/year (state-specific). Maternity Leave, Ent...",
+      "- **Standard Hours** : 9 hours/day (including 1 hour break), 6 days/week or 8 hours/day, 5 days/week (as per company policy).\n- **Flexible Timings** : Allowed for eligible roles, subject to manager approval.\n- **Shift Work** : Applicable for certain roles; shift allowance as per policy.",
+      "- Apply via HRMS/leave portal at least 3 days in advance (except emergencies).\n- Sick leave for more than 2 days requires a medical certificate.\n- Emergency leave to be communicated to manager/HR as soon as possible.\n- Approval from reporting manager and HR required for all leave requests.\n- Leave b...",
+      "- Processed within 30-60 days of exit, including leave encashment and statutory dues.",
+      "- Up to 2 days/week for eligible roles; must be approved by manager.\n- Must be reachable and available during core work hours."
+    ],
+    "actual_tools_called": []
+  },
+  {
+    "id": 5,
+    "domain": "hr",
+    "question": "What is the procedure for applying for leave?",
+    "reference": "Employees should apply through the HRMS or leave portal at least three days in advance unless it is an emergency. Leave requests require approval from the reporting manager and HR.",
+    "relevant_contexts": [
+      "Apply via HRMS/leave portal at least 3 days in advance.",
+      "Approval from reporting manager and HR required."
+    ],
+    "expected_tools": [
+      "retrieve_documents"
+    ],
+    "actual_response": "The procedure for applying for leave is to apply via HRMS/leave portal at least 3 days in advance (except emergencies) and obtain approval from the reporting manager and HR. Additionally, for sick leave of more than 2 days, a medical certificate is required. (Source: [1] employee_handbook.md) \n\nIn case of specific types of leave, such as maternity leave, the application should be submitted on HRMS with a medical certificate at least 8 weeks before the due date. (Source: [2] employee_handbook.md) \n\nIt is also important to note that leave balance can be viewed on the HRMS portal. (Source: [1] employee_handbook.md)",
+    "actual_contexts": [
+      "- Apply via HRMS/leave portal at least 3 days in advance (except emergencies).\n- Sick leave for more than 2 days requires a medical certificate.\n- Emergency leave to be communicated to manager/HR as soon as possible.\n- Approval from reporting manager and HR required for all leave requests.\n- Leave b...",
+      "**Q: How do I apply for maternity leave?**\nA: Submit application on HRMS with medical certificate at least 8 weeks before due date.\n**Q: What if I forget to mark attendance?**\nA: Inform HR within 24 hours; repeated lapses may lead to deduction or disciplinary action.\n**Q: How is overtime calculated?...",
+      "Privilege/Annual, Entitlement/Details = 15-21 days/year (as per state Shops & Establishments Act); accrued monthly. Sick Leave, Entitlement/Details = 12 days/year (non-cumulative; medical certificate for >2 days). Casual Leave, Entitlement/Details = 7 days/year (state-specific). Maternity Leave, Ent...",
+      "- Submit written/email resignation to manager and HR.\n- Notice period as per appointment letter (typically 30-90 days).\n- Handover of duties and documentation required.",
+      "- Processed within 30-60 days of exit, including leave encashment and statutory dues."
+    ],
+    "actual_tools_called": []
+  },
+  {
+    "id": 6,
+    "domain": "hr",
+    "question": "When is a medical certificate required for sick leave?",
+    "reference": "A medical certificate is required when sick leave exceeds two days.",
+    "relevant_contexts": [
+      "Sick leave for more than 2 days requires a medical certificate."
+    ],
+    "expected_tools": [
+      "retrieve_documents"
+    ],
+    "actual_response": "A medical certificate is required for sick leave when the leave is for more than 2 days. (Source: [1] employee_handbook.md, [2] employee_handbook.md)",
+    "actual_contexts": [
+      "- Apply via HRMS/leave portal at least 3 days in advance (except emergencies).\n- Sick leave for more than 2 days requires a medical certificate.\n- Emergency leave to be communicated to manager/HR as soon as possible.\n- Approval from reporting manager and HR required for all leave requests.\n- Leave b...",
+      "Privilege/Annual, Entitlement/Details = 15-21 days/year (as per state Shops & Establishments Act); accrued monthly. Sick Leave, Entitlement/Details = 12 days/year (non-cumulative; medical certificate for >2 days). Casual Leave, Entitlement/Details = 7 days/year (state-specific). Maternity Leave, Ent...",
+      "**Q: How do I apply for maternity leave?**\nA: Submit application on HRMS with medical certificate at least 8 weeks before due date.\n**Q: What if I forget to mark attendance?**\nA: Inform HR within 24 hours; repeated lapses may lead to deduction or disciplinary action.\n**Q: How is overtime calculated?...",
+      "- Attendance must be marked daily via biometric, swipe card, or HRMS app.\n- Late arrivals/early departures must be notified to the manager.\n- Three or more late arrivals in a month may attract disciplinary action.",
+      "- Comply with the Occupational Safety, Health, and Working Conditions Code, 2020.\n- Mandatory safety training for all employees.\n- Use personal protective equipment (PPE) where required."
+    ],
+    "actual_tools_called": []
+  },
+  {
+    "id": 7,
+    "domain": "hr",
+    "question": "What are the company's standard working hours?",
+    "reference": "The company follows either 9 hours per day including a one-hour break for six-day workweeks or 8 hours per day for five-day workweeks depending on company policy.",
+    "relevant_contexts": [
+      "Standard Hours: 9 hours/day including 1 hour break, 6 days/week or 8 hours/day, 5 days/week."
+    ],
+    "expected_tools": [
+      "retrieve_documents"
+    ],
+    "actual_response": "The company's standard working hours are 9 hours/day (including 1 hour break), 6 days/week or 8 hours/day, 5 days/week (as per company policy) (Source: employee_handbook.md).",
+    "actual_contexts": [
+      "- **Standard Hours** : 9 hours/day (including 1 hour break), 6 days/week or 8 hours/day, 5 days/week (as per company policy).\n- **Flexible Timings** : Allowed for eligible roles, subject to manager approval.\n- **Shift Work** : Applicable for certain roles; shift allowance as per policy.",
+      "Privilege/Annual, Entitlement/Details = 15-21 days/year (as per state Shops & Establishments Act); accrued monthly. Sick Leave, Entitlement/Details = 12 days/year (non-cumulative; medical certificate for >2 days). Casual Leave, Entitlement/Details = 7 days/year (state-specific). Maternity Leave, Ent...",
+      "- Up to 2 days/week for eligible roles; must be approved by manager.\n- Must be reachable and available during core work hours.",
+      "- All employees must record work hours and breaks accurately.\n- Use of company-approved time tracking tools is mandatory for remote/hybrid roles.",
+      "**Q: How do I apply for maternity leave?**\nA: Submit application on HRMS with medical certificate at least 8 weeks before due date.\n**Q: What if I forget to mark attendance?**\nA: Inform HR within 24 hours; repeated lapses may lead to deduction or disciplinary action.\n**Q: How is overtime calculated?..."
+    ],
+    "actual_tools_called": []
+  },
+  {
+    "id": 8,
+    "domain": "hr",
+    "question": "How is employee attendance recorded?",
+    "reference": "Attendance must be recorded daily using biometric devices, swipe cards, or the HRMS application.",
+    "relevant_contexts": [
+      "Attendance must be marked daily via biometric, swipe card, or HRMS app."
+    ],
+    "expected_tools": [
+      "retrieve_documents"
+    ],
+    "actual_response": "Employee attendance must be marked daily via biometric, swipe card, or HRMS app (Source: [1] employee_handbook.md). Additionally, all employees must record work hours and breaks accurately using company-approved time tracking tools, especially for remote/hybrid roles (Source: [2] employee_handbook.md). If an employee forgets to mark attendance, they should inform HR within 24 hours (Source: [5] employee_handbook.md).",
+    "actual_contexts": [
+      "- Attendance must be marked daily via biometric, swipe card, or HRMS app.\n- Late arrivals/early departures must be notified to the manager.\n- Three or more late arrivals in a month may attract disciplinary action.",
+      "- All employees must record work hours and breaks accurately.\n- Use of company-approved time tracking tools is mandatory for remote/hybrid roles.",
+      "1. [Welcome & Introduction](#welcome--introduction)\n2. [Employee Onboarding & Benefits](#employee-onboarding--benefits)\n3. [Leave Policies](#leave-policies)\n4. [Work Hours & Attendance](#work-hours--attendance)\n5. [Code of Conduct & Workplace Behavior](#code-of-conduct--workplace-behavior)\n6. [Healt...",
+      "Privilege/Annual, Entitlement/Details = 15-21 days/year (as per state Shops & Establishments Act); accrued monthly. Sick Leave, Entitlement/Details = 12 days/year (non-cumulative; medical certificate for >2 days). Casual Leave, Entitlement/Details = 7 days/year (state-specific). Maternity Leave, Ent...",
+      "**Q: How do I apply for maternity leave?**\nA: Submit application on HRMS with medical certificate at least 8 weeks before due date.\n**Q: What if I forget to mark attendance?**\nA: Inform HR within 24 hours; repeated lapses may lead to deduction or disciplinary action.\n**Q: How is overtime calculated?..."
+    ],
+    "actual_tools_called": []
+  },
+  {
+    "id": 9,
+    "domain": "hr",
+    "question": "What happens if an employee is repeatedly late?",
+    "reference": "Employees with three or more late arrivals in a month may be subject to disciplinary action.",
+    "relevant_contexts": [
+      "Three or more late arrivals in a month may attract disciplinary action."
+    ],
+    "expected_tools": [
+      "retrieve_documents"
+    ],
+    "actual_response": "If an employee is repeatedly late, with three or more late arrivals in a month, it may attract disciplinary action (Source: [1] employee_handbook.md).",
+    "actual_contexts": [
+      "- Attendance must be marked daily via biometric, swipe card, or HRMS app.\n- Late arrivals/early departures must be notified to the manager.\n- Three or more late arrivals in a month may attract disciplinary action.",
+      "- May occur due to misconduct, underperformance, redundancy, or business needs.\n- HR will provide written communication and explanation.",
+      "- Attempt informal resolution with the concerned party.\n- If unresolved, escalate to HR or Grievance Redressal Officer.\n- Formal complaints investigated impartially and resolved within 30 days.",
+      "- Raise discrepancies to HR within 5 working days of salary credit.\n- Issues resolved within 7 working days.",
+      "**Q: How do I apply for maternity leave?**\nA: Submit application on HRMS with medical certificate at least 8 weeks before due date.\n**Q: What if I forget to mark attendance?**\nA: Inform HR within 24 hours; repeated lapses may lead to deduction or disciplinary action.\n**Q: How is overtime calculated?..."
+    ],
+    "actual_tools_called": []
+  },
+  {
+    "id": 10,
+    "domain": "hr",
+    "question": "How is overtime compensated?",
+    "reference": "Overtime is voluntary, requires prior manager approval, and is compensated at double the regular wage rate. In some cases, compensatory leave may be provided instead.",
+    "relevant_contexts": [
+      "Overtime is voluntary and paid at double the regular wage rate.",
+      "Prior approval from manager required.",
+      "Compensatory off may be provided."
+    ],
+    "expected_tools": [
+      "retrieve_documents"
+    ],
+    "actual_response": "Overtime is compensated at double the regular wage rate, as per the Factories Act, and may also be provided as a compensatory off in lieu of overtime for certain roles, subject to prior approval from the manager. (Source: [1] employee_handbook.md) \n\nAdditionally, the calculation of overtime is paid at double the regular wage for hours beyond statutory limits, subject to manager approval. (Source: [5] employee_handbook.md)",
+    "actual_contexts": [
+      "- Overtime is voluntary and paid at double the regular wage rate (as per Factories Act).\n- Prior approval from manager required for overtime.\n- Compensatory off may be provided in lieu of overtime for certain roles.",
+      "- Salary is processed and credited to bank accounts on the last working day of each month.\n- Payslips are available on the HRMS portal.",
+      "- **Standard Hours** : 9 hours/day (including 1 hour break), 6 days/week or 8 hours/day, 5 days/week (as per company policy).\n- **Flexible Timings** : Allowed for eligible roles, subject to manager approval.\n- **Shift Work** : Applicable for certain roles; shift allowance as per policy.",
+      "Basic Salary, Details = 40-50% of CTC. House Rent Allowance (HRA), Details = 40-50% of basic salary. Special Allowance, Details = Variable, as per grade. Conveyance Allowance, Details = As per company policy. Bonus, Details = Minimum 8.33% of basic salary, as per law. Gratuity, Details = As per Paym...",
+      "**Q: How do I apply for maternity leave?**\nA: Submit application on HRMS with medical certificate at least 8 weeks before due date.\n**Q: What if I forget to mark attendance?**\nA: Inform HR within 24 hours; repeated lapses may lead to deduction or disciplinary action.\n**Q: How is overtime calculated?..."
+    ],
+    "actual_tools_called": []
+  }
+]

@@ -21,8 +21,7 @@ src/prompts_layer/prompts.py
 src/rag_chain/__init__.py
 src/rag_chain/chain_pipeline.py
 src/ragas_evaluation/__init__.py
-src/ragas_evaluation/background.py
-src/ragas_evaluation/rags_evaluator.py
+src/ragas_evaluation/ragas_evaluator.py
 src/retrieval/__init__.py
 src/retrieval/retriever_service.py
 src/role_based_rag.egg-info/PKG-INFO

@@ -54,4 +54,6 @@ pytest-asyncio
 pytest-mock
 faker
 coverage
+types-psutil
+types-python-jose
 streamlit

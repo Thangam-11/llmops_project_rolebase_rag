@@ -1,0 +1,422 @@
+[
+  {
+    "id": 1,
+    "domain": "marketing",
+    "question": "How much did new customer acquisition increase in 2024?",
+    "reference": "New customer acquisition increased by 20% in 2024.",
+    "relevant_contexts": [
+      "Marketing Performance: New customer acquisition increased by 20% compared to 2023."
+    ],
+    "expected_tools": [
+      "retrieve_documents"
+    ],
+    "actual_response": "To determine the increase in new customer acquisition in 2024, we need to compare the customer acquisition targets across different quarters. \n\nIn Q2 2024, the customer acquisition target was 200,000 new customers (Source: marketing_report_q2_2024.md). \nIn Q3 2024, the target was 180,000 new customers (Source: marketing_report_q3_2024.md). \nIn Q4 2024, the target increased to 220,000 new customers (Source: market_report_q4_2024.md).\n\nComparing these targets, we see an increase from 180,000 in Q3 to 220,000 in Q4, which is an increase of 40,000 or 22.22% (Source: market_report_q4_2024.md, marketing_report_q3_2024.md). However, to understand the overall increase in new customer acquisition for the year 2024, we would need more specific data on actual acquisitions rather than just targets.\n\nGiven the information available, we can see that the targets for new customer acquisition varied by quarter, with Q4 2024 having the highest target at 220,000 (Source: market_report_q4_2024.md). \n\nI don't have that information on the actual increase in new customer acquisition for the entire year 2024.",
+    "actual_contexts": [
+      "Our projections for Q4 2024 were ambitious yet grounded in historical performance and market analysis. The key targets were:\n- \n**Customer Acquisition Target**\n: 220,000 new customers\n- Focused on expanding our retail and enterprise customer base through targeted campaigns and promotional offers.\n- ...",
+      "The Marketing Department's success in 2024 can largely be attributed to its focus on understanding and engaging key customer segments. Key insights include:\n1. **Geographic Growth** : Significant increases in customer acquisition in Asia and Europe, with Asia showing the largest market potential for...",
+      "Our Q3 2024 targets were designed to balance growth in new markets with the retention of existing customers. The key projections were:\n- \n**Customer Acquisition Target**\n: 180,000 new customers\n- Focused on acquiring customers in Latin America (50%) and existing markets (50%) through digital and off...",
+      "Our Q2 2024 targets were designed to drive growth in new and existing markets while maintaining cost efficiency. The key projections were:\n- \n**Customer Acquisition Target**\n: 200,000 new customers\n- Split evenly between Southeast Asia (50%) and existing markets (50%), with a focus on digital channe...",
+      "1. **Customer Acquisition Cost (CAC)** : $150 per new customer (down from $180 in 2023), reflecting more efficient targeting and optimization of ad spend.\n2. **Return on Ad Spend (ROAS)** : 4.5x for digital campaigns, a significant improvement over the 3x in 2023.\n3. **Customer Lifetime Value (CLTV)..."
+    ],
+    "actual_tools_called": []
+  },
+  {
+    "id": 2,
+    "domain": "marketing",
+    "question": "How much did brand awareness improve during 2024?",
+    "reference": "Brand awareness increased by 15% in 2024.",
+    "relevant_contexts": [
+      "Brand awareness improved by 15% through digital campaigns and brand initiatives."
+    ],
+    "expected_tools": [
+      "retrieve_documents"
+    ],
+    "actual_response": "I don't have that information.",
+    "actual_contexts": [
+      "Q2 2024 was a dynamic quarter that strengthened our brand in existing markets and marked significant progress in Southeast Asia. Our focus on influencer partnerships, email retargeting, and localized campaigns delivered measurable results, positioning us for continued growth in Q3. This report under...",
+      "Q2 2024 was a pivotal quarter dedicated to reinforcing our brand's dominance in existing markets while strategically expanding into Southeast Asia. This report details our marketing strategies, performance metrics, and strategic objectives, highlighting our efforts to drive customer acquisition, enh...",
+      "The Marketing Department's success in 2024 can largely be attributed to its focus on understanding and engaging key customer segments. Key insights include:\n1. **Geographic Growth** : Significant increases in customer acquisition in Asia and Europe, with Asia showing the largest market potential for...",
+      "Q4 2024 was a transformative quarter for our marketing efforts, with significant strides in customer acquisition, revenue growth, and brand loyalty. By aligning our strategies with market opportunities and leveraging data-driven insights, we positioned ourselves for continued success in 2025. This r...",
+      "Based on Q2 performance, we propose the following strategies for Q3 2024:\n1. **Deepen Southeast Asia Penetration** : Increase ad spend by 10% in Thailand to address competitive challenges and meet acquisition targets.\n2. **Expand Influencer Network** : Partner with 15 additional influencers in South..."
+    ],
+    "actual_tools_called": []
+  },
+  {
+    "id": 3,
+    "domain": "marketing",
+    "question": "Which campaign was the most successful in 2024?",
+    "reference": "The 'InstantWire Global Expansion' campaign was the most successful campaign in 2024.",
+    "relevant_contexts": [
+      "Campaign Analysis: InstantWire Global Expansion was the highest-performing campaign."
+    ],
+    "expected_tools": [
+      "retrieve_documents"
+    ],
+    "actual_response": "I don't have that information.",
+    "actual_contexts": [
+      "Q2 2024 was a dynamic quarter that strengthened our brand in existing markets and marked significant progress in Southeast Asia. Our focus on influencer partnerships, email retargeting, and localized campaigns delivered measurable results, positioning us for continued growth in Q3. This report under...",
+      "Q2 2024 was a pivotal quarter dedicated to reinforcing our brand's dominance in existing markets while strategically expanding into Southeast Asia. This report details our marketing strategies, performance metrics, and strategic objectives, highlighting our efforts to drive customer acquisition, enh...",
+      "Q4 2024 was a transformative quarter for our marketing efforts, with significant strides in customer acquisition, revenue growth, and brand loyalty. By aligning our strategies with market opportunities and leveraging data-driven insights, we positioned ourselves for continued success in 2025. This r...",
+      "Based on Q1 performance, we propose the following strategies for Q2 2024:\n1. **Accelerate European Expansion** : Increase ad spend by 10% in France to overcome regulatory hurdles and meet acquisition targets.\n2. **Enhance InstantPay Adoption** : Introduce gamified incentives to drive repeat usage an...",
+      "Based on Q2 performance, we propose the following strategies for Q3 2024:\n1. **Deepen Southeast Asia Penetration** : Increase ad spend by 10% in Thailand to address competitive challenges and meet acquisition targets.\n2. **Expand Influencer Network** : Partner with 15 additional influencers in South..."
+    ],
+    "actual_tools_called": []
+  },
+  {
+    "id": 4,
+    "domain": "marketing",
+    "question": "What results did the InstantWire Global Expansion campaign achieve?",
+    "reference": "The campaign increased website traffic by 25% and customer sign-ups by 12%.",
+    "relevant_contexts": [
+      "InstantWire Global Expansion generated a 25% increase in website traffic and a 12% increase in customer sign-ups."
+    ],
+    "expected_tools": [
+      "retrieve_documents"
+    ],
+    "actual_response": "The InstantWire Global Expansion campaign achieved a 25% increase in traffic to the website and a 12% increase in sign-ups, with a 3.5x return on investment, generating $17.5M in revenue directly attributed to these efforts, after spending $5M on digital ads, influencer partnerships, and sponsored content. (Source: marketing_report_2024.md)",
+    "actual_contexts": [
+      "1. \n**Digital Campaigns**\n: FinSolve Technologies launched a series of digital campaigns, focusing on performance marketing, content marketing, and social media engagement. The\n**\"InstantWire Global Expansion\"**\ncampaign, which highlighted FinSolve Technologies’s expansion into new markets, was the ...",
+      "Our strategic objectives for Q1 2024 were crafted to lay the groundwork for sustained growth and market penetration. The key objectives included:\n1. **Expand Brand Presence in Europe**\n- Launched localized campaigns in the UK, Germany, and France, focusing on digital ads and partnerships with local ...",
+      "In Q1 2024, FinNova prioritized establishing a scalable framework for growth, with a focus on strengthening customer acquisition channels and enhancing brand visibility. Key initiatives included:\n- **European Market Entry** : Launched targeted campaigns in the UK, Germany, and France to build brand ...",
+      "Q1 2024 marked a foundational quarter for FinNova, as we focused on building robust marketing infrastructure to support aggressive expansion and enhance customer acquisition channels. This report details our marketing strategies, performance metrics, and strategic objectives, emphasizing our efforts...",
+      "Q1 2024 was a transformative quarter for FinNova, as we successfully laid the foundation for aggressive expansion and strengthened our customer acquisition channels. Our focus on European market entry, the InstantPay launch, and social media engagement delivered measurable results, positioning us fo..."
+    ],
+    "actual_tools_called": []
+  },
+  {
+    "id": 5,
+    "domain": "marketing",
+    "question": "How much was spent on digital campaigns?",
+    "reference": "The company spent $5 million on digital marketing campaigns.",
+    "relevant_contexts": [
+      "Digital Campaign Budget: Total spend was $5 million."
+    ],
+    "expected_tools": [
+      "retrieve_documents"
+    ],
+    "actual_response": "$5M was spent on digital ads, influencer partnerships, and sponsored content for the digital campaigns (Source: marketing_report_2024.md | dept=marketing | score=0.6951). Additionally, the total budget for Digital Marketing was $7M (47% of the total marketing budget) (Source: marketing_report_2024.md | dept=marketing | score=0.7109).",
+    "actual_contexts": [
+      "In 2024, the total marketing budget was $15M, allocated as follows:\n1. **Digital Marketing** : $7M (47%) – Focused on paid ads, influencer campaigns, and digital content.\n2. **Event Marketing** : $3M (20%) – Sponsorships, event organization, and travel.\n3. **Public Relations and Brand Awareness** : ...",
+      "1. \n**Digital Campaigns**\n: FinSolve Technologies launched a series of digital campaigns, focusing on performance marketing, content marketing, and social media engagement. The\n**\"InstantWire Global Expansion\"**\ncampaign, which highlighted FinSolve Technologies’s expansion into new markets, was the ...",
+      "1. **Customer Acquisition Cost (CAC)** : $150 per new customer (down from $180 in 2023), reflecting more efficient targeting and optimization of ad spend.\n2. **Return on Ad Spend (ROAS)** : 4.5x for digital campaigns, a significant improvement over the 3x in 2023.\n3. **Customer Lifetime Value (CLTV)...",
+      "- **Social Media Campaigns** : Achieved a 25% engagement rate on platforms like LinkedIn and Instagram, driven by interactive content and influencer partnerships.\n- **Paid Search** : Optimized Google Ads campaigns, resulting in a 12% reduction in cost-per-click (CPC) and a 10% increase in click-thro...",
+      "- **European Campaigns** : Recorded a 15% click-through rate (CTR) on Google Ads in European markets, driven by localized ad copy.\n- **Social Media** : Gained 25,000 new followers across platforms, with a 20% engagement rate on Instagram Stories."
+    ],
+    "actual_tools_called": []
+  },
+  {
+    "id": 6,
+    "domain": "marketing",
+    "question": "What ROI did digital campaigns achieve?",
+    "reference": "Digital campaigns achieved a 3.5x return on investment.",
+    "relevant_contexts": [
+      "Digital marketing campaigns delivered an ROI of 3.5x."
+    ],
+    "expected_tools": [
+      "retrieve_documents"
+    ],
+    "actual_response": "The digital campaigns achieved a 3.5x return on investment (ROI), with $17.5M in generated revenue directly attributed to these efforts. (Source: marketing_report_2024.md)",
+    "actual_contexts": [
+      "To measure the effectiveness of our marketing initiatives, we established the following performance benchmarks:\n- \n**Conversion Rate Target**\n: 15.0%\n- Aimed to improve conversion rates through optimized landing pages, streamlined user journeys, and A/B testing of campaign creatives.\n- \n**ROI Target...",
+      "To evaluate the success of our marketing initiatives, we established the following performance benchmarks:\n- \n**Conversion Rate Target**\n: 14.0%\n- Aimed to optimize conversion rates through localized campaign creatives and streamlined checkout processes.\n- \n**ROI Target**\n: 3.75x\n- Measured as the r...",
+      "1. \n**Digital Campaigns**\n: FinSolve Technologies launched a series of digital campaigns, focusing on performance marketing, content marketing, and social media engagement. The\n**\"InstantWire Global Expansion\"**\ncampaign, which highlighted FinSolve Technologies’s expansion into new markets, was the ...",
+      "To evaluate the success of our marketing initiatives, we established the following performance benchmarks:\n- \n**Conversion Rate Target**\n: 10.0%\n- Aimed to optimize conversions through streamlined user funnels and targeted ad creatives.\n- \n**ROI Target**\n: 3x\n- Measured as the ratio of incremental r...",
+      "To measure the effectiveness of our marketing initiatives, we established the following performance benchmarks:\n- \n**Conversion Rate Target**\n: 12.0%\n- Aimed to improve conversions through refined ad creatives, landing page optimizations, and retargeting campaigns.\n- \n**ROI Target**\n: 2.4x\n- Calcula..."
+    ],
+    "actual_tools_called": []
+  },
+  {
+    "id": 7,
+    "domain": "marketing",
+    "question": "Which event generated more than 300 enterprise leads?",
+    "reference": "The FinSolve Technologies Fintech Innovation event in Berlin generated more than 300 enterprise leads.",
+    "relevant_contexts": [
+      "Berlin Fintech Innovation Event generated over 300 enterprise leads."
+    ],
+    "expected_tools": [
+      "retrieve_documents"
+    ],
+    "actual_response": "The event that generated more than 300 qualified leads was the **Industry Events** where FinSolve sponsored two major industry conferences (Source: market_report_q4_2024.md).",
+    "actual_contexts": [
+      "- **Account-Based Marketing** : Targeted 50 high-value enterprise accounts, securing 10 new contracts worth $1.2 million in annual recurring revenue.\n- **Industry Events** : Sponsored two major industry conferences, generating 300 qualified leads.",
+      "- **Event Sponsorships** : Secured 500,000 impressions through conference activations in London and Berlin.\n- **Content Marketing** : Published 10 blog posts and two whitepapers on fintech trends, driving 15,000 website visits.",
+      "1. \n**Digital Campaigns**\n: FinSolve Technologies launched a series of digital campaigns, focusing on performance marketing, content marketing, and social media engagement. The\n**\"InstantWire Global Expansion\"**\ncampaign, which highlighted FinSolve Technologies’s expansion into new markets, was the ...",
+      "- **Merchant Partnerships** : Onboarded 15 merchants, contributing $1 million in revenue from co-branded promotions.\n- **Influencer Marketing** : Collaborated with 25 regional influencers, generating 500,000 impressions and 50,000 website visits.",
+      "- **Southeast Asia Influencers** : Secured partnerships with 20 regional influencers, contributing to 40,000 new customer sign-ups.\n- **Core Markets** : Worked with 10 influencers in existing markets, boosting brand visibility by 25% on social media."
+    ],
+    "actual_tools_called": []
+  },
+  {
+    "id": 8,
+    "domain": "marketing",
+    "question": "How much was allocated to the total marketing budget in 2024?",
+    "reference": "The total marketing budget allocated for 2024 was $15 million.",
+    "relevant_contexts": [
+      "Marketing Budget 2024: Total allocation was $15 million."
+    ],
+    "expected_tools": [
+      "retrieve_documents"
+    ],
+    "actual_response": "The total marketing budget allocated in 2024 was $15M. (Source: marketing_report_2024.md)",
+    "actual_contexts": [
+      "In 2024, the total marketing budget was $15M, allocated as follows:\n1. **Digital Marketing** : $7M (47%) – Focused on paid ads, influencer campaigns, and digital content.\n2. **Event Marketing** : $3M (20%) – Sponsorships, event organization, and travel.\n3. **Public Relations and Brand Awareness** : ...",
+      "Our projections for Q4 2024 were ambitious yet grounded in historical performance and market analysis. The key targets were:\n- \n**Customer Acquisition Target**\n: 220,000 new customers\n- Focused on expanding our retail and enterprise customer base through targeted campaigns and promotional offers.\n- ...",
+      "Our Q2 2024 targets were designed to drive growth in new and existing markets while maintaining cost efficiency. The key projections were:\n- \n**Customer Acquisition Target**\n: 200,000 new customers\n- Split evenly between Southeast Asia (50%) and existing markets (50%), with a focus on digital channe...",
+      "Q2 2024 was a pivotal quarter dedicated to reinforcing our brand's dominance in existing markets while strategically expanding into Southeast Asia. This report details our marketing strategies, performance metrics, and strategic objectives, highlighting our efforts to drive customer acquisition, enh...",
+      "Our Q3 2024 targets were designed to balance growth in new markets with the retention of existing customers. The key projections were:\n- \n**Customer Acquisition Target**\n: 180,000 new customers\n- Focused on acquiring customers in Latin America (50%) and existing markets (50%) through digital and off..."
+    ],
+    "actual_tools_called": []
+  },
+  {
+    "id": 9,
+    "domain": "marketing",
+    "question": "Which category received the highest marketing budget allocation?",
+    "reference": "Digital Marketing received the highest allocation with $7 million, representing 47% of the total marketing budget.",
+    "relevant_contexts": [
+      "Budget Allocation: Digital Marketing received $7M (47%), the largest budget allocation."
+    ],
+    "expected_tools": [
+      "retrieve_documents"
+    ],
+    "actual_response": "The category that received the highest marketing budget allocation was **Digital Marketing**, with an allocation of $7M, which accounts for 47% of the total marketing budget. (Source: marketing_report_2024.md)",
+    "actual_contexts": [
+      "In 2024, the total marketing budget was $15M, allocated as follows:\n1. **Digital Marketing** : $7M (47%) – Focused on paid ads, influencer campaigns, and digital content.\n2. **Event Marketing** : $3M (20%) – Sponsorships, event organization, and travel.\n3. **Public Relations and Brand Awareness** : ...",
+      "In Q2 2024, our marketing strategy centered on two primary goals: solidifying our brand's position in core markets and establishing a presence in high-growth Southeast Asian markets, including Indonesia, Thailand, and Vietnam. Key initiatives included:\n- **Brand Reinforcement** : Launched integrated...",
+      "Our Q2 2024 targets were designed to drive growth in new and existing markets while maintaining cost efficiency. The key projections were:\n- \n**Customer Acquisition Target**\n: 200,000 new customers\n- Split evenly between Southeast Asia (50%) and existing markets (50%), with a focus on digital channe...",
+      "Our projections for Q4 2024 were ambitious yet grounded in historical performance and market analysis. The key targets were:\n- \n**Customer Acquisition Target**\n: 220,000 new customers\n- Focused on expanding our retail and enterprise customer base through targeted campaigns and promotional offers.\n- ...",
+      "In Q3 2024, our marketing strategy revolved around two key priorities: strengthening customer retention to ensure long-term loyalty and penetrating Latin American markets to diversify our customer base. Key initiatives included:\n- **Customer Retention Programs** : Rolled out enhanced loyalty program..."
+    ],
+    "actual_tools_called": []
+  },
+  {
+    "id": 10,
+    "domain": "marketing",
+    "question": "What was the customer acquisition cost in 2024?",
+    "reference": "Customer Acquisition Cost (CAC) was $150 per new customer.",
+    "relevant_contexts": [
+      "Marketing KPIs: Customer Acquisition Cost (CAC) = $150."
+    ],
+    "expected_tools": [
+      "retrieve_documents"
+    ],
+    "actual_response": "The Customer Acquisition Cost (CAC) in 2024 was $150 per new customer, which is down from $180 in 2023. (Source: marketing_report_2024.md)",
+    "actual_contexts": [
+      "Our projections for Q4 2024 were ambitious yet grounded in historical performance and market analysis. The key targets were:\n- \n**Customer Acquisition Target**\n: 220,000 new customers\n- Focused on expanding our retail and enterprise customer base through targeted campaigns and promotional offers.\n- ...",
+      "1. **Customer Acquisition Cost (CAC)** : $150 per new customer (down from $180 in 2023), reflecting more efficient targeting and optimization of ad spend.\n2. **Return on Ad Spend (ROAS)** : 4.5x for digital campaigns, a significant improvement over the 3x in 2023.\n3. **Customer Lifetime Value (CLTV)...",
+      "Our Q3 2024 targets were designed to balance growth in new markets with the retention of existing customers. The key projections were:\n- \n**Customer Acquisition Target**\n: 180,000 new customers\n- Focused on acquiring customers in Latin America (50%) and existing markets (50%) through digital and off...",
+      "Our Q2 2024 targets were designed to drive growth in new and existing markets while maintaining cost efficiency. The key projections were:\n- \n**Customer Acquisition Target**\n: 200,000 new customers\n- Split evenly between Southeast Asia (50%) and existing markets (50%), with a focus on digital channe...",
+      "Q4 2024 was a transformative quarter for our marketing efforts, with significant strides in customer acquisition, revenue growth, and brand loyalty. By aligning our strategies with market opportunities and leveraging data-driven insights, we positioned ourselves for continued success in 2025. This r..."
+    ],
+    "actual_tools_called": []
+  },
+  {
+    "id": 11,
+    "domain": "marketing",
+    "question": "What was the return on ad spend for digital campaigns?",
+    "reference": "The Return on Ad Spend (ROAS) for digital campaigns was 4.5x.",
+    "relevant_contexts": [
+      "Marketing KPIs: Return on Ad Spend (ROAS) = 4.5x."
+    ],
+    "expected_tools": [
+      "retrieve_documents"
+    ],
+    "actual_response": "The return on ad spend (ROAS) for digital campaigns was 4.5x. (Source: marketing_report_2024.md)",
+    "actual_contexts": [
+      "1. **Customer Acquisition Cost (CAC)** : $150 per new customer (down from $180 in 2023), reflecting more efficient targeting and optimization of ad spend.\n2. **Return on Ad Spend (ROAS)** : 4.5x for digital campaigns, a significant improvement over the 3x in 2023.\n3. **Customer Lifetime Value (CLTV)...",
+      "To measure the effectiveness of our marketing initiatives, we established the following performance benchmarks:\n- \n**Conversion Rate Target**\n: 12.0%\n- Aimed to improve conversions through refined ad creatives, landing page optimizations, and retargeting campaigns.\n- \n**ROI Target**\n: 2.4x\n- Calcula...",
+      "In 2024, the total marketing budget was $15M, allocated as follows:\n1. **Digital Marketing** : $7M (47%) – Focused on paid ads, influencer campaigns, and digital content.\n2. **Event Marketing** : $3M (20%) – Sponsorships, event organization, and travel.\n3. **Public Relations and Brand Awareness** : ...",
+      "To measure the effectiveness of our marketing initiatives, we established the following performance benchmarks:\n- \n**Conversion Rate Target**\n: 15.0%\n- Aimed to improve conversion rates through optimized landing pages, streamlined user journeys, and A/B testing of campaign creatives.\n- \n**ROI Target...",
+      "To evaluate the success of our marketing initiatives, we established the following performance benchmarks:\n- \n**Conversion Rate Target**\n: 10.0%\n- Aimed to optimize conversions through streamlined user funnels and targeted ad creatives.\n- \n**ROI Target**\n: 3x\n- Measured as the ratio of incremental r..."
+    ],
+    "actual_tools_called": []
+  },
+  {
+    "id": 12,
+    "domain": "marketing",
+    "question": "What was the customer lifetime value?",
+    "reference": "Customer Lifetime Value (CLTV) was $1,200 per customer.",
+    "relevant_contexts": [
+      "Marketing KPIs: Customer Lifetime Value (CLTV) = $1,200."
+    ],
+    "expected_tools": [
+      "retrieve_documents"
+    ],
+    "actual_response": "The customer lifetime value (CLTV) was $1,200 per customer (Source: marketing_report_2024.md).",
+    "actual_contexts": [
+      "1. **Customer Acquisition Cost (CAC)** : $150 per new customer (down from $180 in 2023), reflecting more efficient targeting and optimization of ad spend.\n2. **Return on Ad Spend (ROAS)** : 4.5x for digital campaigns, a significant improvement over the 3x in 2023.\n3. **Customer Lifetime Value (CLTV)...",
+      "To evaluate the success of our marketing initiatives, we established the following performance benchmarks:\n- \n**Conversion Rate Target**\n: 14.0%\n- Aimed to optimize conversion rates through localized campaign creatives and streamlined checkout processes.\n- \n**ROI Target**\n: 3.75x\n- Measured as the r...",
+      "To evaluate the success of our marketing initiatives, we established the following performance benchmarks:\n- \n**Conversion Rate Target**\n: 10.0%\n- Aimed to optimize conversions through streamlined user funnels and targeted ad creatives.\n- \n**ROI Target**\n: 3x\n- Measured as the ratio of incremental r...",
+      "To measure the effectiveness of our marketing initiatives, we established the following performance benchmarks:\n- \n**Conversion Rate Target**\n: 15.0%\n- Aimed to improve conversion rates through optimized landing pages, streamlined user journeys, and A/B testing of campaign creatives.\n- \n**ROI Target...",
+      "To measure the effectiveness of our marketing initiatives, we established the following performance benchmarks:\n- \n**Conversion Rate Target**\n: 12.0%\n- Aimed to improve conversions through refined ad creatives, landing page optimizations, and retargeting campaigns.\n- \n**ROI Target**\n: 2.4x\n- Calcula..."
+    ],
+    "actual_tools_called": []
+  },
+  {
+    "id": 13,
+    "domain": "marketing",
+    "question": "Which customer demographic contributed most to new customer growth?",
+    "reference": "Young professionals aged 25–35 contributed the most to new customer growth.",
+    "relevant_contexts": [
+      "Customer Insights: Young professionals (25–35 years) represented the largest growth segment."
+    ],
+    "expected_tools": [
+      "retrieve_documents"
+    ],
+    "actual_response": "The customer demographic that contributed most to new customer growth was young professionals aged 25-35. (Source: marketing_report_2024.md)",
+    "actual_contexts": [
+      "The Marketing Department's success in 2024 can largely be attributed to its focus on understanding and engaging key customer segments. Key insights include:\n1. **Geographic Growth** : Significant increases in customer acquisition in Asia and Europe, with Asia showing the largest market potential for...",
+      "FinSolve Technologies's marketing team saw a solid year-over-year (YoY) improvement in key performance metrics:\n1. **New Customer Acquisition** : A 20% increase in new customers, outpacing the industry average of 10% growth. The increase was primarily driven by targeted digital marketing campaigns a...",
+      "Our Q2 2024 targets were designed to drive growth in new and existing markets while maintaining cost efficiency. The key projections were:\n- \n**Customer Acquisition Target**\n: 200,000 new customers\n- Split evenly between Southeast Asia (50%) and existing markets (50%), with a focus on digital channe...",
+      "Our Q3 2024 targets were designed to balance growth in new markets with the retention of existing customers. The key projections were:\n- \n**Customer Acquisition Target**\n: 180,000 new customers\n- Focused on acquiring customers in Latin America (50%) and existing markets (50%) through digital and off...",
+      "In Q4 2024, our marketing strategy centered on three core pillars: finalizing market penetration in key demographics, fostering stronger customer relationships through personalized engagement, and laying the groundwork for sustained growth in 2025. Key initiatives included:\n- **Targeted Campaigns** ..."
+    ],
+    "actual_tools_called": []
+  },
+  {
+    "id": 14,
+    "domain": "marketing",
+    "question": "Which social media platforms generated the highest engagement?",
+    "reference": "Instagram and LinkedIn generated the highest customer engagement.",
+    "relevant_contexts": [
+      "Social Media Performance: Instagram and LinkedIn recorded the highest engagement rates."
+    ],
+    "expected_tools": [
+      "retrieve_documents"
+    ],
+    "actual_response": "The social media platforms that generated the highest engagement were [PERSON] and Instagram, with a 25% engagement rate (Source: market_report_q4_2024.md). Additionally, Instagram also had a high engagement rate of 20% on Instagram Stories (Source: marketing_report_q1_2024.md) and 18% engagement rate on Instagram in Southeast Asia Campaigns (Source: marketing_report_q2_2024.md).",
+    "actual_contexts": [
+      "- **Social Media Campaigns** : Achieved a 25% engagement rate on platforms like LinkedIn and Instagram, driven by interactive content and influencer partnerships.\n- **Paid Search** : Optimized Google Ads campaigns, resulting in a 12% reduction in cost-per-click (CPC) and a 10% increase in click-thro...",
+      "- **Southeast Asia Campaigns** : Achieved a 18% engagement rate on social media platforms like Instagram and TikTok, driven by localized content.\n- **Paid Search** : Reduced cost-per-click (CPC) by 10% through keyword optimization, improving ad efficiency.",
+      "- **European Campaigns** : Recorded a 15% click-through rate (CTR) on Google Ads in European markets, driven by localized ad copy.\n- **Social Media** : Gained 25,000 new followers across platforms, with a 20% engagement rate on Instagram Stories.",
+      "- **Localized Campaigns** : Tailored social media and Google Ads campaigns for Latin American audiences, achieving a 15% engagement rate.\n- **Email Marketing** : Recorded a 30% open rate and 4.5% conversion rate on loyalty-focused email campaigns.",
+      "1. \n**Digital Campaigns**\n: FinSolve Technologies launched a series of digital campaigns, focusing on performance marketing, content marketing, and social media engagement. The\n**\"InstantWire Global Expansion\"**\ncampaign, which highlighted FinSolve Technologies’s expansion into new markets, was the ..."
+    ],
+    "actual_tools_called": []
+  },
+  {
+    "id": 15,
+    "domain": "marketing",
+    "question": "Which geographic region shows the highest future growth potential?",
+    "reference": "Asia has the highest future growth potential according to the report.",
+    "relevant_contexts": [
+      "Market Expansion: Asia was identified as the highest-growth opportunity."
+    ],
+    "expected_tools": [
+      "retrieve_documents"
+    ],
+    "actual_response": "According to the marketing reports, Asia shows the largest market potential for growth in the coming years (Source: [3] marketing_report_2024.md). Specifically, the report highlights \"Geographic Growth\" and notes significant increases in customer acquisition in Asia, indicating its high potential for future growth (Source: [3] marketing_report_2024.md). Additionally, targeted efforts in Southeast Asia, a part of the Asian region, have already shown positive results, such as a 15% increase in website traffic (Source: [1] marketing_report_q2_2024.md), further supporting Asia's potential for future growth.",
+    "actual_contexts": [
+      "Our strategic objectives for Q2 2024 were crafted to capitalize on regional growth opportunities and enhance engagement in existing markets. The key objectives included:\n1. **Increase Market Share in Southeast Asia**\n- Launched localized digital campaigns in Indonesia, Thailand, and Vietnam, tailore...",
+      "Q3 2024 was a critical quarter for building customer loyalty and establishing a presence in Latin American markets. Our focus on retention, strategic partnerships, and localized branding delivered measurable results, positioning us for a strong Q4. This report highlights our commitment to data-drive...",
+      "The Marketing Department's success in 2024 can largely be attributed to its focus on understanding and engaging key customer segments. Key insights include:\n1. **Geographic Growth** : Significant increases in customer acquisition in Asia and Europe, with Asia showing the largest market potential for...",
+      "Q2 2024 was a pivotal quarter dedicated to reinforcing our brand's dominance in existing markets while strategically expanding into Southeast Asia. This report details our marketing strategies, performance metrics, and strategic objectives, highlighting our efforts to drive customer acquisition, enh...",
+      "Q2 2024 was a dynamic quarter that strengthened our brand in existing markets and marked significant progress in Southeast Asia. Our focus on influencer partnerships, email retargeting, and localized campaigns delivered measurable results, positioning us for continued growth in Q3. This report under..."
+    ],
+    "actual_tools_called": []
+  },
+  {
+    "id": 16,
+    "domain": "marketing",
+    "question": "What issue was identified with Vendor A?",
+    "reference": "Vendor A experienced issues with timely reporting and budget adherence.",
+    "relevant_contexts": [
+      "Vendor Performance: Vendor A had reporting delays and budget management issues."
+    ],
+    "expected_tools": [
+      "retrieve_documents"
+    ],
+    "actual_response": "Vendor A (ABC Services) faced issues with timely reporting and budget adherence. (Source: marketing_report_2024.md)",
+    "actual_contexts": [
+      "FinSolve Technologies relied on several key external vendors in 2024 to support its marketing efforts. These vendors included digital advertising agencies, PR firms, and event organizers. A detailed review of vendor performance for the year highlights the following:\n1. **Vendor A (ABC Services)** : ...",
+      "- May occur due to misconduct, underperformance, redundancy, or business needs.\n- HR will provide written communication and explanation.",
+      "- Verbal/written warning.\n- Performance Improvement Plan (PIP).\n- Termination if no improvement.",
+      "- Original bills/invoices.\n- Travel tickets/boarding passes.\n- Approval emails (if pre-approval required).",
+      "- Treat all colleagues, clients, and vendors with respect and courtesy.\n- Maintain a positive, inclusive, and harassment-free environment.\n- Uphold confidentiality of company information at all times."
+    ],
+    "actual_tools_called": []
+  },
+  {
+    "id": 17,
+    "domain": "marketing",
+    "question": "Why was Vendor B considered successful?",
+    "reference": "Vendor B was considered successful because it delivered several viral campaigns that significantly increased brand awareness.",
+    "relevant_contexts": [
+      "Vendor Performance: Vendor B produced multiple viral campaigns that improved brand awareness."
+    ],
+    "expected_tools": [
+      "retrieve_documents"
+    ],
+    "actual_response": "Vendor B (XYZ Marketing Solutions) was considered successful because they performed exceptionally well, with several viral campaigns that significantly boosted brand awareness (Source: marketing_report_2024.md).",
+    "actual_contexts": [
+      "FinSolve Technologies relied on several key external vendors in 2024 to support its marketing efforts. These vendors included digital advertising agencies, PR firms, and event organizers. A detailed review of vendor performance for the year highlights the following:\n1. **Vendor A (ABC Services)** : ...",
+      "Our strategic objectives for Q3 2024 were crafted to leverage market opportunities in Latin America while reinforcing customer loyalty. The key objectives included:\n1. **Strengthen Customer Retention with Loyalty Programs**\n- Launched a points-based loyalty program offering redeemable rewards for pu...",
+      "Based on Q4 performance, we propose the following strategies for Q1 2025:\n1. **Enhance Conversion Optimization** : Invest in advanced A/B testing and user experience improvements to achieve the 15.0% conversion rate target.\n2. **Expand B2B Efforts** : Increase ABM budget by 10% to target additional ...",
+      "Our strategic objectives for Q4 2024 were designed to capitalize on seasonal opportunities, strengthen our B2B segment, and enhance customer loyalty. The key objectives included:\n1. **Maximize End-of-Year Sales Through Promotions**\n- Implemented aggressive promotional campaigns, including Black Frid...",
+      "Preliminary data indicates strong performance against our Q3 targets:\n- **Customer Acquisition** : Acquired 165,000 new customers by quarter-end, with 45% from Latin America, slightly below the 180,000 target due to slower-than-expected growth in Colombia.\n- **Revenue** : Generated $7.2 million in r..."
+    ],
+    "actual_tools_called": []
+  },
+  {
+    "id": 18,
+    "domain": "marketing",
+    "question": "What recommendation was made to improve customer engagement?",
+    "reference": "The report recommends implementing AI-driven marketing automation and personalized content to improve customer engagement.",
+    "relevant_contexts": [
+      "Recommendations: Implement AI-powered personalization and marketing automation."
+    ],
+    "expected_tools": [
+      "retrieve_documents"
+    ],
+    "actual_response": "To improve customer engagement, the recommendation was to implement AI-driven marketing automation and focus on personalized offers and content (Source: marketing_report_2024.md). Additionally, enhancing customer loyalty programs and introducing personalized offers were also introduced to boost retention and engagement (Source: market_report_q4_2024.md). Furthermore, the use of personalized and AI-driven engagement strategies was highlighted as a focus for improvement (Source: marketing_report_2024.md).",
+    "actual_contexts": [
+      "1. **Enhance Personalization** : Implement AI-driven marketing automation to increase customer engagement and reduce CAC. Personalized offers and content should be central to next year's strategy.\n2. **Expand Market Reach** : Focus on untapped markets, particularly in **Latin America** , where FinSo...",
+      "FinSolve Technologies's marketing team saw a solid year-over-year (YoY) improvement in key performance metrics:\n1. **New Customer Acquisition** : A 20% increase in new customers, outpacing the industry average of 10% growth. The increase was primarily driven by targeted digital marketing campaigns a...",
+      "In Q4 2024, our marketing strategy centered on three core pillars: finalizing market penetration in key demographics, fostering stronger customer relationships through personalized engagement, and laying the groundwork for sustained growth in 2025. Key initiatives included:\n- **Targeted Campaigns** ...",
+      "The Marketing Department's success in 2024 can largely be attributed to its focus on understanding and engaging key customer segments. Key insights include:\n1. **Geographic Growth** : Significant increases in customer acquisition in Asia and Europe, with Asia showing the largest market potential for...",
+      "In Q3 2024, our marketing strategy revolved around two key priorities: strengthening customer retention to ensure long-term loyalty and penetrating Latin American markets to diversify our customer base. Key initiatives included:\n- **Customer Retention Programs** : Rolled out enhanced loyalty program..."
+    ],
+    "actual_tools_called": []
+  },
+  {
+    "id": 19,
+    "domain": "marketing",
+    "question": "Which region should FinSolve expand into next?",
+    "reference": "The report recommends expanding into Latin America.",
+    "relevant_contexts": [
+      "Strategic Recommendation: Expand business operations into Latin America."
+    ],
+    "expected_tools": [
+      "retrieve_documents"
+    ],
+    "actual_response": "FinSolve Technologies should expand into Latin America next. (Source: marketing_report_2024.md)",
+    "actual_contexts": [
+      "Founded in 2016, FinSolve Technologies is a leading player in fintech with a presence across India and global markets. We are committed to ethical business, social responsibility, and fostering a culture of learning and growth.",
+      "At FinSolve Technologies, our vision is to empower businesses and individuals through innovative technology solutions. Our mission is to deliver high-quality, sustainable products and services that create value for our stakeholders.",
+      "1. **Enhance Personalization** : Implement AI-driven marketing automation to increase customer engagement and reduce CAC. Personalized offers and content should be central to next year's strategy.\n2. **Expand Market Reach** : Focus on untapped markets, particularly in **Latin America** , where FinSo...",
+      "2024 was a pivotal year for the Marketing Department at FinSolve Technologies, marked by ambitious campaigns, strategic partnerships, and a focus on increasing customer engagement across digital and physical channels. The department’s efforts resulted in a 20% increase in new customer acquisition, a...",
+      "1. \n**Digital Campaigns**\n: FinSolve Technologies launched a series of digital campaigns, focusing on performance marketing, content marketing, and social media engagement. The\n**\"InstantWire Global Expansion\"**\ncampaign, which highlighted FinSolve Technologies’s expansion into new markets, was the ..."
+    ],
+    "actual_tools_called": []
+  },
+  {
+    "id": 20,
+    "domain": "marketing",
+    "question": "What was the overall objective of the 2024 marketing strategy?",
+    "reference": "The marketing strategy focused on increasing customer acquisition, strengthening brand awareness, improving customer engagement, and supporting international expansion.",
+    "relevant_contexts": [
+      "Executive Summary: Marketing strategy objectives included customer acquisition, brand awareness, customer engagement, and international expansion."
+    ],
+    "expected_tools": [
+      "retrieve_documents"
+    ],
+    "actual_response": "The overall objective of the 2024 marketing strategy was to reinforce the brand's dominance in existing markets, expand into new regions, and enhance customer engagement, while setting the stage for sustained growth (Source: market_report_q4_2024.md, market_report_q2_2024.md). Specifically, the strategy focused on market penetration, strengthening customer relationships, and optimizing marketing investments in Q4 (Source: market_report_q4_2024.md), and regional expansion, improving retargeting efforts, and leveraging influencer partnerships in Q2 (Source: marketing_report_q2_2024.md).",
+    "actual_contexts": [
+      "In Q4 2024, our marketing strategy centered on three core pillars: finalizing market penetration in key demographics, fostering stronger customer relationships through personalized engagement, and laying the groundwork for sustained growth in 2025. Key initiatives included:\n- **Targeted Campaigns** ...",
+      "The Q4 2024 marketing efforts were pivotal in solidifying our market position, enhancing customer engagement, and setting the stage for robust growth in the upcoming year. This report provides a detailed analysis of our marketing strategies, performance metrics, and strategic objectives for the quar...",
+      "Q2 2024 was a pivotal quarter dedicated to reinforcing our brand's dominance in existing markets while strategically expanding into Southeast Asia. This report details our marketing strategies, performance metrics, and strategic objectives, highlighting our efforts to drive customer acquisition, enh...",
+      "Our strategic objectives for Q4 2024 were designed to capitalize on seasonal opportunities, strengthen our B2B segment, and enhance customer loyalty. The key objectives included:\n1. **Maximize End-of-Year Sales Through Promotions**\n- Implemented aggressive promotional campaigns, including Black Frid...",
+      "Our strategic objectives for Q2 2024 were crafted to capitalize on regional growth opportunities and enhance engagement in existing markets. The key objectives included:\n1. **Increase Market Share in Southeast Asia**\n- Launched localized digital campaigns in Indonesia, Thailand, and Vietnam, tailore..."
+    ],
+    "actual_tools_called": []
+  }
+]

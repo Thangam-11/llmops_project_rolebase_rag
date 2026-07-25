@@ -1,0 +1,6 @@
+department,total_cases,avg_faithfulness,avg_relevancy,avg_precision,avg_recall,avg_overall,pass_rate
+engineering,5,,,,,,0.2
+finance,15,,,,,,0.0
+general,10,,,,,,0.0
+hr,10,,,,,,0.0
+marketing,20,,,,,,0.1

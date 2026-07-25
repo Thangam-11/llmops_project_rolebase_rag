@@ -1,0 +1,108 @@
+[
+  {
+    "id": 1,
+    "domain": "engineering",
+    "question": "What cloud provider does FinSolve use?",
+    "reference": "AWS is the primary cloud provider. The platform uses Amazon EC2, ECS, Lambda, RDS, S3, CloudFront, ElastiCache, CloudWatch, and other managed AWS services.",
+    "relevant_contexts": [
+      "Cloud Infrastructure: FinSolve's production platform is hosted on AWS using EC2, ECS, Lambda, RDS, S3, CloudFront, ElastiCache, and CloudWatch."
+    ],
+    "expected_tools": [
+      "retrieve_documents"
+    ],
+    "actual_response": "I don't have that information. (Source: engineering_master_doc(1).md, employee_handbook.md) \n\nThe provided context documents do not mention the specific cloud provider used by FinSolve. They only mention that FinSolve's architecture is \"cloud-native\" (Source: engineering_master_doc(1).md), but do not provide further details on the cloud provider.",
+    "actual_contexts": [
+      "FinSolve's architecture is a microservices-based, cloud-native system designed for scalability, resilience, and security. It leverages a modular design to support rapid feature development and seamless integration with third-party financial systems (e.g., payment gateways, credit bureaus, regulatory...",
+      "FinSolve Technologies is a leading FinTech company headquartered in Bangalore, India, with operations across North America, Europe, and Asia-Pacific. Founded in 2018, FinSolve provides innovative financial solutions, including digital banking, payment processing, wealth management, and enterprise fi...",
+      "Founded in 2016, FinSolve Technologies is a leading player in fintech with a presence across India and global markets. We are committed to ethical business, social responsibility, and fostering a culture of learning and growth.",
+      "At FinSolve Technologies, our vision is to empower businesses and individuals through innovative technology solutions. Our mission is to deliver high-quality, sustainable products and services that create value for our stakeholders.",
+      "Engineering Lead, Email = engineering@finsolve.com. Engineering Lead, Response SLA = 4 hours. Security Team, Email = security@finsolve.com. Security Team, Response SLA = 1 hour. DevOps Support, Email = devops@finsolve.com. DevOps Support, Response SLA = 2 hours. Data Protection Officer, Email = dpo@..."
+    ],
+    "actual_tools_called": []
+  },
+  {
+    "id": 2,
+    "domain": "engineering",
+    "question": "Which database stores transactional data?",
+    "reference": "PostgreSQL is the primary relational database used to store transactional data because it provides ACID compliance, high reliability, and strong consistency.",
+    "relevant_contexts": [
+      "Data Layer: PostgreSQL is the primary relational database for transactional workloads requiring ACID compliance."
+    ],
+    "expected_tools": [
+      "retrieve_documents"
+    ],
+    "actual_response": "PostgreSQL is the primary relational database for storing transactional data requiring ACID compliance. (Source: engineering_master_doc(1).md)",
+    "actual_contexts": [
+      "- **PostgreSQL** : Primary relational database for transactional data requiring ACID compliance.\n- **MongoDB** : NoSQL database storing user profiles, preferences, and semi-structured data.\n- **Redis** : In-memory data store for caching, session management, and pub/sub messaging between services.\n- ...",
+      "- PostgreSQL uses range-based sharding for high-volume transactional tables.\n- Read replicas for analytics and reporting workloads.\n- MongoDB sharding for user data distribution across multiple clusters.\n- Database connection pooling via PgBouncer to optimize connection management.",
+      "- Event sourcing patterns for critical financial transactions.\n- Saga pattern for distributed transactions across microservices.\n- Eventual consistency with compensation transactions where appropriate.",
+      "- Regular security audits and employee training.\n- Data stored on secure, encrypted servers.",
+      "- Multi-level caching architecture:\n- Application-level caching with Redis\n- API Gateway response caching\n- CDN caching for static assets\n- Database query result caching\n- Cache invalidation using event-based triggers and time-to-live (TTL) policies."
+    ],
+    "actual_tools_called": []
+  },
+  {
+    "id": 3,
+    "domain": "engineering",
+    "question": "What is used for caching and session management?",
+    "reference": "Redis is used for caching, session management, distributed locking, and publish/subscribe messaging to improve application performance.",
+    "relevant_contexts": [
+      "Caching Layer: Redis is used for caching, session management, distributed locks, and Pub/Sub messaging."
+    ],
+    "expected_tools": [
+      "retrieve_documents"
+    ],
+    "actual_response": "Redis is used for caching and session management. (Source: engineering_master_doc(1).md, score=0.6210)",
+    "actual_contexts": [
+      "- Multi-level caching architecture:\n- Application-level caching with Redis\n- API Gateway response caching\n- CDN caching for static assets\n- Database query result caching\n- Cache invalidation using event-based triggers and time-to-live (TTL) policies.",
+      "- **PostgreSQL** : Primary relational database for transactional data requiring ACID compliance.\n- **MongoDB** : NoSQL database storing user profiles, preferences, and semi-structured data.\n- **Redis** : In-memory data store for caching, session management, and pub/sub messaging between services.\n- ...",
+      "- \n**User Authentication**\n:\n- OAuth 2.0 implementation with JWT tokens\n- Multi-factor authentication (MFA) via SMS, email, or authenticator apps\n- Biometric authentication for mobile devices\n- Session management with configurable timeouts\n- \n**Authorization**\n:\n- Role-Based Access Control (RBAC) fo...",
+      "- PostgreSQL uses range-based sharding for high-volume transactional tables.\n- Read replicas for analytics and reporting workloads.\n- MongoDB sharding for user data distribution across multiple clusters.\n- Database connection pooling via PgBouncer to optimize connection management.",
+      "- \n**Patching Schedule**\n:\n- OS updates: Monthly\n- Dependency updates: Bi-weekly\n- Critical security patches: Within 48 hours\n- \n**Database Maintenance**\n:\n- Index optimization: Weekly\n- Vacuum and analyze: Daily\n- Statistics update: Daily"
+    ],
+    "actual_tools_called": []
+  },
+  {
+    "id": 4,
+    "domain": "engineering",
+    "question": "Which container orchestration platform is used?",
+    "reference": "Kubernetes is used as the container orchestration platform to deploy, scale, manage, and monitor containerized applications.",
+    "relevant_contexts": [
+      "Container Platform: Kubernetes manages container deployment, scaling, service discovery, and high availability."
+    ],
+    "expected_tools": [
+      "retrieve_documents"
+    ],
+    "actual_response": "Kubernetes is the container orchestration platform used. (Source: engineering_master_doc(1).md, score=0.6639)",
+    "actual_contexts": [
+      "- Jenkins for build orchestration\n- ArgoCD for GitOps-based deployment\n- Nexus Repository for artifact storage\n- Prometheus and Grafana for deployment monitoring",
+      "- Resource limits and requests for all containers\n- Pod security policies enforced\n- Network policies controlling pod-to-pod communication\n- Horizontal Pod Autoscalers based on custom metrics",
+      "- **AWS** : Primary cloud provider utilizing EC2, ECS, Lambda, RDS, S3, CloudFront, and other managed services.\n- **Kubernetes** : Container orchestration platform managing microservices deployment, scaling, and failover.\n- **Cloudflare** : Content Delivery Network (CDN) and security layer providing...",
+      "FinSolve's architecture is a microservices-based, cloud-native system designed for scalability, resilience, and security. It leverages a modular design to support rapid feature development and seamless integration with third-party financial systems (e.g., payment gateways, credit bureaus, regulatory...",
+      "- Private Docker registry with vulnerability scanning\n- Image promotion process across environments\n- Immutable tags with git commit hashes\n- Image retention policies"
+    ],
+    "actual_tools_called": []
+  },
+  {
+    "id": 5,
+    "domain": "engineering",
+    "question": "How are APIs secured?",
+    "reference": "APIs are secured using OAuth 2.0 and JWT authentication. AWS API Gateway provides authentication, authorization, request validation, throttling, and rate limiting before requests reach backend services.",
+    "relevant_contexts": [
+      "Security Architecture: OAuth 2.0 and JWT are used for authentication.",
+      "AWS API Gateway enforces authentication, authorization, request validation, and rate limiting."
+    ],
+    "expected_tools": [
+      "retrieve_documents"
+    ],
+    "actual_response": "APIs are secured through several measures, including rate limiting to prevent abuse, input validation and sanitization, and request signing for partner APIs (Source: [2] engineering_master_doc(1).md). Additionally, APIs are protected by a centralized entry point that implements authentication, authorization, and rate limiting, and provides API versioning and documentation via Swagger/OpenAPI (Source: [4] engineering_master_doc(1).md). Furthermore, APIs are also secured through the use of OAuth 2.0 implementation with JWT tokens, and Role-Based Access Control (RBAC) and Attribute-Based Access Control (ABAC) for fine-grained permissions (Source: [5] engineering_master_doc(1).md).",
+    "actual_contexts": [
+      "- \n**API Marketplace**\n:\n- Developer portal and SDK\n- Partner integration platform\n- Revenue sharing model\n- \n**Regulatory Compliance**\n:\n- PSD2 and equivalent standards\n- Strong Customer Authentication (SCA)\n- Consent management framework",
+      "- \n**Perimeter Protection**\n:\n- AWS WAF for web application protection\n- Cloudflare for DDoS mitigation\n- IP whitelisting for administrative endpoints\n- \n**Network Segmentation**\n:\n- VPC with public, private, and restricted subnets\n- Security groups with least-privilege rules\n- Network ACLs as a sec...",
+      "- Private Docker registry with vulnerability scanning\n- Image promotion process across environments\n- Immutable tags with git commit hashes\n- Image retention policies",
+      "- Centralized entry point for all client requests\n- Implements authentication, authorization, and rate limiting\n- Provides API versioning and documentation via Swagger/OpenAPI\n- Handles request logging and basic analytics\n- AWS API Gateway with custom Lambda authorizers for sophisticated permission ...",
+      "- \n**User Authentication**\n:\n- OAuth 2.0 implementation with JWT tokens\n- Multi-factor authentication (MFA) via SMS, email, or authenticator apps\n- Biometric authentication for mobile devices\n- Session management with configurable timeouts\n- \n**Authorization**\n:\n- Role-Based Access Control (RBAC) fo..."
+    ],
+    "actual_tools_called": []
+  }
+]

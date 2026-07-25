@@ -4,13 +4,52 @@ src/ragas_evaluation/ragas_evaluator.py
 
 from __future__ import annotations
 
+import sys
+import types
 from dataclasses import dataclass
+from typing import Any
 
-from datasets import Dataset
-from langchain_openai import ChatOpenAI
-from ragas import evaluate
-from ragas.evaluation import EvaluationResult
-from ragas.metrics import (
+
+def _patch_ragas_vertexai_import() -> None:
+    """
+    ragas (0.3.x / 0.4.x) still imports ChatVertexAI from the old
+    'langchain_community.chat_models.vertexai' path at module load time.
+    That path was removed from modern langchain-community (ChatVertexAI
+    now lives in langchain-google-vertexai). This project never uses
+    VertexAI, so instead of downgrading the whole langchain family
+    (which cascades into langchain-core/langchain-openai mismatches),
+    we register a lightweight stub module satisfying ragas's import.
+    Must run BEFORE `import ragas` anywhere in the process.
+    """
+    module_name = "langchain_community.chat_models.vertexai"
+    if module_name in sys.modules:
+        return
+
+    chat_vertexai_cls: type[Any]
+    try:
+        from langchain_google_vertexai import ChatVertexAI as _RealChatVertexAI
+        chat_vertexai_cls = _RealChatVertexAI
+    except ImportError:
+        class _StubChatVertexAI:  # pragma: no cover - never instantiated in this project
+            def __init__(self, *args: Any, **kwargs: Any) -> None:
+                raise ImportError(
+                    "ChatVertexAI is not available in this project "
+                    "(langchain-google-vertexai not installed)."
+                )
+        chat_vertexai_cls = _StubChatVertexAI
+
+    shim = types.ModuleType(module_name)
+    setattr(shim, "ChatVertexAI", chat_vertexai_cls)
+    sys.modules[module_name] = shim
+
+
+_patch_ragas_vertexai_import()
+
+from datasets import Dataset  # noqa: E402
+from langchain_openai import ChatOpenAI  # noqa: E402
+from ragas import evaluate  # noqa: E402
+from ragas.evaluation import EvaluationResult  # noqa: E402
+from ragas.metrics import (  # noqa: E402
     answer_relevancy,
     context_precision,
     context_recall,
@@ -211,9 +250,14 @@ class RagasEvaluator:
             return 0.0
 
         try:
-            return float(value)
+            score = float(value)
         except (TypeError, ValueError):
             return 0.0
+
+        if score != score:  # NaN check (NaN is the only float that != itself)
+            return 0.0
+
+        return score
 
 
 if __name__ == "__main__":

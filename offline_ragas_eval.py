@@ -58,7 +58,7 @@ REQUIRED_SOURCE_FIELDS = ("question", "reference", "actual_response", "actual_co
 
 
 def load_department_file(path: Path) -> list[dict[str, Any]]:
-    with open(path, "r", encoding="utf-8") as f:
+    with open(path, "r", encoding="utf-8-sig") as f:
         data = json.load(f)
 
     if not isinstance(data, list):

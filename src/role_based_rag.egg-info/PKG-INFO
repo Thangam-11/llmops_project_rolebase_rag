@@ -58,4 +58,6 @@ Requires-Dist: pytest-asyncio
 Requires-Dist: pytest-mock
 Requires-Dist: faker
 Requires-Dist: coverage
+Requires-Dist: types-psutil
+Requires-Dist: types-python-jose
 Requires-Dist: streamlit

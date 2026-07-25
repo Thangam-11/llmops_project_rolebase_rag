@@ -1,0 +1,39 @@
+department,id,question,answer,faithfulness,answer_relevancy,context_precision,context_recall,overall_score,pass
+hr,1,What is the onboarding process for a new employee?,"The onboarding process for a new employee includes several steps: 
+
+1. **Pre-Joining**: Offer letter issuance, document submission (ID, address, education, previous employment) (Source: [2] employee_handbook.md).
+2. **Day 1**: Welcome session, HR induction, IT setup, introduction to team and mentor (Source: [2] employee_handbook.md).
+3. **First Week**: Policy orientation, compliance training, role-specific training, buddy program (Source: [2] employee_handbook.md).
+4. **First Month**: Probation objectives set, regular check-ins with manager and HR (Source: [2] employee_handbook.md).
+
+Additionally, the employee handbook provides an overview of the onboarding process in section 2: [Employee Onboarding & Benefits] (Source: [1] employee_handbook.md).",,,,,,False
+hr,2,What statutory benefits are provided to employees?,"The statutory benefits provided to employees include:
+- Provident Fund (PF) (Source: [2] employee_handbook.md)
+- Employee State Insurance (ESI) (Source: [2] employee_handbook.md)
+- Professional Tax (Source: [2] employee_handbook.md)
+- Income Tax (TDS) (Source: [2] employee_handbook.md)
+- Labour Welfare Fund (Source: [2] employee_handbook.md)
+- Gratuity (Source: [4] employee_handbook.md)
+- Maternity Benefit (Source: [4] employee_handbook.md)
+- Bonus (Source: [4] employee_handbook.md)
+
+Additionally, the company provides leave benefits as per statutory requirements, including:
+- Privilege/Annual Leave (Source: [3] employee_handbook.md)
+- Sick Leave (Source: [3] employee_handbook.md)
+- Casual Leave (Source: [3] employee_handbook.md)
+- Maternity Leave (Source: [3] employee_handbook.md)
+- Public Holidays (Source: [3] employee_handbook.md)",,,,,,False
+hr,3,How much maternity leave does the company provide?,"The company provides 26 weeks of maternity leave for the first two children, and 12 weeks for subsequent children (Source: [1] employee_handbook.md). Additionally, the maternity leave is also mentioned as 26 weeks paid leave for the first two children, as per the Maternity Benefit Act (Source: [4] employee_handbook.md).",,,,,,False
+hr,4,How many casual leave days are employees entitled to each year?,Employees are entitled to 7 days of casual leave per year (Source: [1] employee_handbook.md).,,,,,,False
+hr,5,What is the procedure for applying for leave?,"The procedure for applying for leave is to apply via HRMS/leave portal at least 3 days in advance (except emergencies) and obtain approval from the reporting manager and HR. Additionally, for sick leave of more than 2 days, a medical certificate is required. (Source: [1] employee_handbook.md) 
+
+In case of specific types of leave, such as maternity leave, the application should be submitted on HRMS with a medical certificate at least 8 weeks before the due date. (Source: [2] employee_handbook.md) 
+
+It is also important to note that leave balance can be viewed on the HRMS portal. (Source: [1] employee_handbook.md)",,,,,,False
+hr,6,When is a medical certificate required for sick leave?,"A medical certificate is required for sick leave when the leave is for more than 2 days. (Source: [1] employee_handbook.md, [2] employee_handbook.md)",,,,,,False
+hr,7,What are the company's standard working hours?,"The company's standard working hours are 9 hours/day (including 1 hour break), 6 days/week or 8 hours/day, 5 days/week (as per company policy) (Source: employee_handbook.md).",,,,,,False
+hr,8,How is employee attendance recorded?,"Employee attendance must be marked daily via biometric, swipe card, or HRMS app (Source: [1] employee_handbook.md). Additionally, all employees must record work hours and breaks accurately using company-approved time tracking tools, especially for remote/hybrid roles (Source: [2] employee_handbook.md). If an employee forgets to mark attendance, they should inform HR within 24 hours (Source: [5] employee_handbook.md).",,,,,,False
+hr,9,What happens if an employee is repeatedly late?,"If an employee is repeatedly late, with three or more late arrivals in a month, it may attract disciplinary action (Source: [1] employee_handbook.md).",,,,,,False
+hr,10,How is overtime compensated?,"Overtime is compensated at double the regular wage rate, as per the Factories Act, and may also be provided as a compensatory off in lieu of overtime for certain roles, subject to prior approval from the manager. (Source: [1] employee_handbook.md) 
+
+Additionally, the calculation of overtime is paid at double the regular wage for hours beyond statutory limits, subject to manager approval. (Source: [5] employee_handbook.md)",,,,,,False

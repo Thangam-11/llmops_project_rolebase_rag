@@ -40,12 +40,11 @@ from langchain_core.output_parsers import StrOutputParser
 
 from src.prompts_layer.prompts import get_rag_prompt
 from src.embedding_layer.embedding_service import get_embedding_service
-from src.ragas_evaluation.rags_evaluator import RagasEvaluator
 from src.vectordb.qdrant_store import QdrantStore
 from src.retrieval.retriever_service import RetrieverService
 from src.llm_layer.llm_connecter import LLMConnector
 from src.pil_guardrils.pil_guard import PIIGuardrail, PIIGuardResult
-#from src.ragas_evaluation.rags_evaluator import RagasEvaluator
+from src.ragas_evaluation.ragas_evaluator import RagasEvaluator
 
 from config.settings import get_settings
 from utils.logger_exceptions import get_logger

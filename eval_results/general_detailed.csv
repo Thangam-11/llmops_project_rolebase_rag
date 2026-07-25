@@ -1,0 +1,11 @@
+department,id,question,answer,faithfulness,answer_relevancy,context_precision,context_recall,overall_score,pass
+general,1,What is FinSolve Technologies' mission?,"FinSolve Technologies' mission is to deliver high-quality, sustainable products and services that create value for our stakeholders. (Source: employee_handbook.md)",,,,,,False
+general,2,When was FinSolve Technologies founded?,FinSolve Technologies was founded in 2016. (Source: employee_handbook.md),,,,,,False
+general,3,Where is FinSolve Technologies headquartered?,I don't have that information. (Source: employee_handbook.md),,,,,,False
+general,4,What financial services does FinSolve Technologies provide?,"I don't have that information about the specific financial services FinSolve Technologies provides. The context documents provided focus on the company's vision, mission, employee benefits, and policies, but do not detail the financial services offered by the company. (Source: employee_handbook.md)",,,,,,False
+general,5,How many individual customers does FinSolve Technologies serve globally?,I don't have that information.,,,,,,False
+general,6,How many business customers use FinSolve Technologies' platform?,I don't have that information. (Source: None),,,,,,False
+general,7,What software architecture does FinSolve Technologies use?,I don't have that information. (Source: None),,,,,,False
+general,8,What monitoring tools are used in production?,I don't have that information. (Source: None of the provided documents),,,,,,False
+general,9,Which compliance standards does FinSolve Technologies follow?,I don't have that information.,,,,,,False
+general,10,What is the company's uptime target?,I don't have that information.,,,,,,False

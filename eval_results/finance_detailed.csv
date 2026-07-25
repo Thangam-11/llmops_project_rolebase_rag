@@ -1,0 +1,75 @@
+department,id,question,answer,faithfulness,answer_relevancy,context_precision,context_recall,overall_score,pass
+finance,1,How much did FinSolve Technologies' revenue grow in 2024?,FinSolve Technologies' revenue grew by 25% in 2024 (Source: financial_summary(1).md) and also achieved a 28% year-over-year (YoY) increase with total revenue of $9.4 billion (Source: quarterly_financial_report(1).md).,1.0,0.973,,1.0,,False
+finance,2,What was the company's gross margin in 2024?,"The company's gross margin in 2024 varied by quarter. 
+- In Q1 2024, the gross margin was 58% (Source: [2] quarterly_financial_report(1).md).
+- In Q2 2024, the gross margin was 60% (Source: [5] quarterly_financial_report(1).md).
+- In Q4 2024, the gross margin was 64% (Source: [1] quarterly_financial_report(1).md).
+I don't have that information for Q3 2024.",,0.0,0.2,0.0,,False
+finance,3,What was the net margin in 2024?,"To calculate the net margin, we need to know the net income and revenue for each quarter. 
+
+In Q1 2024, the net income was $250 million and the revenue was $2.1 billion (Source: [1] quarterly_financial_report(1).md). 
+In Q4 2024, the net income was $325 million and the revenue was $2.6 billion (Source: [2] quarterly_financial_report(1).md). 
+In Q2 2024, the net income was $275 million and the revenue was $2.3 billion (Source: [4] quarterly_financial_report(1).md).
+
+However, the net margin for the entire year 2024 cannot be determined with the given information, as we would need the total net income and total revenue for the year. 
+
+We can see the revenue for each quarter: 
+- Q1: $2.1 billion (Source: [1] quarterly_financial_report(1).md)
+- Q2: $2.3 billion (Source: [4] quarterly_financial_report(1).md)
+- Q4: $2.6 billion (Source: [2] quarterly_financial_report(1).md)
+
+But Q3 data is missing. 
+
+Thus, I don't have that information to calculate the net margin for 2024.",0.529,0.0,0.0,0.0,0.185,False
+finance,4,How much did vendor services cost in 2024?,The total cost of vendor services in 2024 was $30M. (Source: financial_summary(1).md),0.5,0.972,,1.0,,False
+finance,5,Which category represented the largest share of vendor services expenses?,"The largest share of vendor services expenses varied across different reports. 
+
+In [1] quarterly_financial_report(1).md, marketing-related activities, including digital advertisements and corporate events, represented 40% ($48 million) of vendor services expenses (Source: quarterly_financial_report(1).md).
+
+In [2] financial_summary(1).md, marketing-related expenses, including dinner and corporate events, represented 40% of vendor services, while training and education expenses represented 30%, and software subscriptions represented 25% (Source: financial_summary(1).md).
+
+In [3] quarterly_financial_report(1).md, influencer marketing and social media campaigns dedicated 50% ($62.5 million) of vendor services (Source: quarterly_financial_report(1).md).
+
+In [4] quarterly_financial_report(1).md, end-of-year promotions and B2B marketing efforts represented 40% ($54 million) of vendor services (Source: quarterly_financial_report(1).md).
+
+In [5] quarterly_financial_report(1).md, loyalty programs and customer retention strategies represented 35% ($45.5 million) of vendor services (Source: quarterly_financial_report(1).md).
+
+Therefore, the category that represented the largest share of vendor services expenses was influencer marketing and social media campaigns, which accounted for 50% of the expenses (Source: quarterly_financial_report(1).md).",,0.999,,1.0,,False
+finance,6,How much was spent on software subscriptions in 2024?,"The total amount spent on software subscriptions in 2024 was $25M, as stated in the financial summary document (Source: financial_summary(1).md).",0.0,0.983,0.0,0.0,0.295,False
+finance,7,How much cash flow from operations did the company generate?,"The company generated different amounts of cash flow from operations in various reports. 
+- $400 million (Source: quarterly_financial_report(1).md | dept=finance | score=0.7796)
+- $350 million (Source: quarterly_financial_report(1).md | dept=finance | score=0.7639)
+- $450 million (Source: quarterly_financial_report(1).md | dept=finance | score=0.7584)
+- $300 million (Source: quarterly_financial_report(1).md | dept=finance | score=0.7387)
+- $50 million (Source: financial_summary(1).md | dept=finance | score=0.6876)",0.0,0.928,0.325,1.0,0.493,False
+finance,8,"How much was invested in research, market expansion, and acquisitions?","To determine the total investment in research, market expansion, and acquisitions, we need to look at the cash flow from investing from the provided reports.
+
+- In [1] quarterly_financial_report(1).md, **Cash Flow from Investing** was $70 million, allocated to R&D and Latin American expansion efforts. (Source: [1] quarterly_financial_report(1).md)
+- In [4] quarterly_financial_report(1).md, **Cash Flow from Investing** was $60 million, allocated to market entry efforts and product development. (Source: [4] quarterly_financial_report(1).md)
+
+There is no direct mention of acquisitions in the provided reports. Therefore, based on the information available, the total investment in research, market expansion, and product development (as a proxy for some forms of expansion or growth initiatives) is $70 million + $60 million = $130 million.
+
+I don't have information on investments in acquisitions. (Source: [1] quarterly_financial_report(1).md, [4] quarterly_financial_report(1).md)",0.714,0.0,0.0,0.0,0.25,False
+finance,9,What was FinSolve Technologies' return on investment in 2024?,"I don't have that information. 
+
+The provided context documents do not mention the return on investment (ROI) for FinSolve Technologies in 2024. They discuss revenue growth, gross margin, operating income, net income, and other financial metrics, but do not provide ROI data. (Source: [1] quarterly_financial_report(1).md, [2] quarterly_financial_report(1).md, [3] quarterly_financial_report(1).md, [4] financial_summary(1).md, [5] financial_summary(1).md)",0.625,0.0,,0.0,,False
+finance,10,What was the operating expenses to revenue ratio?,"To calculate the operating expenses to revenue ratio, we need to first identify the total operating expenses and the total revenue.
+
+From [3] quarterly_financial_report(1).md, we know the revenue is $2.1 billion. 
+
+To find the total operating expenses, we can use the information from [3] quarterly_financial_report(1).md, which provides the operating income and other financial highlights. The operating income is $500 million, and the revenue is $2.1 billion. However, to calculate the operating expenses, we need the total expenses, which can be derived from the operating income and revenue. 
+
+Since Operating Income = Revenue - Operating Expenses, we can rearrange the formula to find the Operating Expenses: Operating Expenses = Revenue - Operating Income.
+
+Using the numbers from [3] quarterly_financial_report(1).md: 
+Operating Expenses = $2.1 billion - $500 million = $1.6 billion.
+
+Now, to find the operating expenses to revenue ratio: 
+Operating Expenses to Revenue Ratio = Operating Expenses / Revenue = $1.6 billion / $2.1 billion.
+
+Operating Expenses to Revenue Ratio = 0.762 or approximately 76.2% (Source: [3] quarterly_financial_report(1).md).",,,,,,False
+finance,11,What was the Days Sales Outstanding (DSO) in 2024?,"I don't have that information. (Source: None of the provided documents [1], [2], [3], [4], [5])",,,,,,False
+finance,12,What recommendation was made regarding vendor management?,"The recommendation made regarding vendor management was to ""Continue negotiations for better pricing, especially in high-expense categories like marketing events and software subscriptions. Consider consolidating suppliers where possible to leverage better terms."" (Source: financial_summary(1).md)",,,,,,False
+finance,13,Why was automation of vendor payments recommended?,"Automation of vendor payments was recommended to reduce human errors, speed up payments, and help reduce overdue payments, which will positively impact cash flow (Source: financial_summary(1).md | dept=finance | score=0.7475). Additionally, streamlining payment workflows and renegotiating vendor contracts were also implemented to improve cash flow efficiency (Source: quarterly_financial_report(1).md | dept=finance | score=0.6542).",,,,,,False
+finance,14,What financial risk was identified regarding vendor costs?,"The financial risk identified regarding vendor costs is vendor cost inflation, which includes increased vendor costs due to market conditions, particularly in Latin America, and high costs for services such as marketing and software subscriptions. (Source: [1] quarterly_financial_report(1).md, [2] financial_summary(1).md, [3] quarterly_financial_report(1).md)",,,,,,False
+finance,15,What caused pressure on profitability despite revenue growth?,"The pressure on profitability despite revenue growth was caused by significant increases in certain expense categories, notably vendor-related costs and software subscriptions (Source: [2] financial_summary(1).md). Additionally, the 10% increase in vendor-related expenses also impacted overall profit margins (Source: [1] financial_summary(1).md). Specifically, vendor costs increased due to regional marketing campaigns and influencer-driven initiatives, with $125 million in Q2 2024 (Source: [3] quarterly_financial_report(1).md) and $120 million in Q1 2024 (Source: [4] quarterly_financial_report(1).md).",,,,,,False

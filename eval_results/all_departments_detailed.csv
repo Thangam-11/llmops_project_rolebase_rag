@@ -1,0 +1,160 @@
+department,id,question,answer,faithfulness,answer_relevancy,context_precision,context_recall,overall_score,pass
+engineering,1,What cloud provider does FinSolve use?,"I don't have that information. (Source: engineering_master_doc(1).md, employee_handbook.md) 
+
+The provided context documents do not mention the specific cloud provider used by FinSolve. They only mention that FinSolve's architecture is ""cloud-native"" (Source: engineering_master_doc(1).md), but do not provide further details on the cloud provider.",0.5,0.0,0.0,0.0,0.175,False
+engineering,2,Which database stores transactional data?,PostgreSQL is the primary relational database for storing transactional data requiring ACID compliance. (Source: engineering_master_doc(1).md),1.0,0.835,,1.0,,False
+engineering,3,What is used for caching and session management?,"Redis is used for caching and session management. (Source: engineering_master_doc(1).md, score=0.6210)",1.0,0.648,1.0,1.0,0.894,True
+engineering,4,Which container orchestration platform is used?,"Kubernetes is the container orchestration platform used. (Source: engineering_master_doc(1).md, score=0.6639)",1.0,0.999,,,,False
+engineering,5,How are APIs secured?,"APIs are secured through several measures, including rate limiting to prevent abuse, input validation and sanitization, and request signing for partner APIs (Source: [2] engineering_master_doc(1).md). Additionally, APIs are protected by a centralized entry point that implements authentication, authorization, and rate limiting, and provides API versioning and documentation via Swagger/OpenAPI (Source: [4] engineering_master_doc(1).md). Furthermore, APIs are also secured through the use of OAuth 2.0 implementation with JWT tokens, and Role-Based Access Control (RBAC) and Attribute-Based Access Control (ABAC) for fine-grained permissions (Source: [5] engineering_master_doc(1).md).",,,0.325,1.0,,False
+finance,1,How much did FinSolve Technologies' revenue grow in 2024?,FinSolve Technologies' revenue grew by 25% in 2024 (Source: financial_summary(1).md) and also achieved a 28% year-over-year (YoY) increase with total revenue of $9.4 billion (Source: quarterly_financial_report(1).md).,1.0,0.973,,1.0,,False
+finance,2,What was the company's gross margin in 2024?,"The company's gross margin in 2024 varied by quarter. 
+- In Q1 2024, the gross margin was 58% (Source: [2] quarterly_financial_report(1).md).
+- In Q2 2024, the gross margin was 60% (Source: [5] quarterly_financial_report(1).md).
+- In Q4 2024, the gross margin was 64% (Source: [1] quarterly_financial_report(1).md).
+I don't have that information for Q3 2024.",,0.0,0.2,0.0,,False
+finance,3,What was the net margin in 2024?,"To calculate the net margin, we need to know the net income and revenue for each quarter. 
+
+In Q1 2024, the net income was $250 million and the revenue was $2.1 billion (Source: [1] quarterly_financial_report(1).md). 
+In Q4 2024, the net income was $325 million and the revenue was $2.6 billion (Source: [2] quarterly_financial_report(1).md). 
+In Q2 2024, the net income was $275 million and the revenue was $2.3 billion (Source: [4] quarterly_financial_report(1).md).
+
+However, the net margin for the entire year 2024 cannot be determined with the given information, as we would need the total net income and total revenue for the year. 
+
+We can see the revenue for each quarter: 
+- Q1: $2.1 billion (Source: [1] quarterly_financial_report(1).md)
+- Q2: $2.3 billion (Source: [4] quarterly_financial_report(1).md)
+- Q4: $2.6 billion (Source: [2] quarterly_financial_report(1).md)
+
+But Q3 data is missing. 
+
+Thus, I don't have that information to calculate the net margin for 2024.",0.529,0.0,0.0,0.0,0.185,False
+finance,4,How much did vendor services cost in 2024?,The total cost of vendor services in 2024 was $30M. (Source: financial_summary(1).md),0.5,0.972,,1.0,,False
+finance,5,Which category represented the largest share of vendor services expenses?,"The largest share of vendor services expenses varied across different reports. 
+
+In [1] quarterly_financial_report(1).md, marketing-related activities, including digital advertisements and corporate events, represented 40% ($48 million) of vendor services expenses (Source: quarterly_financial_report(1).md).
+
+In [2] financial_summary(1).md, marketing-related expenses, including dinner and corporate events, represented 40% of vendor services, while training and education expenses represented 30%, and software subscriptions represented 25% (Source: financial_summary(1).md).
+
+In [3] quarterly_financial_report(1).md, influencer marketing and social media campaigns dedicated 50% ($62.5 million) of vendor services (Source: quarterly_financial_report(1).md).
+
+In [4] quarterly_financial_report(1).md, end-of-year promotions and B2B marketing efforts represented 40% ($54 million) of vendor services (Source: quarterly_financial_report(1).md).
+
+In [5] quarterly_financial_report(1).md, loyalty programs and customer retention strategies represented 35% ($45.5 million) of vendor services (Source: quarterly_financial_report(1).md).
+
+Therefore, the category that represented the largest share of vendor services expenses was influencer marketing and social media campaigns, which accounted for 50% of the expenses (Source: quarterly_financial_report(1).md).",,0.999,,1.0,,False
+finance,6,How much was spent on software subscriptions in 2024?,"The total amount spent on software subscriptions in 2024 was $25M, as stated in the financial summary document (Source: financial_summary(1).md).",0.0,0.983,0.0,0.0,0.295,False
+finance,7,How much cash flow from operations did the company generate?,"The company generated different amounts of cash flow from operations in various reports. 
+- $400 million (Source: quarterly_financial_report(1).md | dept=finance | score=0.7796)
+- $350 million (Source: quarterly_financial_report(1).md | dept=finance | score=0.7639)
+- $450 million (Source: quarterly_financial_report(1).md | dept=finance | score=0.7584)
+- $300 million (Source: quarterly_financial_report(1).md | dept=finance | score=0.7387)
+- $50 million (Source: financial_summary(1).md | dept=finance | score=0.6876)",0.0,0.928,0.325,1.0,0.493,False
+finance,8,"How much was invested in research, market expansion, and acquisitions?","To determine the total investment in research, market expansion, and acquisitions, we need to look at the cash flow from investing from the provided reports.
+
+- In [1] quarterly_financial_report(1).md, **Cash Flow from Investing** was $70 million, allocated to R&D and Latin American expansion efforts. (Source: [1] quarterly_financial_report(1).md)
+- In [4] quarterly_financial_report(1).md, **Cash Flow from Investing** was $60 million, allocated to market entry efforts and product development. (Source: [4] quarterly_financial_report(1).md)
+
+There is no direct mention of acquisitions in the provided reports. Therefore, based on the information available, the total investment in research, market expansion, and product development (as a proxy for some forms of expansion or growth initiatives) is $70 million + $60 million = $130 million.
+
+I don't have information on investments in acquisitions. (Source: [1] quarterly_financial_report(1).md, [4] quarterly_financial_report(1).md)",0.714,0.0,0.0,0.0,0.25,False
+finance,9,What was FinSolve Technologies' return on investment in 2024?,"I don't have that information. 
+
+The provided context documents do not mention the return on investment (ROI) for FinSolve Technologies in 2024. They discuss revenue growth, gross margin, operating income, net income, and other financial metrics, but do not provide ROI data. (Source: [1] quarterly_financial_report(1).md, [2] quarterly_financial_report(1).md, [3] quarterly_financial_report(1).md, [4] financial_summary(1).md, [5] financial_summary(1).md)",0.625,0.0,,0.0,,False
+finance,10,What was the operating expenses to revenue ratio?,"To calculate the operating expenses to revenue ratio, we need to first identify the total operating expenses and the total revenue.
+
+From [3] quarterly_financial_report(1).md, we know the revenue is $2.1 billion. 
+
+To find the total operating expenses, we can use the information from [3] quarterly_financial_report(1).md, which provides the operating income and other financial highlights. The operating income is $500 million, and the revenue is $2.1 billion. However, to calculate the operating expenses, we need the total expenses, which can be derived from the operating income and revenue. 
+
+Since Operating Income = Revenue - Operating Expenses, we can rearrange the formula to find the Operating Expenses: Operating Expenses = Revenue - Operating Income.
+
+Using the numbers from [3] quarterly_financial_report(1).md: 
+Operating Expenses = $2.1 billion - $500 million = $1.6 billion.
+
+Now, to find the operating expenses to revenue ratio: 
+Operating Expenses to Revenue Ratio = Operating Expenses / Revenue = $1.6 billion / $2.1 billion.
+
+Operating Expenses to Revenue Ratio = 0.762 or approximately 76.2% (Source: [3] quarterly_financial_report(1).md).",,,,,,False
+finance,11,What was the Days Sales Outstanding (DSO) in 2024?,"I don't have that information. (Source: None of the provided documents [1], [2], [3], [4], [5])",,,,,,False
+finance,12,What recommendation was made regarding vendor management?,"The recommendation made regarding vendor management was to ""Continue negotiations for better pricing, especially in high-expense categories like marketing events and software subscriptions. Consider consolidating suppliers where possible to leverage better terms."" (Source: financial_summary(1).md)",,,,,,False
+finance,13,Why was automation of vendor payments recommended?,"Automation of vendor payments was recommended to reduce human errors, speed up payments, and help reduce overdue payments, which will positively impact cash flow (Source: financial_summary(1).md | dept=finance | score=0.7475). Additionally, streamlining payment workflows and renegotiating vendor contracts were also implemented to improve cash flow efficiency (Source: quarterly_financial_report(1).md | dept=finance | score=0.6542).",,,,,,False
+finance,14,What financial risk was identified regarding vendor costs?,"The financial risk identified regarding vendor costs is vendor cost inflation, which includes increased vendor costs due to market conditions, particularly in Latin America, and high costs for services such as marketing and software subscriptions. (Source: [1] quarterly_financial_report(1).md, [2] financial_summary(1).md, [3] quarterly_financial_report(1).md)",,,,,,False
+finance,15,What caused pressure on profitability despite revenue growth?,"The pressure on profitability despite revenue growth was caused by significant increases in certain expense categories, notably vendor-related costs and software subscriptions (Source: [2] financial_summary(1).md). Additionally, the 10% increase in vendor-related expenses also impacted overall profit margins (Source: [1] financial_summary(1).md). Specifically, vendor costs increased due to regional marketing campaigns and influencer-driven initiatives, with $125 million in Q2 2024 (Source: [3] quarterly_financial_report(1).md) and $120 million in Q1 2024 (Source: [4] quarterly_financial_report(1).md).",,,,,,False
+general,1,What is FinSolve Technologies' mission?,"FinSolve Technologies' mission is to deliver high-quality, sustainable products and services that create value for our stakeholders. (Source: employee_handbook.md)",,,,,,False
+general,2,When was FinSolve Technologies founded?,FinSolve Technologies was founded in 2016. (Source: employee_handbook.md),,,,,,False
+general,3,Where is FinSolve Technologies headquartered?,I don't have that information. (Source: employee_handbook.md),,,,,,False
+general,4,What financial services does FinSolve Technologies provide?,"I don't have that information about the specific financial services FinSolve Technologies provides. The context documents provided focus on the company's vision, mission, employee benefits, and policies, but do not detail the financial services offered by the company. (Source: employee_handbook.md)",,,,,,False
+general,5,How many individual customers does FinSolve Technologies serve globally?,I don't have that information.,,,,,,False
+general,6,How many business customers use FinSolve Technologies' platform?,I don't have that information. (Source: None),,,,,,False
+general,7,What software architecture does FinSolve Technologies use?,I don't have that information. (Source: None),,,,,,False
+general,8,What monitoring tools are used in production?,I don't have that information. (Source: None of the provided documents),,,,,,False
+general,9,Which compliance standards does FinSolve Technologies follow?,I don't have that information.,,,,,,False
+general,10,What is the company's uptime target?,I don't have that information.,,,,,,False
+hr,1,What is the onboarding process for a new employee?,"The onboarding process for a new employee includes several steps: 
+
+1. **Pre-Joining**: Offer letter issuance, document submission (ID, address, education, previous employment) (Source: [2] employee_handbook.md).
+2. **Day 1**: Welcome session, HR induction, IT setup, introduction to team and mentor (Source: [2] employee_handbook.md).
+3. **First Week**: Policy orientation, compliance training, role-specific training, buddy program (Source: [2] employee_handbook.md).
+4. **First Month**: Probation objectives set, regular check-ins with manager and HR (Source: [2] employee_handbook.md).
+
+Additionally, the employee handbook provides an overview of the onboarding process in section 2: [Employee Onboarding & Benefits] (Source: [1] employee_handbook.md).",,,,,,False
+hr,2,What statutory benefits are provided to employees?,"The statutory benefits provided to employees include:
+- Provident Fund (PF) (Source: [2] employee_handbook.md)
+- Employee State Insurance (ESI) (Source: [2] employee_handbook.md)
+- Professional Tax (Source: [2] employee_handbook.md)
+- Income Tax (TDS) (Source: [2] employee_handbook.md)
+- Labour Welfare Fund (Source: [2] employee_handbook.md)
+- Gratuity (Source: [4] employee_handbook.md)
+- Maternity Benefit (Source: [4] employee_handbook.md)
+- Bonus (Source: [4] employee_handbook.md)
+
+Additionally, the company provides leave benefits as per statutory requirements, including:
+- Privilege/Annual Leave (Source: [3] employee_handbook.md)
+- Sick Leave (Source: [3] employee_handbook.md)
+- Casual Leave (Source: [3] employee_handbook.md)
+- Maternity Leave (Source: [3] employee_handbook.md)
+- Public Holidays (Source: [3] employee_handbook.md)",,,,,,False
+hr,3,How much maternity leave does the company provide?,"The company provides 26 weeks of maternity leave for the first two children, and 12 weeks for subsequent children (Source: [1] employee_handbook.md). Additionally, the maternity leave is also mentioned as 26 weeks paid leave for the first two children, as per the Maternity Benefit Act (Source: [4] employee_handbook.md).",,,,,,False
+hr,4,How many casual leave days are employees entitled to each year?,Employees are entitled to 7 days of casual leave per year (Source: [1] employee_handbook.md).,,,,,,False
+hr,5,What is the procedure for applying for leave?,"The procedure for applying for leave is to apply via HRMS/leave portal at least 3 days in advance (except emergencies) and obtain approval from the reporting manager and HR. Additionally, for sick leave of more than 2 days, a medical certificate is required. (Source: [1] employee_handbook.md) 
+
+In case of specific types of leave, such as maternity leave, the application should be submitted on HRMS with a medical certificate at least 8 weeks before the due date. (Source: [2] employee_handbook.md) 
+
+It is also important to note that leave balance can be viewed on the HRMS portal. (Source: [1] employee_handbook.md)",,,,,,False
+hr,6,When is a medical certificate required for sick leave?,"A medical certificate is required for sick leave when the leave is for more than 2 days. (Source: [1] employee_handbook.md, [2] employee_handbook.md)",,,,,,False
+hr,7,What are the company's standard working hours?,"The company's standard working hours are 9 hours/day (including 1 hour break), 6 days/week or 8 hours/day, 5 days/week (as per company policy) (Source: employee_handbook.md).",,,,,,False
+hr,8,How is employee attendance recorded?,"Employee attendance must be marked daily via biometric, swipe card, or HRMS app (Source: [1] employee_handbook.md). Additionally, all employees must record work hours and breaks accurately using company-approved time tracking tools, especially for remote/hybrid roles (Source: [2] employee_handbook.md). If an employee forgets to mark attendance, they should inform HR within 24 hours (Source: [5] employee_handbook.md).",,,,,,False
+hr,9,What happens if an employee is repeatedly late?,"If an employee is repeatedly late, with three or more late arrivals in a month, it may attract disciplinary action (Source: [1] employee_handbook.md).",,,,,,False
+hr,10,How is overtime compensated?,"Overtime is compensated at double the regular wage rate, as per the Factories Act, and may also be provided as a compensatory off in lieu of overtime for certain roles, subject to prior approval from the manager. (Source: [1] employee_handbook.md) 
+
+Additionally, the calculation of overtime is paid at double the regular wage for hours beyond statutory limits, subject to manager approval. (Source: [5] employee_handbook.md)",,,,,,False
+marketing,1,How much did new customer acquisition increase in 2024?,"To determine the increase in new customer acquisition in 2024, we need to compare the customer acquisition targets across different quarters. 
+
+In Q2 2024, the customer acquisition target was 200,000 new customers (Source: marketing_report_q2_2024.md). 
+In Q3 2024, the target was 180,000 new customers (Source: marketing_report_q3_2024.md). 
+In Q4 2024, the target increased to 220,000 new customers (Source: market_report_q4_2024.md).
+
+Comparing these targets, we see an increase from 180,000 in Q3 to 220,000 in Q4, which is an increase of 40,000 or 22.22% (Source: market_report_q4_2024.md, marketing_report_q3_2024.md). However, to understand the overall increase in new customer acquisition for the year 2024, we would need more specific data on actual acquisitions rather than just targets.
+
+Given the information available, we can see that the targets for new customer acquisition varied by quarter, with Q4 2024 having the highest target at 220,000 (Source: market_report_q4_2024.md). 
+
+I don't have that information on the actual increase in new customer acquisition for the entire year 2024.",,,,,,False
+marketing,2,How much did brand awareness improve during 2024?,I don't have that information.,,,,,,False
+marketing,3,Which campaign was the most successful in 2024?,I don't have that information.,0.0,0.0,0.0,0.0,0.0,False
+marketing,4,What results did the InstantWire Global Expansion campaign achieve?,"The InstantWire Global Expansion campaign achieved a 25% increase in traffic to the website and a 12% increase in sign-ups, with a 3.5x return on investment, generating $17.5M in revenue directly attributed to these efforts, after spending $5M on digital ads, influencer partnerships, and sponsored content. (Source: marketing_report_2024.md)",,0.98,,0.0,,False
+marketing,5,How much was spent on digital campaigns?,"$5M was spent on digital ads, influencer partnerships, and sponsored content for the digital campaigns (Source: marketing_report_2024.md | dept=marketing | score=0.6951). Additionally, the total budget for Digital Marketing was $7M (47% of the total marketing budget) (Source: marketing_report_2024.md | dept=marketing | score=0.7109).",,0.781,0.0,0.0,,False
+marketing,6,What ROI did digital campaigns achieve?,"The digital campaigns achieved a 3.5x return on investment (ROI), with $17.5M in generated revenue directly attributed to these efforts. (Source: marketing_report_2024.md)",0.0,0.927,0.5,0.0,0.378,False
+marketing,7,Which event generated more than 300 enterprise leads?,The event that generated more than 300 qualified leads was the **Industry Events** where FinSolve sponsored two major industry conferences (Source: market_report_q4_2024.md).,0.333,0.807,0.0,0.0,0.359,False
+marketing,8,How much was allocated to the total marketing budget in 2024?,The total marketing budget allocated in 2024 was $15M. (Source: marketing_report_2024.md),0.5,0.986,1.0,1.0,0.821,True
+marketing,9,Which category received the highest marketing budget allocation?,"The category that received the highest marketing budget allocation was **Digital Marketing**, with an allocation of $7M, which accounts for 47% of the total marketing budget. (Source: marketing_report_2024.md)",1.0,0.999,,,,False
+marketing,10,What was the customer acquisition cost in 2024?,"The Customer Acquisition Cost (CAC) in 2024 was $150 per new customer, which is down from $180 in 2023. (Source: marketing_report_2024.md)",1.0,0.909,,1.0,,False
+marketing,11,What was the return on ad spend for digital campaigns?,The return on ad spend (ROAS) for digital campaigns was 4.5x. (Source: marketing_report_2024.md),1.0,0.934,1.0,1.0,0.98,True
+marketing,12,What was the customer lifetime value?,"The customer lifetime value (CLTV) was $1,200 per customer (Source: marketing_report_2024.md).",0.0,0.782,0.0,0.0,0.235,False
+marketing,13,Which customer demographic contributed most to new customer growth?,The customer demographic that contributed most to new customer growth was young professionals aged 25-35. (Source: marketing_report_2024.md),0.0,1.0,0.0,0.0,0.3,False
+marketing,14,Which social media platforms generated the highest engagement?,"The social media platforms that generated the highest engagement were [PERSON] and Instagram, with a 25% engagement rate (Source: market_report_q4_2024.md). Additionally, Instagram also had a high engagement rate of 20% on Instagram Stories (Source: marketing_report_q1_2024.md) and 18% engagement rate on Instagram in Southeast Asia Campaigns (Source: marketing_report_q2_2024.md).",,0.871,1.0,1.0,,False
+marketing,15,Which geographic region shows the highest future growth potential?,"According to the marketing reports, Asia shows the largest market potential for growth in the coming years (Source: [3] marketing_report_2024.md). Specifically, the report highlights ""Geographic Growth"" and notes significant increases in customer acquisition in Asia, indicating its high potential for future growth (Source: [3] marketing_report_2024.md). Additionally, targeted efforts in Southeast Asia, a part of the Asian region, have already shown positive results, such as a 15% increase in website traffic (Source: [1] marketing_report_q2_2024.md), further supporting Asia's potential for future growth.",,,,,,False
+marketing,16,What issue was identified with Vendor A?,Vendor A (ABC Services) faced issues with timely reporting and budget adherence. (Source: marketing_report_2024.md),,,,,,False
+marketing,17,Why was Vendor B considered successful?,"Vendor B (XYZ Marketing Solutions) was considered successful because they performed exceptionally well, with several viral campaigns that significantly boosted brand awareness (Source: marketing_report_2024.md).",,,,,,False
+marketing,18,What recommendation was made to improve customer engagement?,"To improve customer engagement, the recommendation was to implement AI-driven marketing automation and focus on personalized offers and content (Source: marketing_report_2024.md). Additionally, enhancing customer loyalty programs and introducing personalized offers were also introduced to boost retention and engagement (Source: market_report_q4_2024.md). Furthermore, the use of personalized and AI-driven engagement strategies was highlighted as a focus for improvement (Source: marketing_report_2024.md).",,,,,,False
+marketing,19,Which region should FinSolve expand into next?,FinSolve Technologies should expand into Latin America next. (Source: marketing_report_2024.md),,,,,,False
+marketing,20,What was the overall objective of the 2024 marketing strategy?,"The overall objective of the 2024 marketing strategy was to reinforce the brand's dominance in existing markets, expand into new regions, and enhance customer engagement, while setting the stage for sustained growth (Source: market_report_q4_2024.md, market_report_q2_2024.md). Specifically, the strategy focused on market penetration, strengthening customer relationships, and optimizing marketing investments in Q4 (Source: market_report_q4_2024.md), and regional expansion, improving retargeting efforts, and leveraging influencer partnerships in Q2 (Source: marketing_report_q2_2024.md).",,,,,,False

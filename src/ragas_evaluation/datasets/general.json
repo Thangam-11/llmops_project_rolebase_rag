@@ -7,9 +7,17 @@
     "relevant_contexts": [
       "Mission: Deliver secure, scalable, and innovative fintech solutions that simplify financial services and digital payments."
     ],
-    "expected_tools": ["retrieve_documents"],
-    "actual_response": "",
-    "actual_contexts": [],
+    "expected_tools": [
+      "retrieve_documents"
+    ],
+    "actual_response": "FinSolve Technologies' mission is to deliver high-quality, sustainable products and services that create value for our stakeholders. (Source: employee_handbook.md)",
+    "actual_contexts": [
+      "At FinSolve Technologies, our vision is to empower businesses and individuals through innovative technology solutions. Our mission is to deliver high-quality, sustainable products and services that create value for our stakeholders.",
+      "Founded in 2016, FinSolve Technologies is a leading player in fintech with a presence across India and global markets. We are committed to ethical business, social responsibility, and fostering a culture of learning and growth.",
+      "- Access to online learning platforms (Coursera, Udemy, etc.).\n- Sponsorship for industry certifications (e.g., PMP, AWS).",
+      "- **Integrity** : We act with honesty and transparency.\n- **Respect** : We value diversity and treat everyone with dignity.\n- **Innovation** : We encourage creativity and continuous improvement.\n- **Customer Focus** : Our customers are at the heart of everything we do.\n- **Accountability** : We take...",
+      "- Provided as per statutory requirements and company policy."
+    ],
     "actual_tools_called": []
   },
   {
@@ -20,9 +28,17 @@
     "relevant_contexts": [
       "Company Overview: FinSolve Technologies was established in 2015."
     ],
-    "expected_tools": ["retrieve_documents"],
-    "actual_response": "",
-    "actual_contexts": [],
+    "expected_tools": [
+      "retrieve_documents"
+    ],
+    "actual_response": "FinSolve Technologies was founded in 2016. (Source: employee_handbook.md)",
+    "actual_contexts": [
+      "Founded in 2016, FinSolve Technologies is a leading player in fintech with a presence across India and global markets. We are committed to ethical business, social responsibility, and fostering a culture of learning and growth.",
+      "At FinSolve Technologies, our vision is to empower businesses and individuals through innovative technology solutions. Our mission is to deliver high-quality, sustainable products and services that create value for our stakeholders.",
+      "- Access to online learning platforms (Coursera, Udemy, etc.).\n- Sponsorship for industry certifications (e.g., PMP, AWS).",
+      "- **Group Health Insurance** : Family floater policy covering employee, spouse, and up to 2 children.\n- **Accident & Life Insurance** : Additional coverage for accidental death or disability.\n- **Wellness Programs** : Annual health check-ups, yoga/meditation sessions, mental health counseling.\n- **E...",
+      "- Provided as per statutory requirements and company policy."
+    ],
     "actual_tools_called": []
   },
   {
@@ -33,9 +49,17 @@
     "relevant_contexts": [
       "Corporate Information: Headquarters are located in San Francisco, California."
     ],
-    "expected_tools": ["retrieve_documents"],
-    "actual_response": "",
-    "actual_contexts": [],
+    "expected_tools": [
+      "retrieve_documents"
+    ],
+    "actual_response": "I don't have that information. (Source: employee_handbook.md)",
+    "actual_contexts": [
+      "Founded in 2016, FinSolve Technologies is a leading player in fintech with a presence across India and global markets. We are committed to ethical business, social responsibility, and fostering a culture of learning and growth.",
+      "At FinSolve Technologies, our vision is to empower businesses and individuals through innovative technology solutions. Our mission is to deliver high-quality, sustainable products and services that create value for our stakeholders.",
+      "- **Group Health Insurance** : Family floater policy covering employee, spouse, and up to 2 children.\n- **Accident & Life Insurance** : Additional coverage for accidental death or disability.\n- **Wellness Programs** : Annual health check-ups, yoga/meditation sessions, mental health counseling.\n- **E...",
+      "- Provided as per statutory requirements and company policy.",
+      "- Access to online learning platforms (Coursera, Udemy, etc.).\n- Sponsorship for industry certifications (e.g., PMP, AWS)."
+    ],
     "actual_tools_called": []
   },
   {
@@ -46,9 +70,17 @@
     "relevant_contexts": [
       "Products and Services: Digital payments, merchant solutions, lending, digital wallets, fraud detection, analytics, and cross-border payments."
     ],
-    "expected_tools": ["retrieve_documents"],
-    "actual_response": "",
-    "actual_contexts": [],
+    "expected_tools": [
+      "retrieve_documents"
+    ],
+    "actual_response": "I don't have that information about the specific financial services FinSolve Technologies provides. The context documents provided focus on the company's vision, mission, employee benefits, and policies, but do not detail the financial services offered by the company. (Source: employee_handbook.md)",
+    "actual_contexts": [
+      "Founded in 2016, FinSolve Technologies is a leading player in fintech with a presence across India and global markets. We are committed to ethical business, social responsibility, and fostering a culture of learning and growth.",
+      "At FinSolve Technologies, our vision is to empower businesses and individuals through innovative technology solutions. Our mission is to deliver high-quality, sustainable products and services that create value for our stakeholders.",
+      "- **Group Health Insurance** : Family floater policy covering employee, spouse, and up to 2 children.\n- **Accident & Life Insurance** : Additional coverage for accidental death or disability.\n- **Wellness Programs** : Annual health check-ups, yoga/meditation sessions, mental health counseling.\n- **E...",
+      "- Access to online learning platforms (Coursera, Udemy, etc.).\n- Sponsorship for industry certifications (e.g., PMP, AWS).",
+      "- Salary is processed and credited to bank accounts on the last working day of each month.\n- Payslips are available on the HRMS portal."
+    ],
     "actual_tools_called": []
   },
   {
@@ -59,9 +91,17 @@
     "relevant_contexts": [
       "Company Overview: Serving over 20 million individual users globally."
     ],
-    "expected_tools": ["retrieve_documents"],
-    "actual_response": "",
-    "actual_contexts": [],
+    "expected_tools": [
+      "retrieve_documents"
+    ],
+    "actual_response": "I don't have that information.",
+    "actual_contexts": [
+      "Founded in 2016, FinSolve Technologies is a leading player in fintech with a presence across India and global markets. We are committed to ethical business, social responsibility, and fostering a culture of learning and growth.",
+      "At FinSolve Technologies, our vision is to empower businesses and individuals through innovative technology solutions. Our mission is to deliver high-quality, sustainable products and services that create value for our stakeholders.",
+      "- **Group Health Insurance** : Family floater policy covering employee, spouse, and up to 2 children.\n- **Accident & Life Insurance** : Additional coverage for accidental death or disability.\n- **Wellness Programs** : Annual health check-ups, yoga/meditation sessions, mental health counseling.\n- **E...",
+      "- **Integrity** : We act with honesty and transparency.\n- **Respect** : We value diversity and treat everyone with dignity.\n- **Innovation** : We encourage creativity and continuous improvement.\n- **Customer Focus** : Our customers are at the heart of everything we do.\n- **Accountability** : We take...",
+      "- Provided as per statutory requirements and company policy."
+    ],
     "actual_tools_called": []
   },
   {
@@ -72,9 +112,17 @@
     "relevant_contexts": [
       "Customer Base: Over 250,000 businesses rely on FinSolve Technologies."
     ],
-    "expected_tools": ["retrieve_documents"],
-    "actual_response": "",
-    "actual_contexts": [],
+    "expected_tools": [
+      "retrieve_documents"
+    ],
+    "actual_response": "I don't have that information. (Source: None)",
+    "actual_contexts": [
+      "Founded in 2016, FinSolve Technologies is a leading player in fintech with a presence across India and global markets. We are committed to ethical business, social responsibility, and fostering a culture of learning and growth.",
+      "At FinSolve Technologies, our vision is to empower businesses and individuals through innovative technology solutions. Our mission is to deliver high-quality, sustainable products and services that create value for our stakeholders.",
+      "- Access to online learning platforms (Coursera, Udemy, etc.).\n- Sponsorship for industry certifications (e.g., PMP, AWS).",
+      "- Provided as per statutory requirements and company policy.",
+      "1. Submit expense claims via HRMS with original bills within 30 days of incurring the expense.\n2. Claims reviewed and approved by reporting manager.\n3. Reimbursement processed with the next payroll cycle."
+    ],
     "actual_tools_called": []
   },
   {
@@ -85,9 +133,17 @@
     "relevant_contexts": [
       "Architecture Overview: The platform is built using a microservices architecture."
     ],
-    "expected_tools": ["retrieve_documents"],
-    "actual_response": "",
-    "actual_contexts": [],
+    "expected_tools": [
+      "retrieve_documents"
+    ],
+    "actual_response": "I don't have that information. (Source: None)",
+    "actual_contexts": [
+      "Founded in 2016, FinSolve Technologies is a leading player in fintech with a presence across India and global markets. We are committed to ethical business, social responsibility, and fostering a culture of learning and growth.",
+      "At FinSolve Technologies, our vision is to empower businesses and individuals through innovative technology solutions. Our mission is to deliver high-quality, sustainable products and services that create value for our stakeholders.",
+      "- Access to online learning platforms (Coursera, Udemy, etc.).\n- Sponsorship for industry certifications (e.g., PMP, AWS).",
+      "- **Group Health Insurance** : Family floater policy covering employee, spouse, and up to 2 children.\n- **Accident & Life Insurance** : Additional coverage for accidental death or disability.\n- **Wellness Programs** : Annual health check-ups, yoga/meditation sessions, mental health counseling.\n- **E...",
+      "- Original bills/invoices.\n- Travel tickets/boarding passes.\n- Approval emails (if pre-approval required)."
+    ],
     "actual_tools_called": []
   },
   {
@@ -98,9 +154,17 @@
     "relevant_contexts": [
       "Monitoring Stack: Prometheus, Grafana, CloudWatch, and ELK are used for monitoring and observability."
     ],
-    "expected_tools": ["retrieve_documents"],
-    "actual_response": "",
-    "actual_contexts": [],
+    "expected_tools": [
+      "retrieve_documents"
+    ],
+    "actual_response": "I don't have that information. (Source: None of the provided documents)",
+    "actual_contexts": [
+      "- All employees must record work hours and breaks accurately.\n- Use of company-approved time tracking tools is mandatory for remote/hybrid roles.",
+      "- Attendance must be marked daily via biometric, swipe card, or HRMS app.\n- Late arrivals/early departures must be notified to the manager.\n- Three or more late arrivals in a month may attract disciplinary action.",
+      "- Maintain cleanliness of workspace.\n- Use meeting rooms for calls/discussions.\n- Mobile phones on silent in work areas.\n**Note**\n: This handbook is a living document and may be updated periodically. For policy clarifications or state-specific rules, please consult HR or refer to the company’s polic...",
+      "- Regular security audits and employee training.\n- Data stored on secure, encrypted servers.",
+      "- Conductspice by HR to gather feedback and suggestions."
+    ],
     "actual_tools_called": []
   },
   {
@@ -111,9 +175,17 @@
     "relevant_contexts": [
       "Compliance: PCI DSS, SOC 2 Type II, GDPR, and ISO 27001."
     ],
-    "expected_tools": ["retrieve_documents"],
-    "actual_response": "",
-    "actual_contexts": [],
+    "expected_tools": [
+      "retrieve_documents"
+    ],
+    "actual_response": "I don't have that information.",
+    "actual_contexts": [
+      "At FinSolve Technologies, our vision is to empower businesses and individuals through innovative technology solutions. Our mission is to deliver high-quality, sustainable products and services that create value for our stakeholders.",
+      "Founded in 2016, FinSolve Technologies is a leading player in fintech with a presence across India and global markets. We are committed to ethical business, social responsibility, and fostering a culture of learning and growth.",
+      "- Provided as per statutory requirements and company policy.",
+      "- All employees must record work hours and breaks accurately.\n- Use of company-approved time tracking tools is mandatory for remote/hybrid roles.",
+      "- Access to online learning platforms (Coursera, Udemy, etc.).\n- Sponsorship for industry certifications (e.g., PMP, AWS)."
+    ],
     "actual_tools_called": []
   },
   {
@@ -124,9 +196,17 @@
     "relevant_contexts": [
       "Service Reliability: Production systems are designed to achieve 99.99% uptime."
     ],
-    "expected_tools": ["retrieve_documents"],
-    "actual_response": "",
-    "actual_contexts": [],
+    "expected_tools": [
+      "retrieve_documents"
+    ],
+    "actual_response": "I don't have that information.",
+    "actual_contexts": [
+      "- All employees must record work hours and breaks accurately.\n- Use of company-approved time tracking tools is mandatory for remote/hybrid roles.",
+      "- Up to 2 days/week for eligible roles; must be approved by manager.\n- Must be reachable and available during core work hours.",
+      "- **Standard Hours** : 9 hours/day (including 1 hour break), 6 days/week or 8 hours/day, 5 days/week (as per company policy).\n- **Flexible Timings** : Allowed for eligible roles, subject to manager approval.\n- **Shift Work** : Applicable for certain roles; shift allowance as per policy.",
+      "- Provided as per statutory requirements and company policy.",
+      "Privilege/Annual, Entitlement/Details = 15-21 days/year (as per state Shops & Establishments Act); accrued monthly. Sick Leave, Entitlement/Details = 12 days/year (non-cumulative; medical certificate for >2 days). Casual Leave, Entitlement/Details = 7 days/year (state-specific). Maternity Leave, Ent..."
+    ],
     "actual_tools_called": []
   }
 ]
