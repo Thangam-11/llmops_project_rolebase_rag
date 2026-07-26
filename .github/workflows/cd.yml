@@ -1,6 +1,7 @@
 name: CD Pipeline
 
 on:
+  workflow_dispatch :
   workflow_run:
     workflows:
       - CI Pipeline
@@ -47,6 +48,16 @@ jobs:
       - name: Login to Azure Container Registry
         run: |
           az acr login --name ${{ secrets.ACR_NAME }}
+
+      - name : Verify Azure Resources
+        run : |
+         echo "Current Subscription:"
+         az account show --output table
+
+         echo "Resource Groups:"
+         az group list -o table
+         echo "Container Apps:"
+         az containerapp list -o table
 
       ##################################################
       # Build Image
