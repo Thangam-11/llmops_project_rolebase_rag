@@ -129,13 +129,15 @@ jobs:
 
       - name: Wait for App to Be Ready
         run: |
-          for i in $(seq 1 30); do
-            if curl -sf http://localhost:8000/health; then
-              echo "App is up"
-              exit 0
-            fi
-            echo "Waiting for app... ($i/30)"
-            sleep 2
+         for i in $(seq 1 30); do
+
+          if curl -sf http://localhost:8001/health; then
+
+           echo "App is up"
+           exit 0
+         fi
+           echo "Waiting for app... ($i/30)"
+           sleep 2
           done
           echo "App failed to become ready in time"
           docker logs rag-smoke-test
@@ -143,15 +145,9 @@ jobs:
 
       - name: Smoke Test - Health Endpoint
         run: |
-          curl -sf http://localhost:8000/health | tee /dev/stderr | grep -qi "ok\|healthy" \
-            || (echo "Health check response did not indicate healthy status" && exit 1)
+         curl -sf http://localhost:8001/health | tee /dev/stderr | grep -qi "ok\|healthy" \
+         || (echo "Health check response did not indicate healthy status" && exit 1)
 
       - name: Dump Container Logs (always, for debugging)
         if: always()
         run: docker logs rag-smoke-test || true
-
-      - name: Stop and Remove Container
-        if: always()
-        run: |
-          docker stop rag-smoke-test || true
-          docker rm rag-smoke-test || true
