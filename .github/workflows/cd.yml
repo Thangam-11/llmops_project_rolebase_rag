@@ -1,0 +1,146 @@
+name: CD Pipeline
+
+on:
+  workflow_run:
+    workflows:
+      - CI Pipeline
+    types:
+      - completed
+    branches:
+      - main
+
+permissions:
+  contents: read
+  id-token: write
+
+env:
+  IMAGE_NAME: role-based-rag
+
+jobs:
+  deploy:
+    if: >
+      github.event.workflow_run.conclusion == 'success'
+
+    runs-on: ubuntu-latest
+
+    environment: production
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.workflow_run.head_sha }}
+
+      ##################################################
+      # Azure Login
+      ##################################################
+
+      - name: Login to Azure
+        uses: azure/login@v2
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      ##################################################
+      # Login ACR
+      ##################################################
+
+      - name: Login to Azure Container Registry
+        run: |
+          az acr login --name ${{ secrets.ACR_NAME }}
+
+      ##################################################
+      # Build Image
+      ##################################################
+
+      - name: Build Docker Image
+        run: |
+          docker build \
+            -t ${{ secrets.ACR_NAME }}.azurecr.io/${{ env.IMAGE_NAME }}:${{ github.event.workflow_run.head_sha }} \
+            -t ${{ secrets.ACR_NAME }}.azurecr.io/${{ env.IMAGE_NAME }}:latest .
+
+      ##################################################
+      # Push Image
+      ##################################################
+
+      - name: Push Docker Image
+        run: |
+          docker push ${{ secrets.ACR_NAME }}.azurecr.io/${{ env.IMAGE_NAME }}:${{ github.event.workflow_run.head_sha }}
+          docker push ${{ secrets.ACR_NAME }}.azurecr.io/${{ env.IMAGE_NAME }}:latest
+
+      ##################################################
+      # Capture Current Revision (for rollback if needed)
+      ##################################################
+
+      - name: Capture Previous Active Revision
+        id: previous_revision
+        run: |
+          PREV=$(az containerapp revision list \
+            --name ${{ secrets.CONTAINER_APP_NAME }} \
+            --resource-group ${{ secrets.RESOURCE_GROUP }} \
+            --query "[?properties.active].name | [0]" \
+            -o tsv)
+          echo "revision=$PREV" >> "$GITHUB_OUTPUT"
+          echo "Previous active revision: $PREV"
+
+      ##################################################
+      # Deploy Azure Container App
+      ##################################################
+
+      - name: Deploy Container App
+        run: |
+          az containerapp update \
+            --name ${{ secrets.CONTAINER_APP_NAME }} \
+            --resource-group ${{ secrets.RESOURCE_GROUP }} \
+            --image ${{ secrets.ACR_NAME }}.azurecr.io/${{ env.IMAGE_NAME }}:${{ github.event.workflow_run.head_sha }}
+
+      ##################################################
+      # Health Check (with retries)
+      ##################################################
+
+      - name: Health Check
+        id: health_check
+        run: |
+          for i in {1..10}; do
+            if curl --fail -s https://${{ secrets.CONTAINER_APP_URL }}/health; then
+              echo "Healthy"
+              exit 0
+            fi
+            echo "Attempt $i failed, retrying in 10s..."
+            sleep 10
+          done
+          echo "Health check failed after retries"
+          exit 1
+
+      ##################################################
+      # Rollback on Failed Health Check
+      ##################################################
+
+      - name: Rollback to Previous Revision
+        if: failure() && steps.health_check.outcome == 'failure' && steps.previous_revision.outputs.revision != ''
+        run: |
+          echo "Health check failed, rolling back to ${{ steps.previous_revision.outputs.revision }}"
+          az containerapp revision activate \
+            --name ${{ secrets.CONTAINER_APP_NAME }} \
+            --resource-group ${{ secrets.RESOURCE_GROUP }} \
+            --revision ${{ steps.previous_revision.outputs.revision }}
+          az containerapp ingress traffic set \
+            --name ${{ secrets.CONTAINER_APP_NAME }} \
+            --resource-group ${{ secrets.RESOURCE_GROUP }} \
+            --revision-weight ${{ steps.previous_revision.outputs.revision }}=100
+          echo "Rollback complete. Traffic restored to previous revision."
+          exit 1
+
+      ##################################################
+      # Show Success
+      ##################################################
+
+      - name: Deployment Complete
+        run: |
+          echo "======================================"
+          echo "Deployment Successful"
+          echo "======================================"
+          echo "Image:"
+          echo "${{ secrets.ACR_NAME }}.azurecr.io/${{ env.IMAGE_NAME }}:${{ github.event.workflow_run.head_sha }}"
+          echo ""
+          echo "Application URL:"
+          echo "https://${{ secrets.CONTAINER_APP_URL }}"
