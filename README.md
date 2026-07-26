@@ -21,7 +21,7 @@ src/                Ingestion, embeddings, Qdrant, retrieval, RAG chain
 app.py              Streamlit frontend
 ```
 
-## Prerequisites
+## Prerequisites updated the readme file
 
 - Python 3.11+
 - PostgreSQL
