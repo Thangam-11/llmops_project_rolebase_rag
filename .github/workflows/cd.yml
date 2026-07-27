@@ -58,7 +58,22 @@ jobs:
          az group list -o table
          echo "Container Apps:"
          az containerapp list -o table
+     
+      - name : Verify Azure Resources
+        run  : |
+           echo "===== Current Subscription ====="
+           az account show --output table
 
+           echo "===== Resource Groups ====="
+           az group list --output table
+
+           echo "===== Container Apps ====="
+           az containerapp list --output table
+
+           echo "===== ACR ====="
+           az acr list --output table
+
+           
       ##################################################
       # Build Image
       ##################################################
