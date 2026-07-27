@@ -1,7 +1,7 @@
 name: CD Pipeline
 
 on:
-  workflow_dispatch :
+  workflow_dispatch:
   workflow_run:
     workflows:
       - CI Pipeline
@@ -16,10 +16,12 @@ permissions:
 
 env:
   IMAGE_NAME: role-based-rag
+  DEPLOY_SHA: ${{ github.event.workflow_run.head_sha || github.sha }}
 
 jobs:
   deploy:
     if: >
+      github.event_name == 'workflow_dispatch' ||
       github.event.workflow_run.conclusion == 'success'
 
     runs-on: ubuntu-latest
@@ -30,7 +32,7 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
         with:
-          ref: ${{ github.event.workflow_run.head_sha }}
+          ref: ${{ env.DEPLOY_SHA }}
 
       ##################################################
       # Azure Login
@@ -49,31 +51,20 @@ jobs:
         run: |
           az acr login --name ${{ secrets.ACR_NAME }}
 
-      - name : Verify Azure Resources
-        run : |
-         echo "Current Subscription:"
-         az account show --output table
+      - name: Verify Azure Resources
+        run: |
+          echo "===== Current Subscription ====="
+          az account show --output table
 
-         echo "Resource Groups:"
-         az group list -o table
-         echo "Container Apps:"
-         az containerapp list -o table
-     
-      - name : Verify Azure Resources
-        run  : |
-           echo "===== Current Subscription ====="
-           az account show --output table
+          echo "===== Resource Groups ====="
+          az group list --output table
 
-           echo "===== Resource Groups ====="
-           az group list --output table
+          echo "===== Container Apps ====="
+          az containerapp list --output table
 
-           echo "===== Container Apps ====="
-           az containerapp list --output table
+          echo "===== ACR ====="
+          az acr list --output table
 
-           echo "===== ACR ====="
-           az acr list --output table
-
-           
       ##################################################
       # Build Image
       ##################################################
@@ -81,7 +72,7 @@ jobs:
       - name: Build Docker Image
         run: |
           docker build \
-            -t ${{ secrets.ACR_NAME }}.azurecr.io/${{ env.IMAGE_NAME }}:${{ github.event.workflow_run.head_sha }} \
+            -t ${{ secrets.ACR_NAME }}.azurecr.io/${{ env.IMAGE_NAME }}:${{ env.DEPLOY_SHA }} \
             -t ${{ secrets.ACR_NAME }}.azurecr.io/${{ env.IMAGE_NAME }}:latest .
 
       ##################################################
@@ -90,7 +81,7 @@ jobs:
 
       - name: Push Docker Image
         run: |
-          docker push ${{ secrets.ACR_NAME }}.azurecr.io/${{ env.IMAGE_NAME }}:${{ github.event.workflow_run.head_sha }}
+          docker push ${{ secrets.ACR_NAME }}.azurecr.io/${{ env.IMAGE_NAME }}:${{ env.DEPLOY_SHA }}
           docker push ${{ secrets.ACR_NAME }}.azurecr.io/${{ env.IMAGE_NAME }}:latest
 
       ##################################################
@@ -117,7 +108,15 @@ jobs:
           az containerapp update \
             --name ${{ secrets.CONTAINER_APP_NAME }} \
             --resource-group ${{ secrets.RESOURCE_GROUP }} \
-            --image ${{ secrets.ACR_NAME }}.azurecr.io/${{ env.IMAGE_NAME }}:${{ github.event.workflow_run.head_sha }}
+            --image ${{ secrets.ACR_NAME }}.azurecr.io/${{ env.IMAGE_NAME }}:${{ env.DEPLOY_SHA }} \
+            --set-env-vars \
+              DATABASE_URL="${{ secrets.DATABASE_URL }}" \
+              OPENROUTER_API_KEY="${{ secrets.OPENROUTER_API_KEY }}" \
+              QDRANT_URL="${{ secrets.QDRANT_URL }}" \
+              QDRANT_API_KEY="${{ secrets.QDRANT_API_KEY }}" \
+              SECRET_KEY="${{ secrets.SECRET_KEY }}" \
+              LANGSMITH_API_KEY="${{ secrets.LANGSMITH_API_KEY }}" \
+              ENVIRONMENT="production"
 
       ##################################################
       # Health Check (with retries)
@@ -166,7 +165,7 @@ jobs:
           echo "Deployment Successful"
           echo "======================================"
           echo "Image:"
-          echo "${{ secrets.ACR_NAME }}.azurecr.io/${{ env.IMAGE_NAME }}:${{ github.event.workflow_run.head_sha }}"
+          echo "${{ secrets.ACR_NAME }}.azurecr.io/${{ env.IMAGE_NAME }}:${{ env.DEPLOY_SHA }}"
           echo ""
           echo "Application URL:"
           echo "https://${{ secrets.CONTAINER_APP_URL }}"
