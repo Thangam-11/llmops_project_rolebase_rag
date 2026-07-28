@@ -101,4 +101,4 @@ $env:ROLE_RAG_API_BASE="http://localhost:8001"
 
 # updated the ci yml file 
 
-ci yml implemntation do\\\ change the azure ui portal 
+ci yml implemntation do\\\ change the azure ui portal updated cic d yaml file 
