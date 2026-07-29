@@ -107,7 +107,7 @@ jobs:
         run: |
           az containerapp update \
             --name ${{ secrets.CONTAINER_APP_NAME }} \
-            --resource-group ${{ secrets.RESOURCE_GROUP }} \
+           --resource-group ${{ secrets.RESOURCE_GROUP }} \
             --image ${{ secrets.ACR_NAME }}.azurecr.io/${{ env.IMAGE_NAME }}:${{ env.DEPLOY_SHA }} \
             --set-env-vars \
               DATABASE_URL="${{ secrets.DATABASE_URL }}" \
@@ -118,35 +118,62 @@ jobs:
               LANGSMITH_API_KEY="${{ secrets.LANGSMITH_API_KEY }}" \
               ENVIRONMENT="production"
 
+
+            ##################################################
+      # Debug URL
       ##################################################
-      # Health Check (with retries)
+
+      - name: Debug URL
+        shell: bash
+        run: |
+          URL="https://${{ secrets.CONTAINER_APP_URL }}/health"
+
+          echo "===================================="
+          echo "Container App URL (secret will be masked):"
+          echo "${{ secrets.CONTAINER_APP_URL }}"
+          echo "Health URL:"
+          echo "$URL"
+          echo "===================================="
+
+          curl -v -i "$URL" || true
+
+      ##################################################
+      # Wait for the new revision
+      ##################################################
+
+      - name: Wait for revision
+        run: sleep 30
+
+      ##################################################
+      # Health Check
       ##################################################
 
       - name: Health Check
         id: health_check
-        run : |
-          URL = "https://${{ secrets.CONTAINER_APP_URL }}/health"
-          echo "Performing health check on $URL"
+        shell: bash
+        run: |
+          URL="https://${{ secrets.CONTAINER_APP_URL }}/health"
+
           for i in {1..12}; do
-             HTTP_CODE=$(curl -s -o response.txt -w "%{http_code}" "$URL")
-             echo "Attempt $i - HTTP Status: $HTTP_CODE"
-             cat response.txt
-             echo
-            
-             if [ "$HTTP_CODE" -eq 200 ]; then
-                echo "Health check passed."
-                exit 0
-             fi
-            
-              echo "Health check failed. Retrying in 10 seconds..."
-              sleep 10
-              done
+            HTTP_CODE=$(curl -s -L -o response.txt -w "%{http_code}" "$URL")
 
-              echo "Health check failed after retries"
-              exit 1
+            echo "Attempt $i"
+            echo "HTTP Status: $HTTP_CODE"
+            echo "Response:"
+            cat response.txt
+            echo
 
-              
+            if [ "$HTTP_CODE" = "200" ]; then
+              echo "Health check passed."
+              exit 0
+            fi
 
+            echo "Retrying in 10 seconds..."
+            sleep 10
+          done
+
+          echo "Health check failed after retries."
+          exit 1
       ##################################################
       # Rollback on Failed Health Check
       ##################################################
