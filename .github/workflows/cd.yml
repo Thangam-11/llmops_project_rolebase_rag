@@ -124,17 +124,28 @@ jobs:
 
       - name: Health Check
         id: health_check
-        run: |
-          for i in {1..10}; do
-            if curl --fail -s https://${{ secrets.CONTAINER_APP_URL }}/health; then
-              echo "Healthy"
-              exit 0
-            fi
-            echo "Attempt $i failed, retrying in 10s..."
-            sleep 10
-          done
-          echo "Health check failed after retries"
-          exit 1
+        run : |
+          URL = "https://${{ secrets.CONTAINER_APP_URL }}/health"
+          echo "Performing health check on $URL"
+          for i in {1..12}; do
+             HTTP_CODE=$(curl -s -o response.txt -w "%{http_code}" "$URL")
+             echo "Attempt $i - HTTP Status: $HTTP_CODE"
+             cat response.txt
+             echo
+            
+             if [ "$HTTP_CODE" -eq 200 ]; then
+                echo "Health check passed."
+                exit 0
+             fi
+            
+              echo "Health check failed. Retrying in 10 seconds..."
+              sleep 10
+              done
+
+              echo "Health check failed after retries"
+              exit 1
+
+              
 
       ##################################################
       # Rollback on Failed Health Check
@@ -162,7 +173,9 @@ jobs:
       - name: Deployment Complete
         run: |
           echo "======================================"
-          echo "Deployment Successful"
+          echo "Deployment Successful"\
+
+          
           echo "======================================"
           echo "Image:"
           echo "${{ secrets.ACR_NAME }}.azurecr.io/${{ env.IMAGE_NAME }}:${{ env.DEPLOY_SHA }}"

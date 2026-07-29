@@ -1,14 +1,7 @@
-# verify.py
-from pathlib import Path
+from fastapi import FastAPI
 
-f    = Path("src/ingestion_pipeline/__init__.py")
-size = f.stat().st_size
-text = f.read_text().strip()
+app = FastAPI()
 
-print(f"Size    : {size} bytes")
-print(f"Content : '{text}'")
-
-if size == 0:
-    print("✅ Empty — ready to run")
-else:
-    print("❌ Still has content — clear it again")
+@app.get("/health")
+async def health():
+    return {"status": "healthy"}
