@@ -1,0 +1,31 @@
+template:
+  containers:
+    - name: rag-app
+      image: ragacrthangarasu.azurecr.io/role-based-rag:ee070e718ab0897612366943ebf89a794e5c3d1b
+      probes:
+        - type: Liveness
+          tcpSocket:
+            port: 8001
+          initialDelaySeconds: 0
+          periodSeconds: 10
+          timeoutSeconds: 5
+          successThreshold: 1
+          failureThreshold: 3
+
+        - type: Readiness
+          tcpSocket:
+            port: 8001
+          initialDelaySeconds: 0
+          periodSeconds: 5
+          timeoutSeconds: 5
+          successThreshold: 1
+          failureThreshold: 48
+
+        - type: Startup
+          tcpSocket:
+            port: 8001
+          initialDelaySeconds: 1
+          periodSeconds: 1
+          timeoutSeconds: 3
+          successThreshold: 1
+          failureThreshold: 240
