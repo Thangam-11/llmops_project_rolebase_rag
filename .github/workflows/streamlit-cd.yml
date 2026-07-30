@@ -1,0 +1,174 @@
+name: Streamlit CD Pipeline
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - "app.py"
+      - "Dockerfile.streamlit"
+      - ".github/workflows/streamlit-cd.yml"
+
+permissions:
+  contents: read
+  id-token: write
+
+env:
+  IMAGE_NAME: role-based-rag-streamlit
+  DEPLOY_SHA: ${{ github.sha }}
+
+jobs:
+  deploy-streamlit:
+    runs-on: ubuntu-latest
+
+    environment: production
+
+    steps:
+      ##################################################
+      # Checkout
+      ##################################################
+
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      ##################################################
+      # Azure Login
+      ##################################################
+
+      - name: Login to Azure
+        uses: azure/login@v2
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      ##################################################
+      # Login to Azure Container Registry
+      ##################################################
+
+      - name: Login to ACR
+        run: |
+          az acr login --name ${{ secrets.ACR_NAME }}
+
+      ##################################################
+      # Build Streamlit Docker Image
+      ##################################################
+
+      - name: Build Streamlit Image
+        run: |
+          docker build \
+            -f Dockerfile.streamlit \
+            -t ${{ secrets.ACR_NAME }}.azurecr.io/${{ env.IMAGE_NAME }}:${{ env.DEPLOY_SHA }} \
+            -t ${{ secrets.ACR_NAME }}.azurecr.io/${{ env.IMAGE_NAME }}:latest .
+
+      ##################################################
+      # Push Image
+      ##################################################
+
+      - name: Push Docker Image
+        run: |
+          docker push ${{ secrets.ACR_NAME }}.azurecr.io/${{ env.IMAGE_NAME }}:${{ env.DEPLOY_SHA }}
+          docker push ${{ secrets.ACR_NAME }}.azurecr.io/${{ env.IMAGE_NAME }}:latest
+
+      ##################################################
+      # Create Streamlit App (only if it doesn't exist)
+      ##################################################
+
+      - name: Check Streamlit Container App
+        id: check
+        shell: bash
+        run: |
+          if az containerapp show \
+            --name ${{ secrets.STREAMLIT_APP_NAME }} \
+            --resource-group ${{ secrets.RESOURCE_GROUP }} >/dev/null 2>&1; then
+            echo "exists=true" >> $GITHUB_OUTPUT
+          else
+            echo "exists=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Create Streamlit Container App
+        if: steps.check.outputs.exists == 'false'
+        run: |
+          az containerapp create \
+            --name ${{ secrets.STREAMLIT_APP_NAME }} \
+            --resource-group ${{ secrets.RESOURCE_GROUP }} \
+            --environment ${{ secrets.CONTAINER_APP_ENVIRONMENT }} \
+            --image ${{ secrets.ACR_NAME }}.azurecr.io/${{ env.IMAGE_NAME }}:${{ env.DEPLOY_SHA }} \
+            --target-port 8501 \
+            --ingress external \
+            --registry-server ${{ secrets.ACR_NAME }}.azurecr.io \
+            --set-env-vars \
+              API_BASE_URL=https://${{ secrets.CONTAINER_APP_URL }}
+
+      ##################################################
+      # Update Existing Streamlit App
+      ##################################################
+
+      - name: Update Streamlit Container App
+        if: steps.check.outputs.exists == 'true'
+        run: |
+          az containerapp update \
+            --name ${{ secrets.STREAMLIT_APP_NAME }} \
+            --resource-group ${{ secrets.RESOURCE_GROUP }} \
+            --image ${{ secrets.ACR_NAME }}.azurecr.io/${{ env.IMAGE_NAME }}:${{ env.DEPLOY_SHA }} \
+            --set-env-vars \
+              API_BASE_URL=https://${{ secrets.CONTAINER_APP_URL }}
+
+      ##################################################
+      # Wait for startup
+      ##################################################
+
+      - name: Wait
+        run: sleep 30
+
+      ##################################################
+      # Health Check
+      ##################################################
+
+      - name: Health Check
+        shell: bash
+        run: |
+          URL=$(az containerapp show \
+            --name ${{ secrets.STREAMLIT_APP_NAME }} \
+            --resource-group ${{ secrets.RESOURCE_GROUP }} \
+            --query properties.configuration.ingress.fqdn \
+            -o tsv)
+
+          URL="https://$URL/_stcore/health"
+
+          echo "Checking $URL"
+
+          for i in {1..12}; do
+            HTTP_CODE=$(curl -s -o response.txt -w "%{http_code}" "$URL")
+
+            echo "Attempt $i"
+            echo "Status: $HTTP_CODE"
+
+            if [ "$HTTP_CODE" = "200" ]; then
+              echo "Streamlit is healthy."
+              exit 0
+            fi
+
+            cat response.txt
+
+            sleep 10
+          done
+
+          echo "Health check failed."
+          exit 1
+
+      ##################################################
+      # Show URL
+      ##################################################
+
+      - name: Streamlit URL
+        run: |
+          URL=$(az containerapp show \
+            --name ${{ secrets.STREAMLIT_APP_NAME }} \
+            --resource-group ${{ secrets.RESOURCE_GROUP }} \
+            --query properties.configuration.ingress.fqdn \
+            -o tsv)
+
+          echo "========================================"
+          echo "Deployment Successful"
+          echo "========================================"
+          echo "https://$URL"
