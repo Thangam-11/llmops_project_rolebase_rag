@@ -68,6 +68,8 @@ class LLMConnector:
             openai_api_base  = settings.openrouter_base_url,
             temperature      = self._temperature,
             max_tokens       = self._max_tokens,
+            timeout          = 30,
+            max_retries      = 1,
             # OpenRouter recommended headers
             default_headers  = {
                 "HTTP-Referer": "https://finsolve.internal",
