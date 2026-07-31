@@ -16,7 +16,7 @@ import streamlit as st
 
 
 API_BASE = os.getenv("ROLE_RAG_API_BASE", "http://localhost:8001").rstrip("/")
-
+API_BASE = "https://rag-app.ashycliff-8384b7b9.centralindia.azurecontainerapps.io".rstrip("/")
 # ── Page config ───────────────────────────────────────────────────────────────
 st.set_page_config(
     page_title="Workspace AI",
