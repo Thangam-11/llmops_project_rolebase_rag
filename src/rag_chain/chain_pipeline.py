@@ -1,17 +1,26 @@
 """
 src/rag_chain/chain_pipeline.py
 ================================
-Complete LangChain LCEL RAG chain with PII guardrail
-and optional RAGAS evaluation.
+Complete LangChain LCEL RAG chain with layered guardrails and
+optional RAGAS evaluation.
 
 Flow:
     question + department
          │
          ▼
-    PIIGuardrail.scrub_input()       ← scrub PII from question
+    is_prompt_injection()            ← Layer 1: fast keyword pre-filter
          │
          ▼
-    RetrieverService.retrieve()      ← Qdrant filtered search
+    NemoGuardrailService.check()     ← Layer 2: intent rails (off-topic/jailbreak/sensitive)
+         │
+         ▼
+    PIIGuardrail.scrub_input()       ← Layer 3: scrub PII from question
+         │
+         ▼
+    RetrieverService.retrieve()      ← Layer 4: Qdrant filtered search
+         │
+         ▼
+    filter_safe_docs()               ← Layer 5: drop poisoned/injected doc chunks
          │
          ▼
     RetrieverService.format_context()
@@ -23,7 +32,7 @@ Flow:
     ChatOpenAI via OpenRouter        ← LLM generation
          │
          ▼
-    PIIGuardrail.scrub_output()      ← scrub PII from answer
+    PIIGuardrail.scrub_output()      ← Layer 6: scrub/block PII in answer
          │
          ▼
     RagasEvaluator.evaluate_single() ← optional quality scoring
@@ -43,8 +52,14 @@ from src.embedding_layer.embedding_service import get_embedding_service
 from src.vectordb.qdrant_store import QdrantStore
 from src.retrieval.retriever_service import RetrieverService
 from src.llm_layer.llm_connecter import LLMConnector
-from src.pil_guardrils.pil_guard import PIIGuardrail, PIIGuardResult
+from src.pil_guardrils.pil_guard import (
+    PIIGuardrail,
+    PIIGuardResult,
+    is_prompt_injection,
+    filter_safe_docs,
+)
 from src.ragas_evaluation.ragas_evaluator import RagasEvaluator
+from src.nemo_guardrils.nemo_guardrail_service import NemoGuardrailService
 
 from config.settings import get_settings
 from utils.logger_exceptions import get_logger
@@ -59,6 +74,8 @@ class RAGChain:
         enable_evaluation: bool | None = None,
     ) -> None:
         self._pii_enabled = settings.pii_guardrail_enabled
+        self._nemo_guard = NemoGuardrailService()
+
         self._enable_eval = (
             settings.ragas_enabled
             if enable_evaluation is None
@@ -66,7 +83,6 @@ class RAGChain:
         )
         self._evaluator: RagasEvaluator | None = None
         if self._enable_eval:
-            
             self._evaluator = RagasEvaluator()
 
         self._embedder = get_embedding_service()
@@ -87,13 +103,38 @@ class RAGChain:
         self._parser = StrOutputParser()
 
         self._pii = PIIGuardrail() if self._pii_enabled else None
-        #self._evaluator = RagasEvaluator() if self._enable_eval else None
 
         logger.info(
             f"RAGChain ready | "
             f"evaluation={'on' if self._enable_eval else 'off'} | "
-            f"pii_guardrail={'on' if self._pii_enabled else 'off'}"
+            f"pii_guardrail={'on' if self._pii_enabled else 'off'} | "
+            f"nemo_guardrails=on"
         )
+
+    # ------------------------------------------------------------------
+    # Shared helper — builds a consistent blocked-response payload
+    # ------------------------------------------------------------------
+
+    @staticmethod
+    def _blocked_response(
+        message: str,
+        department: str,
+        start: float,
+        pii_result: PIIGuardResult | None = None,
+    ) -> dict:
+        latency_ms = round((time.perf_counter() - start) * 1000)
+        return {
+            "answer": message,
+            "sources": [],
+            "department": department,
+            "latency_ms": latency_ms,
+            "was_blocked": True,
+            "pii_scrubbed": pii_result.was_scrubbed if pii_result else False,
+            "pii_found": pii_result.pii_found if pii_result else [],
+            "pii_count": pii_result.count if pii_result else 0,
+            "output_pii_found": [],
+            "quality": None,
+        }
 
     def invoke(
         self,
@@ -109,6 +150,22 @@ class RAGChain:
             f"q={question[:80]}"
         )
 
+        # ── Layer 1: fast keyword pre-filter (no LLM cost) ──────────────
+        if is_prompt_injection(question):
+            logger.warning(f"Blocked (keyword prompt injection): {question[:80]}")
+            return self._blocked_response(
+                "I maintain consistent guidelines regardless of how I am prompted.",
+                department,
+                start,
+            )
+
+        # ── Layer 2: NeMo intent rails (off-topic/jailbreak/sensitive) ──
+        is_blocked, bot_message = self._nemo_guard.check(question)
+        if is_blocked:
+            logger.warning(f"Blocked (NeMo rail): {question[:80]}")
+            return self._blocked_response(bot_message, department, start)
+
+        # ── Layer 3: Presidio input PII scrub ────────────────────────────
         pii_result = (
             self._pii.scrub_input(question)
             if self._pii
@@ -119,11 +176,15 @@ class RAGChain:
         if pii_result.was_scrubbed:
             logger.info(f"Input PII anonymized: {pii_result.pii_found}")
 
+        # ── Layer 4: retrieval ────────────────────────────────────────────
         docs = self._retriever.retrieve(
             question=clean_question,
             department=department,
             k=k,
         )
+
+        # ── Layer 5: sanitize retrieved docs (indirect prompt injection) ─
+        docs = filter_safe_docs(docs)
 
         if not docs:
             latency_ms = round((time.perf_counter() - start) * 1000)
@@ -151,15 +212,20 @@ class RAGChain:
             }
         )
 
-        output_pii_found = []
+        # ── Layer 6: Presidio output scrub (redact or hard-block) ────────
+        output_pii_found: list[str] = []
+        was_blocked = False
+
         if self._pii:
-            output_pii_found = [
-                item["type"]
-                for item in self._pii.detect_pii(str(answer))
-            ]
-            answer = self._pii.scrub_output(str(answer))
+            output_pii_result = self._pii.scrub_output(str(answer))
+            answer = output_pii_result.clean_text
+            output_pii_found = output_pii_result.pii_found
+            was_blocked = output_pii_result.was_blocked
         else:
             answer = str(answer)
+
+        if was_blocked:
+            logger.warning(f"Output blocked — sensitive PII detected: {output_pii_found}")
 
         sources = [
             {
@@ -174,12 +240,12 @@ class RAGChain:
                 "page": doc.metadata.get("page"),
             }
             for doc in docs
-        ]
+        ] if not was_blocked else []
 
         latency_ms = round((time.perf_counter() - start) * 1000)
 
         quality = None
-        if self._enable_eval and self._evaluator:
+        if self._enable_eval and self._evaluator and not was_blocked:
             try:
                 contexts = [doc.page_content for doc in docs]
                 ragas_result = self._evaluator.evaluate_single(
@@ -212,7 +278,7 @@ class RAGChain:
             "sources": sources,
             "department": department,
             "latency_ms": latency_ms,
-            "was_blocked": False,
+            "was_blocked": was_blocked,
             "pii_scrubbed": pii_result.was_scrubbed,
             "pii_found": pii_result.pii_found,
             "pii_count": pii_result.count,
@@ -226,6 +292,18 @@ class RAGChain:
         department: str,
         k: int = 5,
     ):
+        # Layer 1 + 2 apply here too, for consistency with invoke()
+        if is_prompt_injection(question):
+            logger.warning(f"Blocked stream (keyword prompt injection): {question[:80]}")
+            yield "I maintain consistent guidelines regardless of how I am prompted."
+            return
+
+        is_blocked, bot_message = self._nemo_guard.check(question)
+        if is_blocked:
+            logger.warning(f"Blocked stream (NeMo rail): {question[:80]}")
+            yield bot_message
+            return
+
         pii_result = (
             self._pii.scrub_input(question)
             if self._pii
@@ -238,6 +316,7 @@ class RAGChain:
             department=department,
             k=k,
         )
+        docs = filter_safe_docs(docs)
 
         if not docs:
             yield "I don't have that information in the available documents."
@@ -256,5 +335,8 @@ class RAGChain:
         ):
             full_answer += str(token)
 
-        clean = self._pii.scrub_output(full_answer) if self._pii else full_answer
-        yield clean
+        if self._pii:
+            output_pii_result = self._pii.scrub_output(full_answer)
+            yield output_pii_result.clean_text
+        else:
+            yield full_answer
