@@ -163,7 +163,11 @@ class RAGChain:
         is_blocked, bot_message = self._nemo_guard.check(question)
         if is_blocked:
             logger.warning(f"Blocked (NeMo rail): {question[:80]}")
-            return self._blocked_response(bot_message, department, start)
+            return self._blocked_response(
+                bot_message or "i can only answer questions about FinSolve company information.",
+                department,
+                start
+            )
 
         # ── Layer 3: Presidio input PII scrub ────────────────────────────
         pii_result = (
