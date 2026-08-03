@@ -128,9 +128,9 @@ models:
   - type: main
     engine: openai
     model: meta-llama/llama-3.3-70b-instruct
+    api_key_env_var: OPENROUTER_API_KEY
     parameters:
-      openai_api_base: "https://openrouter.ai/api/v1"
-
+      base_url: "https://openrouter.ai/api/v1"
 instructions:
   - type: general
     content: |
