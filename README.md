@@ -2,6 +2,8 @@
 
 A department-aware **Retrieval Augmented Generation (RAG)** application that lets employees ask natural-language questions and get answers grounded in company documents — while enforcing role- and department-based access control on what each user can retrieve.
 
+![Architecture](docs/images/architecture.png)
+
 The system combines a **FastAPI** backend, a **Streamlit** frontend, **PostgreSQL** for user/query logging, **Qdrant** for vector search (with **BAAI/bge-base-en-v1.5** embeddings), and **LangChain** for orchestrating LLM calls to **Gemini**, **OpenAI GPT-4o**, **LLaMA 3**, or any OpenRouter-compatible model. Safety and quality are enforced with **NeMo Guardrails**, **Presidio** PII scrubbing, and **RAGAS** evaluation, with **LangSmith**, **Prometheus**, and **Grafana** for observability. The app ships with a full **GitHub Actions** CI/CD pipeline (Ruff, mypy, pytest, Docker smoke test) and deploys to **Azure Container Apps**, with secrets managed in **Azure Key Vault**.
 
 ---
