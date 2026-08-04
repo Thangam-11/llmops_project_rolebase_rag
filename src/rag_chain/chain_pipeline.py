@@ -42,8 +42,8 @@ Flow:
 """
 
 from __future__ import annotations
-
 import time
+from urllib import response
 
 from langchain_core.output_parsers import StrOutputParser
 
@@ -58,6 +58,7 @@ from src.pil_guardrils.pil_guard import (
     is_prompt_injection,
     filter_safe_docs,
 )
+from src.redis_cache.cache_service import RedisCacheService
 from src.ragas_evaluation.ragas_evaluator import RagasEvaluator
 from src.nemo_guardrils.nemo_guardrail_service import NemoGuardrailService
 
@@ -75,6 +76,7 @@ class RAGChain:
     ) -> None:
         self._pii_enabled = settings.pii_guardrail_enabled
         self._nemo_guard = NemoGuardrailService()
+        self._redis_cache = RedisCacheService()
 
         self._enable_eval = (
             settings.ragas_enabled
@@ -149,7 +151,13 @@ class RAGChain:
             f"dept={department} | "
             f"q={question[:80]}"
         )
-
+        # cache check before any LLM calls (guardrails, retrieval, etc.)
+        cached = self._redis_cache.get(question, department, k)
+        if cached is not None:
+            cached["latency_ms"] = round((time.perf_counter() - start) * 1000)
+            cached["cache_hit"] = True
+            return cached
+        
         # ── Layer 1: fast keyword pre-filter (no LLM cost) ──────────────
         if is_prompt_injection(question):
             logger.warning(f"Blocked (keyword prompt injection): {question[:80]}")
@@ -204,6 +212,7 @@ class RAGChain:
                 "output_pii_found": [],
                 "quality": None,
             }
+        
 
         context = RetrieverService.format_context(docs)
         prompt = get_rag_prompt(department)
@@ -288,8 +297,16 @@ class RAGChain:
             "pii_count": pii_result.count,
             "output_pii_found": sorted(set(output_pii_found)),
             "quality": quality,
+    
         }
+        self._redis_cache.set(
+            question=question,
+            department=department,
+            k=k,    
+        )
+        return response
 
+    
     def stream(
         self,
         question: str,

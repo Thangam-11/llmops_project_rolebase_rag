@@ -86,7 +86,7 @@ class PIIGuardrail:
     def __init__(self) -> None:
         nlp_config = {
             "nlp_engine_name": "spacy",
-            "models": [{"lang_code": "en", "model_name": "en_core_web_sm"}],
+            "models": [{"lang_code": "en", "model_name": "en_core_web_lg"}],
         }
         nlp_engine = NlpEngineProvider(nlp_configuration=nlp_config).create_engine()
 

@@ -12,7 +12,7 @@ from src.monitoring.metrices import start_metrics_server
 from api_services.routers.auth         import router as auth_router
 from api_services.routers.chat         import router as chat_router
 from config.settings             import get_settings
-
+from api_services.routers.admin import router as admin_router
 settings = get_settings()
 
 
@@ -47,7 +47,7 @@ app.mount("/metrics", metrics_app)
 # ── Routers ───────────────────────────────────────────────────────────────────
 app.include_router(auth_router)
 app.include_router(chat_router)
-
+app.include_router(admin_router)
 
 @app.get("/health")
 async def health():

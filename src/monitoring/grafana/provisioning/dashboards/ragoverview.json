@@ -130,20 +130,9 @@
       ]
     },
 
-    { "id": 103, "type": "row", "title": "RAGAS Quality", "gridPos": { "h": 1, "w": 24, "x": 0, "y": 43 }, "collapsed": false },
+    
     {
       "id": 12,
-      "title": "RAGAS Overall Score (by department)",
-      "type": "timeseries",
-      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 44 },
-      "datasource": "Prometheus",
-      "fieldConfig": { "defaults": { "min": 0, "max": 1 }, "overrides": [] },
-      "targets": [
-        { "expr": "rag_ragas_score", "legendFormat": "{{department}}" }
-      ]
-    },
-    {
-      "id": 13,
       "title": "RAGAS Metric Breakdown (faithfulness, relevancy, precision, recall)",
       "type": "timeseries",
       "gridPos": { "h": 8, "w": 12, "x": 12, "y": 44 },
@@ -156,7 +145,7 @@
 
     { "id": 104, "type": "row", "title": "LLM Usage & Cost", "gridPos": { "h": 1, "w": 24, "x": 0, "y": 52 }, "collapsed": false },
     {
-      "id": 14,
+      "id": 13,
       "title": "LLM Token Usage (prompt / completion / total)",
       "type": "timeseries",
       "gridPos": { "h": 8, "w": 8, "x": 0, "y": 53 },
@@ -168,7 +157,7 @@
       ]
     },
     {
-      "id": 15,
+      "id": 14,
       "title": "Estimated LLM Cost (USD/hr)",
       "type": "timeseries",
       "gridPos": { "h": 8, "w": 8, "x": 8, "y": 53 },
@@ -179,7 +168,7 @@
       ]
     },
     {
-      "id": 16,
+      "id": 15,
       "title": "LLM Response Time p95",
       "type": "timeseries",
       "gridPos": { "h": 8, "w": 8, "x": 16, "y": 53 },
@@ -192,7 +181,7 @@
 
     { "id": 105, "type": "row", "title": "System Resources", "gridPos": { "h": 1, "w": 24, "x": 0, "y": 61 }, "collapsed": false },
     {
-      "id": 17,
+      "id": 16,
       "title": "CPU Usage %",
       "type": "stat",
       "gridPos": { "h": 6, "w": 8, "x": 0, "y": 62 },
@@ -201,7 +190,7 @@
       "targets": [ { "expr": "system_cpu_usage_percent" } ]
     },
     {
-      "id": 18,
+      "id": 17,
       "title": "Memory Usage %",
       "type": "stat",
       "gridPos": { "h": 6, "w": 8, "x": 8, "y": 62 },
@@ -210,7 +199,7 @@
       "targets": [ { "expr": "system_memory_usage_percent" } ]
     },
     {
-      "id": 19,
+      "id": 18,
       "title": "Disk Usage %",
       "type": "stat",
       "gridPos": { "h": 6, "w": 8, "x": 16, "y": 62 },

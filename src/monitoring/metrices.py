@@ -78,6 +78,11 @@ LLM_COST = Counter(
 )
 
 # ── RAG pipeline ──────────────────────────────────────────────────────────────
+CACHE_HITS = Counter(
+    "rag_cache_hits_total",
+    "Number of RAG query cache hits",
+    ["department"],
+)
 
 RAG_REQUESTS = Counter(
     "rag_requests_total",

@@ -62,7 +62,13 @@ services:
       timeout: 10s
       start_period: 60s
       retries: 3
-
+  # redis cache 
+  redis:
+    image: redis:7
+    container_name: role-rag-redis
+    ports:
+      - "6379:6379"
+    restart: unless-stopped
   # ─────────────────────────────────────────────────────────────
   # Streamlit Frontend
   # ─────────────────────────────────────────────────────────────
@@ -101,6 +107,8 @@ services:
         condition: service_healthy
     restart: unless-stopped
 
+
+  
   # ─────────────────────────────────────────────────────────────
   # Grafana
   # ─────────────────────────────────────────────────────────────

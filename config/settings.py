@@ -16,7 +16,9 @@ class Settings(BaseSettings):
     database_url: str
 
     # === Redis ===
-    redis_url: str = "redis://localhost:6379/0"
+    redis_url: str 
+    redis_cache_ttl_seconds: int   # 1 hour
+    redis_cache_enabled: bool
 
     # === JWT ===
     secret_key:                  str

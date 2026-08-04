@@ -54,7 +54,7 @@ class QueryResponse(BaseModel):
     block_reason: str | None        = None
     pii_found:    list[str] | None  = None   # ← PII types caught e.g. ["US_SSN"]
     quality:      QualityScores | None = None # ← RAGAS scores if evaluation on
-
+    cache_hit:   bool= False # ← True if result was returned from Redis cache
 
 class QueryHistoryItem(BaseModel):
     id:          str
