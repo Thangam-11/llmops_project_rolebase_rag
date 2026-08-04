@@ -53,6 +53,7 @@ The system combines a **FastAPI** backend, a **Streamlit** frontend, **PostgreSQ
 - ☁️ **Azure deployment** — containerized app is built and deployed to an Azure Container instance/app via GitHub Actions, with **Azure Key Vault** for secrets management
 
 ---
+C:\Users\thang\Desktop\role_based_rag\docs\Architecture1.png
 
 ## Architecture Overview
 
