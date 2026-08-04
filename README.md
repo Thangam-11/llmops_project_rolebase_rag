@@ -2,6 +2,8 @@
 
 A department-aware **Retrieval Augmented Generation (RAG)** application that lets employees ask natural-language questions and get answers grounded in company documents — while enforcing role- and department-based access control on what each user can retrieve.
 
+<img width="1397" height="892" alt="login_ui" src="https://github.com/user-attachments/assets/4226b05f-6bc8-4afc-bacf-7959e116ce3f" />
+<img width="1317" height="871" alt="mainui" src="https://github.com/user-attachments/assets/601cf019-25aa-45b2-b123-98d782c51212" />
 
 
 The system combines a **FastAPI** backend, a **Streamlit** frontend, **PostgreSQL** for user/query logging, **Qdrant** for vector search (with **BAAI/bge-base-en-v1.5** embeddings), and **LangChain** for orchestrating LLM calls to **Gemini**, **OpenAI GPT-4o**, **LLaMA 3**, or any OpenRouter-compatible model. Safety and quality are enforced with **NeMo Guardrails**, **Presidio** PII scrubbing, and **RAGAS** evaluation, with **LangSmith**, **Prometheus**, and **Grafana** for observability. The app ships with a full **GitHub Actions** CI/CD pipeline (Ruff, mypy, pytest, Docker smoke test) and deploys to **Azure Container Apps**, with secrets managed in **Azure Key Vault**.
@@ -53,7 +55,9 @@ The system combines a **FastAPI** backend, a **Streamlit** frontend, **PostgreSQ
 - ☁️ **Azure deployment** — containerized app is built and deployed to an Azure Container instance/app via GitHub Actions, with **Azure Key Vault** for secrets management
 
 ---
-C:\Users\thang\Desktop\role_based_rag\docs\Architecture1.png
+# <img width="1536" height="1024" alt="Architecture1" src="https://github.com/user-attachments/assets/31a23a96-689e-4e5b-8ff8-99357e300e6b" />
+
+<img width="1536" height="1024" alt="architecture2" src="https://github.com/user-attachments/assets/c4af5383-3121-48ae-8928-a5792089e4c2" />
 
 ## Architecture Overview
 
@@ -438,6 +442,9 @@ docker compose down
 ---
 
 ## Observability
+<img width="1667" height="887" alt="grafnaimage" src="https://github.com/user-attachments/assets/5cca0896-6d24-4198-b877-bf5198176981" />
+<img width="1637" height="732" alt="Grafnaimage2" src="https://github.com/user-attachments/assets/9c24e058-589d-4fbe-b9e9-e39471aa053a" />
+<img width="1647" height="856" alt="image" src="https://github.com/user-attachments/assets/14ad46f7-5f58-43a4-8dcc-f3f67aa8650f" />
 
 - **LangSmith** — traces every LLM call and chain execution (query processing, guardrail checks, prompt construction, generation) for debugging and quality review. Enable by setting `LANGSMITH_API_KEY` and `LANGSMITH_PROJECT`.
 - **Prometheus** — scrapes operational metrics exposed by the backend (e.g., request counts, latency, error rates) in addition to the `/metrics` API endpoint.
@@ -481,6 +488,9 @@ This same sequence runs automatically in CI on every pull request.
 ---
 
 ## CI/CD & Deployment
+<img width="1260" height="875" alt="image" src="https://github.com/user-attachments/assets/420617b8-b580-4433-a683-5292cc3a49d9" />
+<img width="1297" height="862" alt="image" src="https://github.com/user-attachments/assets/f14e3602-bca4-495e-a714-c79625c9bc28" />
+<img width="1321" height="726" alt="image" src="https://github.com/user-attachments/assets/c552868c-5eb5-4989-80a6-22676c5b9bd5" />
 
 CI/CD is implemented with **GitHub Actions**. On every push/pull request, the pipeline:
 
